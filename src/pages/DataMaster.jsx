@@ -2,18 +2,23 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { Copy } from "lucide-react";
+import { Copy, RotateCcw } from "lucide-react";
 
 export default function DataMaster() {
   const navigate = useNavigate();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const loadRecords = () => {
+    setLoading(true);
     base44.entities.DataMaster.list().then((data) => {
       setRecords(data);
       setLoading(false);
     });
+  };
+
+  useEffect(() => {
+    loadRecords();
   }, []);
 
   return (
@@ -46,7 +51,18 @@ export default function DataMaster() {
         <Button variant="outline" onClick={() => navigate("/")}>Logout</Button>
       </div>
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-light tracking-tight text-foreground mb-2 text-center">Data Master</h1>
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <h1 className="text-3xl font-light tracking-tight text-foreground text-center">Data Master</h1>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={loadRecords}
+            disabled={loading}
+            className="h-8 w-8"
+          >
+            <RotateCcw className="w-4 h-4" />
+          </Button>
+        </div>
         <p className="text-sm font-light uppercase tracking-widest text-muted-foreground mb-8 text-center">Exposed Data</p>
         {loading ? (
           <div className="flex items-center justify-center py-20">

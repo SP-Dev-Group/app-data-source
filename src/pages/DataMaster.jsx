@@ -18,7 +18,7 @@ export default function DataMaster() {
 
   return (
     <div className="min-h-screen bg-background px-6 py-12 relative">
-      <div className="absolute top-4 left-6">
+      <div className="absolute top-4 left-6 flex items-center gap-2">
         <button
           onClick={() => navigator.clipboard.writeText("App ID: 6a0a3a832f954c38e4a31c7b")}
           className="text-xs text-muted-foreground font-mono hover:text-foreground cursor-pointer transition-colors flex items-center gap-1"
@@ -26,6 +26,13 @@ export default function DataMaster() {
         >
           <Copy className="w-3 h-3" />
           App ID: 6a0a3a832f954c38e4a31c7b
+        </button>
+        <button
+          onClick={() => navigator.clipboard.writeText("6a0a3a832f954c38e4a31c7b")}
+          className="text-xs text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+          title="Copy ID only"
+        >
+          <Copy className="w-3 h-3" />
         </button>
       </div>
       <div className="absolute top-4 right-6 flex gap-2 items-center">

@@ -24,8 +24,8 @@ export default function DataMaster() {
           className="text-xs text-muted-foreground font-mono hover:text-foreground cursor-pointer transition-colors flex items-center gap-1"
           title="Click to copy"
         >
-          App ID: 6a0a3a832f954c38e4a31c7b
           <Copy className="w-3 h-3" />
+          App ID: 6a0a3a832f954c38e4a31c7b
         </button>
       </div>
       <div className="absolute top-4 right-6 flex gap-2 items-center">

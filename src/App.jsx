@@ -8,6 +8,8 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 // Add page imports here
 import Home from './pages/Home';
 import DataMaster from './pages/DataMaster';
+import Menu from './pages/Menu';
+import DataMasterListener from './pages/DataMasterListener';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -37,6 +39,8 @@ const AuthenticatedApp = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/datamaster" element={<DataMaster />} />
+      <Route path="/menu" element={<Menu />} />
+      <Route path="/datamasterlistener" element={<DataMasterListener />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

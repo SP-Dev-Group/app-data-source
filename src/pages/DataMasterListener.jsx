@@ -2,16 +2,16 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { Copy, RotateCcw } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 
-export default function DataMaster() {
+export default function DataMasterListener() {
   const navigate = useNavigate();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const loadRecords = () => {
     setLoading(true);
-    base44.entities.DataMaster.list().then((data) => {
+    base44.entities.DataMasterListener.list().then((data) => {
       setRecords(data);
       setLoading(false);
     });
@@ -23,36 +23,12 @@ export default function DataMaster() {
 
   return (
     <div className="min-h-screen bg-background px-6 py-12 relative">
-      <div className="absolute top-4 left-6 flex items-center gap-2">
-        <button
-          onClick={() => navigator.clipboard.writeText("App ID: 6a0a3a832f954c38e4a31c7b")}
-          className="text-xs text-muted-foreground font-mono hover:text-foreground cursor-pointer transition-colors flex items-center gap-1"
-          title="Click to copy"
-        >
-          <Copy className="w-3 h-3" />
-          App ID: 6a0a3a832f954c38e4a31c7b
-        </button>
-        <button
-          onClick={() => navigator.clipboard.writeText("6a0a3a832f954c38e4a31c7b")}
-          className="text-xs text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
-          title="Copy ID only"
-        >
-          <Copy className="w-3 h-3" />
-        </button>
-      </div>
-      <div className="absolute top-4 right-6 flex gap-2 items-center">
-        <button
-          onClick={() => navigator.clipboard.writeText("6a0a3a832f954c38e4a31c7b")}
-          className="text-xs text-muted-foreground font-mono hover:text-foreground cursor-pointer transition-colors flex items-center gap-1"
-          title="Copy ID only"
-        >
-          <Copy className="w-3 h-3" />
-        </button>
+      <div className="absolute top-4 right-6">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
       </div>
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center justify-center gap-2 mb-2">
-          <h1 className="text-3xl font-light tracking-tight text-foreground text-center">Data Master</h1>
+          <h1 className="text-3xl font-light tracking-tight text-foreground text-center">Data Master Listener</h1>
           <Button
             variant="ghost"
             size="icon"
@@ -63,7 +39,7 @@ export default function DataMaster() {
             <RotateCcw className="w-4 h-4" />
           </Button>
         </div>
-        <p className="text-sm font-light uppercase tracking-widest text-muted-foreground mb-8 text-center">Exposed Data</p>
+        <p className="text-sm font-light uppercase tracking-widest text-muted-foreground mb-8 text-center">Listener Data</p>
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="w-6 h-6 border-2 border-muted-foreground border-t-foreground rounded-full animate-spin" />

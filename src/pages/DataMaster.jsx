@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import { Button } from "@/components/ui/button";
 
 export default function DataMaster() {
+  const navigate = useNavigate();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -13,7 +16,10 @@ export default function DataMaster() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background px-6 py-12">
+    <div className="min-h-screen bg-background px-6 py-12 relative">
+      <div className="absolute top-4 left-6">
+        <Button variant="outline" onClick={() => navigate("/")}>Logout</Button>
+      </div>
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-light tracking-tight text-foreground mb-8">Data Master</h1>
         {loading ? (

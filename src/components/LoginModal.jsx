@@ -17,7 +17,7 @@ export default function LoginModal({ open, onOpenChange }) {
   const handleLogin = () => {
     if (email === HARDWIRED_EMAIL && password === HARDWIRED_PASSWORD) {
       onOpenChange(false);
-      navigate("/datamaster");
+      navigate("/menu");
     } else {
       setError("Invalid email or password.");
     }

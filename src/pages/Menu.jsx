@@ -1,12 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { base44 } from "@/api/base44Client";
 
 export default function Menu() {
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    base44.auth.logout("/");
+  };
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6 gap-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6 gap-4 relative">
+      <div className="absolute top-4 right-6">
+        <Button variant="outline" onClick={handleLogout}>Logout</Button>
+      </div>
       <motion.h1
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
+import { Copy } from "lucide-react";
 
 export default function DataMaster() {
   const navigate = useNavigate();
@@ -20,19 +21,20 @@ export default function DataMaster() {
       <div className="absolute top-4 left-6">
         <button
           onClick={() => navigator.clipboard.writeText("App ID: 6a0a3a832f954c38e4a31c7b")}
-          className="text-xs text-muted-foreground font-mono hover:text-foreground cursor-pointer transition-colors"
+          className="text-xs text-muted-foreground font-mono hover:text-foreground cursor-pointer transition-colors flex items-center gap-1"
           title="Click to copy"
         >
           App ID: 6a0a3a832f954c38e4a31c7b
+          <Copy className="w-3 h-3" />
         </button>
       </div>
-      <div className="absolute top-4 right-6 flex gap-2">
+      <div className="absolute top-4 right-6 flex gap-2 items-center">
         <button
           onClick={() => navigator.clipboard.writeText("6a0a3a832f954c38e4a31c7b")}
-          className="text-xs text-muted-foreground font-mono hover:text-foreground cursor-pointer transition-colors"
+          className="text-xs text-muted-foreground font-mono hover:text-foreground cursor-pointer transition-colors flex items-center gap-1"
           title="Copy ID only"
         >
-          Copy ID
+          <Copy className="w-3 h-3" />
         </button>
         <Button variant="outline" onClick={() => navigate("/")}>Logout</Button>
       </div>

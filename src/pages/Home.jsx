@@ -9,7 +9,7 @@ export default function Home() {
         transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
         className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-foreground text-center"
       >
-        App to App Data
+        App Data Master
       </motion.h1>
     </div>
   );

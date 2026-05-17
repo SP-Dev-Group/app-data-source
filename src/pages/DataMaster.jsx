@@ -18,7 +18,13 @@ export default function DataMaster() {
   return (
     <div className="min-h-screen bg-background px-6 py-12 relative">
       <div className="absolute top-4 left-6">
-        <p className="text-xs text-muted-foreground font-mono">App ID: 6a0a3a832f954c38e4a31c7b</p>
+        <button
+          onClick={() => navigator.clipboard.writeText("6a0a3a832f954c38e4a31c7b")}
+          className="text-xs text-muted-foreground font-mono hover:text-foreground cursor-pointer transition-colors"
+          title="Click to copy App ID"
+        >
+          App ID: 6a0a3a832f954c38e4a31c7b
+        </button>
       </div>
       <div className="absolute top-4 right-6">
         <Button variant="outline" onClick={() => navigate("/")}>Logout</Button>

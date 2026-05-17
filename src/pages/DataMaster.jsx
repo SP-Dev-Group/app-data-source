@@ -21,7 +21,8 @@ export default function DataMaster() {
         <Button variant="outline" onClick={() => navigate("/")}>Logout</Button>
       </div>
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-light tracking-tight text-foreground mb-8 text-center">Data Master</h1>
+        <h1 className="text-3xl font-light tracking-tight text-foreground mb-2 text-center">Data Master</h1>
+        <p className="text-sm font-light uppercase tracking-widest text-muted-foreground mb-8 text-center">Exposed Data</p>
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="w-6 h-6 border-2 border-muted-foreground border-t-foreground rounded-full animate-spin" />

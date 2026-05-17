@@ -30,7 +30,7 @@ export default function Menu() {
         className="flex flex-col gap-3 w-full max-w-xs"
       >
         <Button variant="outline" className="w-full" onClick={() => navigate("/datamaster")}>
-          Data Master
+          Data Master Daily & Manual
         </Button>
         <Button variant="outline" className="w-full" onClick={() => navigate("/datamasterlistener")}>
           Data Master Listener

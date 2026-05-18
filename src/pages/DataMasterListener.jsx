@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { RotateCcw } from "lucide-react";
+import DataMasterListenerInstructions from "@/components/DataMasterListenerInstructions";
 
 export default function DataMasterListener() {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ export default function DataMasterListener() {
           >
             <RotateCcw className="w-4 h-4" />
           </Button>
+          <DataMasterListenerInstructions />
         </div>
         <p className="text-sm font-light uppercase tracking-widest text-muted-foreground mb-8 text-center">Listener Data</p>
         {loading ? (

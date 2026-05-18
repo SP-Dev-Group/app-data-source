@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { RotateCcw, Plus } from "lucide-react";
+import { RotateCcw, Plus, Copy } from "lucide-react";
 import DataMasterListenerInstructions from "@/components/DataMasterListenerInstructions";
 import DataMasterListenerForm from "@/components/DataMasterListenerForm";
 
@@ -47,6 +47,17 @@ export default function DataMasterListener() {
       <div className="absolute top-4 left-6">
         <div className="bg-black rounded-lg px-4 py-2">
           <span className="text-blue-400 font-medium">Data Master</span>
+        </div>
+        <div className="flex items-center gap-2 mt-1">
+          <p className="text-xs font-mono text-muted-foreground">DataMasterListener</p>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText("DataMasterListener");
+            }}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Copy className="w-3 h-3" />
+          </button>
         </div>
       </div>
       <div className="absolute top-4 right-6 flex flex-col gap-2">

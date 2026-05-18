@@ -39,6 +39,17 @@ export default function DataMasterDaily() {
         <div className="bg-black rounded-lg px-4 py-2">
           <span className="text-blue-400 font-medium">Data Master</span>
         </div>
+        <div className="flex items-center gap-2 mt-1">
+          <p className="text-xs font-mono text-muted-foreground">DataMasterDaily</p>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText("DataMasterDaily");
+            }}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Copy className="w-3 h-3" />
+          </button>
+        </div>
       </div>
       <div className="absolute top-4 right-6 flex flex-col gap-2 items-end">
         <div className="flex gap-2 items-center">
@@ -58,6 +69,8 @@ export default function DataMasterDaily() {
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center justify-center gap-2 mb-2">
           <h1 className="text-3xl font-light tracking-tight text-foreground text-center">Data Master Daily</h1>
+        </div>
+        <div className="mb-4">
           <Button
             variant="ghost"
             size="icon"

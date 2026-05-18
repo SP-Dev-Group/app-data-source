@@ -11,12 +11,12 @@ export default function Home() {
       <div className="absolute top-0 left-0 right-0 h-[15px] bg-black flex items-center">
         <div className="h-full w-full bg-blue-400"></div>
       </div>
-      <div className="absolute top-4 left-6">
+      <div className="absolute top-8 left-6">
         <div className="bg-black rounded-lg px-4 py-2">
           <span className="text-primary font-medium">Data Master</span>
         </div>
       </div>
-      <div className="absolute top-4 right-6">
+      <div className="absolute top-8 right-6">
         <Button variant="outline" onClick={() => setLoginOpen(true)}>Login</Button>
       </div>
       <motion.h1

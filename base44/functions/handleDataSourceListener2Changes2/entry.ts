@@ -25,9 +25,9 @@ Deno.serve(async (req) => {
         });
 
         // Sync to destination app using service role key (for apps with custom email/password auth)
-        const serviceRoleKey = Deno.env.get("DEST_APP_SERVICE_ROLE_KEY");
+        const serviceRoleKey = Deno.env.get("DEST_APP_SERVICE_ROLE_KEY2");
         if (!serviceRoleKey) {
-            return Response.json({ error: 'DEST_APP_SERVICE_ROLE_KEY not configured' }, { status: 500 });
+            return Response.json({ error: 'DEST_APP_SERVICE_ROLE_KEY2 not configured' }, { status: 500 });
         }
 
         // Call destination app's backend function with service role authentication

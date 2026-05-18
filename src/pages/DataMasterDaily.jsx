@@ -79,22 +79,21 @@ export default function DataMasterDaily() {
         <Button variant="outline" onClick={generateSample} disabled={generating}>
           {generating ? "Generating..." : "Generate Sample"}
         </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={loadRecords}
+          disabled={loading}
+          className="h-9 w-9"
+        >
+          <RotateCcw className="w-4 h-4" />
+        </Button>
       </div>
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center justify-center gap-2 mb-2">
           <h1 className="text-3xl font-light tracking-tight text-foreground text-center">Data Master Daily at 2am</h1>
         </div>
-        <div className="mb-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={loadRecords}
-            disabled={loading}
-            className="h-8 w-8"
-          >
-            <RotateCcw className="w-4 h-4" />
-          </Button>
-        </div>
+
         <p className="text-sm font-light uppercase tracking-widest text-muted-foreground mb-2 text-center">Exposed Data</p>
         <div className="flex justify-center mb-4">
           <button

@@ -31,8 +31,9 @@ export default function DataMasterListener() {
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
       </div>
       <div className="max-w-3xl mx-auto">
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <h1 className="text-3xl font-light tracking-tight text-foreground text-center">Data Master Listener</h1>
+        <h1 className="text-3xl font-light tracking-tight text-foreground text-center mb-2">Data Master Listener</h1>
+        <p className="text-sm font-light uppercase tracking-widest text-muted-foreground mb-4 text-center">Listener Data</p>
+        <div className="mb-4">
           <Button
             variant="ghost"
             size="icon"
@@ -43,7 +44,6 @@ export default function DataMasterListener() {
             <RotateCcw className="w-4 h-4" />
           </Button>
         </div>
-        <p className="text-sm font-light uppercase tracking-widest text-muted-foreground mb-8 text-center">Listener Data</p>
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="w-6 h-6 border-2 border-muted-foreground border-t-foreground rounded-full animate-spin" />

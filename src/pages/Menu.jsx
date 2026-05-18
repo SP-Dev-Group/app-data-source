@@ -37,11 +37,11 @@ export default function Menu() {
         transition={{ duration: 0.6, delay: 0.1 }}
         className="flex flex-col gap-3 w-full max-w-xs"
       >
-        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" onClick={() => navigate("/datasourcedaily")}>
-          Data Source Daily at 2am
-        </Button>
         <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white" onClick={() => navigate("/datasourcemanual")}>
           Data Source Manual
+        </Button>
+        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" onClick={() => navigate("/datasourcedaily")}>
+          Data Source Daily at 2am
         </Button>
         <Button className="w-full bg-green-600 hover:bg-green-700 text-white" onClick={() => navigate("/datasourcerefresh5min")}>
           Data Source Refresh every 5 mins

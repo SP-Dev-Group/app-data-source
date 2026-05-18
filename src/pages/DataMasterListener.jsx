@@ -9,6 +9,18 @@ export default function DataMasterListener() {
   const navigate = useNavigate();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [generating, setGenerating] = useState(false);
+
+  const generateSample = async () => {
+    setGenerating(true);
+    const uid = `UID-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    const names = ["Alice Johnson", "Bob Smith", "Carol White", "David Lee", "Emma Brown"];
+    const name = names[Math.floor(Math.random() * names.length)];
+    const email = `${name.split(" ")[0].toLowerCase()}.${uid.toLowerCase()}@example.com`;
+    await base44.entities.DataMasterListener.create({ unique_id: uid, name, email });
+    setGenerating(false);
+    loadRecords();
+  };
 
   const loadRecords = () => {
     setLoading(true);
@@ -27,6 +39,9 @@ export default function DataMasterListener() {
       <div className="absolute top-4 right-6 flex flex-col gap-2">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
         <DataMasterListenerInstructions />
+        <Button variant="outline" onClick={generateSample} disabled={generating}>
+          {generating ? "Generating..." : "Generate Sample"}
+        </Button>
       </div>
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-light tracking-tight text-foreground text-center mb-2">Data Master Listener</h1>

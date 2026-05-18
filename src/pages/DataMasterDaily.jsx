@@ -43,23 +43,23 @@ export default function DataMasterDaily() {
           <span className="text-white font-medium">Data Master</span>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-xs font-mono text-muted-foreground">Entity: DataMaster2am</p>
+          <p className="text-xs font-mono text-blue-600">Entity: DataMaster2am</p>
           <button
             onClick={() => {
               navigator.clipboard.writeText("DataMaster2am");
             }}
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="text-blue-600 hover:text-blue-700 transition-colors"
           >
             <Copy className="w-3 h-3" />
           </button>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-xs font-mono text-muted-foreground">Function: syncToListener</p>
+          <p className="text-xs font-mono text-blue-600">Function: syncToListener</p>
           <button
             onClick={() => {
               navigator.clipboard.writeText("syncToListener");
             }}
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="text-blue-600 hover:text-blue-700 transition-colors"
           >
             <Copy className="w-3 h-3" />
           </button>

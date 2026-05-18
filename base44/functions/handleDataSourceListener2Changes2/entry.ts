@@ -39,9 +39,11 @@ Deno.serve(async (req) => {
                 'Authorization': `Bearer ${serviceRoleKey}`
             },
             body: JSON.stringify({
-                unique_id: record.unique_id,
-                name: record.name,
-                event_type: eventType
+                event: { type: eventType },
+                data: {
+                    unique_id: record.unique_id,
+                    name: record.name
+                }
             })
         });
 

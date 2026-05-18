@@ -5,18 +5,17 @@ Deno.serve(async (req) => {
         const base44 = createClientFromRequest(req);
         const body = await req.json();
         
-        console.log("Full payload:", JSON.stringify(body, null, 2));
-        
         // Entity automations wrap data in body.data
-        const record = body.data || body;
-        
-        console.log("Extracted record:", JSON.stringify(record, null, 2));
+        // For delete events, body.data is null, use body.old_data
+        const eventType = body.event?.type;
+        const record = body.data || body.old_data || body;
         
         if (!record || !record.unique_id) {
             return Response.json({ 
                 error: 'Missing required field: unique_id',
-                received: record,
-                fullBody: body
+                eventType,
+                hasData: !!body.data,
+                hasOldData: !!body.old_data
             }, { status: 400 });
         }
 
@@ -26,18 +25,28 @@ Deno.serve(async (req) => {
             return Response.json({ error: 'DEST_APP_SERVICE_ROLE_KEY not configured' }, { status: 500 });
         }
 
-        const response = await fetch('https://app.base44.com/apps/6a0a3ce671984e92b2b0f452/api/functions/syncToListener', {
+        // Destination app ID (the listener app)
+        const destAppId = '6a0a3a832f954c38e4a31c7b';
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        
+        const response = await fetch(`https://app.base44.com/apps/${destAppId}/api/functions/syncToListener`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${serviceRoleKey}`,
             },
             body: JSON.stringify({
+                event_type: eventType,
                 unique_id: record.unique_id,
                 name: record.name,
                 email: record.email,
             }),
+            signal: controller.signal,
         });
+        
+        clearTimeout(timeoutId);
 
         const result = await response.json();
         

@@ -38,7 +38,7 @@ export default function DataMasterDaily() {
       <div className="absolute top-0 left-0 right-0 h-[15px] bg-black flex items-center">
         <div className="h-full w-full bg-blue-400"></div>
       </div>
-      <div className="absolute top-4 left-6">
+      <div className="absolute top-8 left-6">
         <div className="bg-black rounded-lg px-4 py-2">
           <span className="text-blue-400 font-medium">Data Master</span>
         </div>
@@ -54,7 +54,7 @@ export default function DataMasterDaily() {
           </button>
         </div>
       </div>
-      <div className="absolute top-4 right-6 flex flex-col gap-2 items-end">
+      <div className="absolute top-8 right-6 flex flex-col gap-2 items-end">
         <div className="flex gap-2 items-center">
           <button
             onClick={() => navigator.clipboard.writeText("6a0a3a832f954c38e4a31c7b")}

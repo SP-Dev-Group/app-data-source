@@ -39,7 +39,7 @@ export default function DataSourceListener2() {
       <div className="absolute top-0 left-0 right-0 h-[15px] bg-black flex items-center">
         <div className="h-full w-full bg-blue-400"></div>
       </div>
-      <div className="absolute top-4 left-6">
+      <div className="absolute top-8 left-6">
         <div className="bg-black rounded-lg px-4 py-2">
           <span className="text-blue-400 font-medium">Data Source</span>
         </div>
@@ -56,7 +56,7 @@ export default function DataSourceListener2() {
           </button>
         </div>
       </div>
-      <div className="absolute top-4 right-6 flex flex-col gap-2">
+      <div className="absolute top-8 right-6 flex flex-col gap-2">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
         <DataSourceListener2Instructions />
         <Button

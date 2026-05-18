@@ -40,7 +40,7 @@ export default function Menu() {
         <Button variant="outline" className="w-full" onClick={() => navigate("/datamasterdaily1")}>
           Data Master 2am Daily <span className="text-green-600 font-bold text-[10px] -mt-1">1</span>
         </Button>
-        <Button variant="outline" className="w-full" onClick={() => navigate("/datamastermanual4")}>
+        <Button variant="outline" className="w-full" onClick={() => navigate("/datamastermanual2")}>
           Data Master Manual <span className="text-green-600 font-bold text-[10px] -mt-1">2</span>
         </Button>
         <Button variant="outline" className="w-full" onClick={() => navigate("/datasourcelistener5min3")}>

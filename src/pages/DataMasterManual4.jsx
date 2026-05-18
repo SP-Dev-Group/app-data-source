@@ -52,10 +52,10 @@ export default function DataMasterManual4() {
           <span className="text-blue-400 font-medium">Data Master</span>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-xs font-mono text-muted-foreground">DataMasterManual4</p>
+          <p className="text-xs font-mono text-muted-foreground">DataMasterManual2</p>
           <button
             onClick={() => {
-              navigator.clipboard.writeText("DataMasterManual4");
+              navigator.clipboard.writeText("DataMasterManual2");
             }}
             className="text-muted-foreground hover:text-foreground transition-colors"
           >
@@ -78,7 +78,7 @@ export default function DataMasterManual4() {
       </div>
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-light tracking-tight text-foreground text-center mb-2">
-          Data Master Manual <span className="text-green-600 font-bold text-[10px] -mt-1">4</span>
+          Data Master Manual <span className="text-green-600 font-bold text-[10px] -mt-1">2</span>
         </h1>
         {showForm && <DataMasterListenerForm onSubmit={handleAddRecord} onCancel={() => setShowForm(false)} />}
         {!loading && <p className="text-xs text-muted-foreground mb-4">{records.length} record{records.length !== 1 ? 's' : ''}</p>}

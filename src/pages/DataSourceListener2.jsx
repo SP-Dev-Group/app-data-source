@@ -41,32 +41,30 @@ export default function DataSourceListener2() {
       </div>
       <div className="absolute top-4 right-6 flex flex-col gap-2">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={loadRecords}
+            disabled={loading}
+            className="flex items-center gap-2"
+          >
+            <RotateCcw className="w-4 h-4" />
+            Refresh
+          </Button>
+          <Button
+            variant="outline"
+            onClick={createSample}
+            disabled={creating}
+            className="flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            {creating ? "Creating..." : "Create Sample"}
+          </Button>
+        </div>
       </div>
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-light tracking-tight text-foreground text-center mb-2">Data Source Listener 2</h1>
         <p className="text-sm font-light uppercase tracking-widest text-muted-foreground mb-4 text-center">Listener Data</p>
-        <div className="flex justify-between items-center mb-4">
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={loadRecords}
-              disabled={loading}
-              className="flex items-center gap-2"
-            >
-              <RotateCcw className="w-4 h-4" />
-              Refresh
-            </Button>
-            <Button
-              variant="outline"
-              onClick={createSample}
-              disabled={creating}
-              className="flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              {creating ? "Creating..." : "Create Sample"}
-            </Button>
-          </div>
-        </div>
         {!loading && <p className="text-xs text-muted-foreground mb-4">{records.length} record{records.length !== 1 ? 's' : ''}</p>}
         {loading ? (
           <div className="flex items-center justify-center py-20">

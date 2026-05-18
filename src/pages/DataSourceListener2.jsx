@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { RotateCcw, Plus, Copy } from "lucide-react";
+import DataSourceListener2Instructions from "@/components/DataSourceListener2Instructions";
 
 export default function DataSourceListener2() {
   const navigate = useNavigate();
@@ -54,6 +55,7 @@ export default function DataSourceListener2() {
       </div>
       <div className="absolute top-4 right-6 flex flex-col gap-2">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
+        <DataSourceListener2Instructions />
         <Button
           variant="outline"
           onClick={loadRecords}

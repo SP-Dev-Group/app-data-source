@@ -2,28 +2,36 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { RotateCcw, Plus, Copy } from "lucide-react";
+import DataMasterListenerInstructions from "@/components/DataMasterListenerInstructions";
+import DataMasterListenerForm from "@/components/DataMasterListenerForm";
+import { Copy, RotateCcw, Plus } from "lucide-react";
 
-export default function DataSourceListener4() {
+export default function DataMasterManual() {
   const navigate = useNavigate();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [creating, setCreating] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [generating, setGenerating] = useState(false);
 
   const createSample = async () => {
-    setCreating(true);
+    setGenerating(true);
     const uid = `UID-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-    const names = ["Alpha System", "Beta Platform", "Gamma Service", "Delta Module", "Epsilon Core"];
+    const names = ["Alpha Listener", "Beta Listener", "Gamma Listener", "Delta Listener", "Epsilon Listener"];
     const name = names[Math.floor(Math.random() * names.length)];
-    await base44.entities.DataSourceListener3.create({ unique_id: uid, name });
-    setCreating(false);
+    await base44.entities.DataMasterListener.create({ unique_id: uid, name, email: `${name.toLowerCase().replace(" ", ".")}@listener.local` });
+    setGenerating(false);
+    loadRecords();
+  };
+
+  const addRecord = async (record) => {
+    await base44.entities.DataMasterListener.create(record);
+    setShowForm(false);
     loadRecords();
   };
 
   const loadRecords = () => {
     setLoading(true);
-    base44.entities.DataSourceListener3.list().then((data) => {
+    base44.entities.DataMasterListener.list().then((data) => {
       setRecords(data);
       setLoading(false);
     });
@@ -40,14 +48,13 @@ export default function DataSourceListener4() {
       </div>
       <div className="absolute top-8 left-6">
         <div className="bg-black rounded-lg px-4 py-2">
-          <span className="text-blue-400 font-medium">Data Source</span>
+          <span className="text-blue-400 font-medium">Data Master</span>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-xs font-mono text-muted-foreground">Entity: DataSourceListener4</p>
+          <p className="text-xs font-mono text-muted-foreground">Entity: DataMasterListener</p>
           <button
             onClick={() => {
-              navigator.clipboard.writeText("DataSourceListener4");
-              toast.success("Entity name copied");
+              navigator.clipboard.writeText("DataMasterListener");
             }}
             className="text-muted-foreground hover:text-foreground transition-colors"
           >
@@ -57,31 +64,26 @@ export default function DataSourceListener4() {
       </div>
       <div className="absolute top-8 right-6 flex flex-col gap-2">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
+        <DataMasterListenerInstructions />
         <Button
           variant="outline"
-          onClick={loadRecords}
-          disabled={loading}
-          className="flex items-center gap-2"
-        >
-          <RotateCcw className="w-4 h-4" />
-          Refresh
-        </Button>
-        <Button
-          variant="outline"
-          onClick={createSample}
-          disabled={creating}
+          onClick={() => setShowForm(!showForm)}
           className="flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
-          {creating ? "Creating..." : "Generate Sample"}
+          {showForm ? "Cancel" : "Add Record"}
+        </Button>
+        <Button variant="outline" onClick={createSample} disabled={generating}>
+          {generating ? "Generating..." : "Generate Sample"}
         </Button>
       </div>
       <div className="max-w-xl mx-auto pt-20">
+        {showForm && (
+          <DataMasterListenerForm onSubmit={addRecord} />
+        )}
         <div className="text-center mb-4">
-          <h1 className="text-3xl font-light tracking-tight text-foreground">
-            Data Source <span className="text-green-600 font-bold text-[10px] -mt-1">4</span>
-          </h1>
-          <p className="text-sm font-light text-muted-foreground mt-1">with Listener Event</p>
+          <h1 className="text-3xl font-light tracking-tight text-foreground">Data Master Manual</h1>
+          <p className="text-sm font-light text-muted-foreground mt-1">Manual data entry and management</p>
         </div>
         {!loading && <p className="text-xs text-muted-foreground mb-4">{records.length} record{records.length !== 1 ? 's' : ''}</p>}
         {loading ? (
@@ -95,6 +97,7 @@ export default function DataSourceListener4() {
                 <tr>
                   <th className="text-left px-4 py-3 font-medium">Unique ID</th>
                   <th className="text-left px-4 py-3 font-medium">Name</th>
+                  <th className="text-left px-4 py-3 font-medium">Email</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border bg-card">
@@ -102,11 +105,12 @@ export default function DataSourceListener4() {
                   <tr key={row.id} className="hover:bg-muted/40 transition-colors">
                     <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{row.unique_id}</td>
                     <td className="px-4 py-3">{row.name}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{row.email}</td>
                   </tr>
                 ))}
                 {records.length === 0 && (
                   <tr>
-                    <td colSpan={2} className="px-4 py-8 text-center text-muted-foreground">No records found.</td>
+                    <td colSpan={3} className="px-4 py-8 text-center text-muted-foreground">No records found.</td>
                   </tr>
                 )}
               </tbody>

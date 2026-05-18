@@ -4,9 +4,8 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { RotateCcw, Plus, Copy } from "lucide-react";
-import DataSourceListener2Instructions from "@/components/DataSourceListener2Instructions";
 
-export default function DataSourceListener5min3() {
+export default function DataSourceListener() {
   const navigate = useNavigate();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,14 +16,14 @@ export default function DataSourceListener5min3() {
     const uid = `UID-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     const names = ["Alpha System", "Beta Platform", "Gamma Service", "Delta Module", "Epsilon Core"];
     const name = names[Math.floor(Math.random() * names.length)];
-    await base44.entities.DataSourceListener2.create({ unique_id: uid, name });
+    await base44.entities.DataSourceListener3.create({ unique_id: uid, name });
     setCreating(false);
     loadRecords();
   };
 
   const loadRecords = () => {
     setLoading(true);
-    base44.entities.DataSourceListener2.list().then((data) => {
+    base44.entities.DataSourceListener3.list().then((data) => {
       setRecords(data);
       setLoading(false);
     });
@@ -36,7 +35,7 @@ export default function DataSourceListener5min3() {
 
   return (
     <div className="min-h-screen bg-background px-6 py-12 relative">
-      <div className="absolute top-0 left-0 right-0 h-[15px] h-[15px] bg-black flex items-center">
+      <div className="absolute top-0 left-0 right-0 h-[15px] bg-black flex items-center">
         <div className="h-full w-full bg-blue-400"></div>
       </div>
       <div className="absolute top-8 left-6">
@@ -44,23 +43,11 @@ export default function DataSourceListener5min3() {
           <span className="text-blue-400 font-medium">Data Source</span>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-xs font-mono text-muted-foreground">Entity: DataSourceListener2</p>
+          <p className="text-xs font-mono text-muted-foreground">Entity: DataSourceListener3</p>
           <button
             onClick={() => {
-              navigator.clipboard.writeText("DataSourceListener2");
+              navigator.clipboard.writeText("DataSourceListener3");
               toast.success("Entity name copied");
-            }}
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <Copy className="w-3 h-3" />
-          </button>
-        </div>
-        <div className="flex items-center gap-2 mt-1">
-          <p className="text-xs font-mono text-muted-foreground">Function: functions/handleDataSourceListener2Changes.ts</p>
-          <button
-            onClick={() => {
-              navigator.clipboard.writeText("functions/handleDataSourceListener2Changes.ts");
-              toast.success("Function path copied");
             }}
             className="text-muted-foreground hover:text-foreground transition-colors"
           >
@@ -70,7 +57,15 @@ export default function DataSourceListener5min3() {
       </div>
       <div className="absolute top-8 right-6 flex flex-col gap-2">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
-        <DataSourceListener2Instructions />
+        <Button
+          variant="outline"
+          onClick={loadRecords}
+          disabled={loading}
+          className="flex items-center gap-2"
+        >
+          <RotateCcw className="w-4 h-4" />
+          Refresh
+        </Button>
         <Button
           variant="outline"
           onClick={createSample}
@@ -78,12 +73,12 @@ export default function DataSourceListener5min3() {
           className="flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
-          {creating ? "Creating..." : "Create Sample"}
+          {creating ? "Creating..." : "Generate Sample"}
         </Button>
       </div>
       <div className="max-w-xl mx-auto pt-20">
         <div className="text-center mb-4">
-          <h1 className="text-3xl font-light tracking-tight text-foreground">Data Source 5 min Refetch <span className="text-green-600 font-bold text-[10px] -mt-1">3</span></h1>
+          <h1 className="text-3xl font-light tracking-tight text-foreground">Data Source</h1>
           <p className="text-sm font-light text-muted-foreground mt-1">with Listener Event</p>
         </div>
         {!loading && <p className="text-xs text-muted-foreground mb-4">{records.length} record{records.length !== 1 ? 's' : ''}</p>}

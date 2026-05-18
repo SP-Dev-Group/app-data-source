@@ -7,11 +7,11 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 // Add page imports here
 import Home from './pages/Home';
-import DataMasterDaily1 from './pages/DataMasterDaily1';
+import DataMasterDaily from './pages/DataMasterDaily';
 import Menu from './pages/Menu';
-import DataMasterManual2 from './pages/DataMasterManual4';
-import DataSourceListener5min3 from './pages/DataSourceListener5min3';
-import DataSourceListener4 from './pages/DataSourceListener4';
+import DataMasterManual from './pages/DataMasterManual';
+import DataSourceListener5min from './pages/DataSourceListener5min';
+import DataSourceListener from './pages/DataSourceListener';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -40,11 +40,11 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/datamasterdaily1" element={<DataMasterDaily1 />} />
+      <Route path="/datamasterdaily" element={<DataMasterDaily />} />
       <Route path="/menu" element={<Menu />} />
-      <Route path="/datamastermanual2" element={<DataMasterManual2 />} />
-      <Route path="/datasourcelistener5min3" element={<DataSourceListener5min3 />} />
-      <Route path="/datasourcelistener4" element={<DataSourceListener4 />} />
+      <Route path="/datamastermanual" element={<DataMasterManual />} />
+      <Route path="/datasourcelistener5min" element={<DataSourceListener5min />} />
+      <Route path="/datasourcelistener" element={<DataSourceListener />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

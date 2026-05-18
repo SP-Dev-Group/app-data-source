@@ -8,6 +8,18 @@ export default function DataMaster() {
   const navigate = useNavigate();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [generating, setGenerating] = useState(false);
+
+  const generateSample = async () => {
+    setGenerating(true);
+    const uid = `UID-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    const names = ["Alice Johnson", "Bob Smith", "Carol White", "David Lee", "Emma Brown"];
+    const name = names[Math.floor(Math.random() * names.length)];
+    const email = `${name.split(" ")[0].toLowerCase()}.${uid.toLowerCase()}@example.com`;
+    await base44.entities.DataMaster.create({ unique_id: uid, name, email });
+    setGenerating(false);
+    loadRecords();
+  };
 
   const loadRecords = () => {
     setLoading(true);
@@ -40,15 +52,20 @@ export default function DataMaster() {
           <Copy className="w-3 h-3" />
         </button>
       </div>
-      <div className="absolute top-4 right-6 flex gap-2 items-center">
-        <button
-          onClick={() => navigator.clipboard.writeText("6a0a3a832f954c38e4a31c7b")}
-          className="text-xs text-muted-foreground font-mono hover:text-foreground cursor-pointer transition-colors flex items-center gap-1"
-          title="Copy ID only"
-        >
-          <Copy className="w-3 h-3" />
-        </button>
-        <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
+      <div className="absolute top-4 right-6 flex flex-col gap-2 items-end">
+        <div className="flex gap-2 items-center">
+          <button
+            onClick={() => navigator.clipboard.writeText("6a0a3a832f954c38e4a31c7b")}
+            className="text-xs text-muted-foreground font-mono hover:text-foreground cursor-pointer transition-colors flex items-center gap-1"
+            title="Copy ID only"
+          >
+            <Copy className="w-3 h-3" />
+          </button>
+          <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
+        </div>
+        <Button variant="outline" onClick={generateSample} disabled={generating}>
+          {generating ? "Generating..." : "Generate Sample"}
+        </Button>
       </div>
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center justify-center gap-2 mb-2">

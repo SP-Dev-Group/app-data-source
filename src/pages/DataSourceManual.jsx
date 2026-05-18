@@ -6,7 +6,7 @@ import DataMasterListenerInstructions from "@/components/DataMasterListenerInstr
 import DataMasterListenerForm from "@/components/DataMasterListenerForm";
 import { Copy, RotateCcw, Plus } from "lucide-react";
 
-export default function DataMasterManual() {
+export default function DataSourceManual() {
   const navigate = useNavigate();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -83,7 +83,7 @@ export default function DataMasterManual() {
         )}
         <div className="text-center mb-4">
           <div className="bg-purple-600 rounded-lg px-6 py-3 inline-block">
-            <h1 className="text-3xl font-light tracking-tight text-white">Data Master Manual</h1>
+            <h1 className="text-3xl font-light tracking-tight text-white">Data Source Manual</h1>
           </div>
           <p className="text-sm font-light text-muted-foreground mt-3">Manual data entry and management</p>
         </div>

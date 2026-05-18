@@ -7,9 +7,9 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 // Add page imports here
 import Home from './pages/Home';
-import DataMasterDaily from './pages/DataMasterDaily';
+import DataSourceDaily from './pages/DataSourceDaily';
 import Menu from './pages/Menu';
-import DataMasterManual from './pages/DataMasterManual';
+import DataSourceManual from './pages/DataSourceManual';
 import DataSourceListener5min from './pages/DataSourceListener5min';
 import DataSourceListener from './pages/DataSourceListener';
 
@@ -40,9 +40,9 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/datamasterdaily" element={<DataMasterDaily />} />
+      <Route path="/datasourcedaily" element={<DataSourceDaily />} />
       <Route path="/menu" element={<Menu />} />
-      <Route path="/datamastermanual" element={<DataMasterManual />} />
+      <Route path="/datasourcemanual" element={<DataSourceManual />} />
       <Route path="/datasourcelistener5min" element={<DataSourceListener5min />} />
       <Route path="/datasourcelistener" element={<DataSourceListener />} />
       <Route path="*" element={<PageNotFound />} />

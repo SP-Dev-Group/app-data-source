@@ -46,7 +46,7 @@ export default function DataMasterListener() {
     <div className="min-h-screen bg-background px-6 py-12 relative">
       <div className="absolute top-4 left-6">
         <div className="bg-black rounded-lg px-4 py-2">
-          <span className="text-primary font-medium">Data Master</span>
+          <span className="text-blue-400 font-medium">Data Master</span>
         </div>
       </div>
       <div className="absolute top-4 right-6 flex flex-col gap-2">

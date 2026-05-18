@@ -18,20 +18,20 @@ export default function DataSourceManual() {
     const uid = `UID-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     const names = ["Alpha Listener", "Beta Listener", "Gamma Listener", "Delta Listener", "Epsilon Listener"];
     const name = names[Math.floor(Math.random() * names.length)];
-    await base44.entities.DataSourceListener.create({ unique_id: uid, name, email: `${name.toLowerCase().replace(" ", ".")}@listener.local` });
+    await base44.entities.DataSourceManual.create({ unique_id: uid, name, email: `${name.toLowerCase().replace(" ", ".")}@listener.local` });
     setGenerating(false);
     loadRecords();
   };
 
   const addRecord = async (record) => {
-    await base44.entities.DataSourceListener.create(record);
+    await base44.entities.DataSourceManual.create(record);
     setShowForm(false);
     loadRecords();
   };
 
   const loadRecords = () => {
     setLoading(true);
-    base44.entities.DataSourceListener.list().then((data) => {
+    base44.entities.DataSourceManual.list().then((data) => {
       setRecords(data);
       setLoading(false);
     });
@@ -51,10 +51,10 @@ export default function DataSourceManual() {
           <span className="text-blue-400 font-medium">Data Source</span>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-xs font-mono text-muted-foreground">Entity: DataSourceListener</p>
+          <p className="text-xs font-mono text-muted-foreground">Entity: DataSourceManual</p>
           <button
             onClick={() => {
-              navigator.clipboard.writeText("DataSourceListener");
+              navigator.clipboard.writeText("DataSourceManual");
             }}
             className="text-muted-foreground hover:text-foreground transition-colors"
           >

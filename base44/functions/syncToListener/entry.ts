@@ -6,7 +6,7 @@ Deno.serve(async (req) => {
         const payload = await req.json();
 
         const response = await fetch(
-            'https://app.base44.com/apps/520c13746d8f46fc90a60bac992d287f/api/functions/syncToListener',
+            'https://app.base44.com/apps/6a0a3ce671984e92b2b0f452/api/functions/syncToListener',
             {
                 method: 'POST',
                 headers: {

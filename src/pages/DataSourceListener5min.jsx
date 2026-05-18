@@ -84,7 +84,7 @@ export default function DataSourceListener5min() {
       <div className="max-w-xl mx-auto pt-20">
         <div className="text-center mb-4">
           <div className="bg-green-600 rounded-lg px-6 py-3 inline-block">
-            <h1 className="text-3xl font-light tracking-tight text-white">Data Source 5 min Refetch</h1>
+            <h1 className="text-3xl font-light tracking-tight text-white">Data Source Refresh every 5 mins</h1>
           </div>
           <p className="text-sm font-light text-muted-foreground mt-3">with Listener Event</p>
         </div>

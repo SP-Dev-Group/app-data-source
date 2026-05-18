@@ -5,14 +5,10 @@ Deno.serve(async (req) => {
         const base44 = createClientFromRequest(req);
         const body = await req.json();
         
-        // Extract event type and data from automation payload
-        const eventType = body.event?.type;
-        const record = body.data;
+        // Extract the entity data from automation payload
+        const record = body.data || body;
         
-        // For delete events, use old_data since data is null
-        const data = record || body.old_data;
-        
-        if (!data || !data.unique_id) {
+        if (!record || !record.unique_id) {
             return Response.json({ error: 'Missing required field: unique_id' }, { status: 400 });
         }
 
@@ -33,10 +29,9 @@ Deno.serve(async (req) => {
                     'Authorization': `Bearer ${serviceRoleKey}`,
                 },
                 body: JSON.stringify({
-                    event_type: eventType,
-                    unique_id: data.unique_id,
-                    name: data.name,
-                    email: data.email,
+                    unique_id: record.unique_id,
+                    name: record.name,
+                    email: record.email,
                 }),
             }
         );

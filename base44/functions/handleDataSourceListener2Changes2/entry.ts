@@ -32,7 +32,7 @@ Deno.serve(async (req) => {
 
         // Call destination app's backend function with service role authentication
         const appId = "6a0a3a832f954c38e4a31c7b"; // Destination app ID
-        const response = await fetch(`https://api.base44.com/api/apps/${appId}/functions/syncToListener`, {
+        const response = await fetch(`https://app.base44.com/apps/${appId}/functions/syncToListener`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

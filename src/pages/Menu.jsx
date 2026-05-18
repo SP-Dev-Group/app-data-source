@@ -37,7 +37,7 @@ export default function Menu() {
         transition={{ duration: 0.6, delay: 0.1 }}
         className="flex flex-col gap-3 w-full max-w-xs"
       >
-        <Button variant="outline" className="w-full" onClick={() => navigate("/datamasterdaily")}>
+        <Button variant="outline" className="w-full" onClick={() => navigate("/datamasterdaily1")}>
           Data Master 2am Daily <span className="text-green-600 font-bold text-[10px] -mt-1">1</span>
         </Button>
         <Button variant="outline" className="w-full" onClick={() => navigate("/datamasterlistener")}>

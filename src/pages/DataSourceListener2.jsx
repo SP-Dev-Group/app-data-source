@@ -37,7 +37,7 @@ export default function DataSourceListener2() {
     <div className="min-h-screen bg-background px-6 py-12 relative">
       <div className="absolute top-4 left-6">
         <div className="bg-black rounded-lg px-4 py-2">
-          <span className="text-white font-medium">Data Source</span>
+          <span className="text-blue-400 font-medium">Data Source</span>
         </div>
         <div className="flex items-center gap-2 mt-1">
           <p className="text-xs font-mono text-muted-foreground">DataSourceListener2</p>

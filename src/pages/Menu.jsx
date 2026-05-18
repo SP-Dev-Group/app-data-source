@@ -41,13 +41,13 @@ export default function Menu() {
           Data Master 2am Daily <span className="text-green-600 font-bold text-[10px] -mt-1">1</span>
         </Button>
         <Button variant="outline" className="w-full" onClick={() => navigate("/datamasterlistener")}>
-          Data Master Listener
+          Data Master Listener <span className="text-green-600 font-bold text-[10px] -mt-1">2</span>
         </Button>
         <Button variant="outline" className="w-full" onClick={() => navigate("/datasourcelistener5min3")}>
           Data Source 5 min Refresh <span className="text-green-600 font-bold text-[10px] -mt-1">3</span>
         </Button>
         <Button variant="outline" className="w-full" onClick={() => navigate("/datasourcelistener3")}>
-          Data Source Listener 3
+          Data Source Listener <span className="text-green-600 font-bold text-[10px] -mt-1">4</span>
         </Button>
       </motion.div>
     </div>

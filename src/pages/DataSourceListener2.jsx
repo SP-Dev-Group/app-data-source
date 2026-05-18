@@ -38,6 +38,7 @@ export default function DataSourceListener2() {
         <div className="bg-black rounded-lg px-4 py-2">
           <span className="text-primary font-medium">Data Source</span>
         </div>
+        <p className="text-xs font-mono text-muted-foreground mt-1">DataSourceListener2</p>
       </div>
       <div className="absolute top-4 right-6 flex flex-col gap-2">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>

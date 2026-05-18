@@ -29,7 +29,7 @@ Deno.serve(async (req) => {
         const destAppId = '6a0a3a832f954c38e4a31c7b';
         
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
         
         const response = await fetch(`https://app.base44.com/apps/${destAppId}/api/functions/syncToListener`, {
             method: 'POST',

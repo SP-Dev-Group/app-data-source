@@ -19,24 +19,25 @@ export default function DataSourceListener2Instructions() {
       </DialogTrigger>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>DataSourceListener2 Setup Instructions</DialogTitle>
+          <DialogTitle>Data Source 5 min Refetch Instructions</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 text-sm text-muted-foreground">
           <div>
             <h3 className="font-medium text-foreground mb-2">Purpose</h3>
             <p>
-              This entity serves as a data source listener that receives synchronized data 
-              from the DataMaster entity via the syncToListener automation.
+              This entity serves as an external database that is refetched every 5 minutes 
+              to check for updates. It acts as a data source listener that receives 
+              synchronized data from external systems.
             </p>
           </div>
           
           <div>
             <h3 className="font-medium text-foreground mb-2">How It Works</h3>
             <ol className="list-decimal list-inside space-y-1">
-              <li>When records are created, updated, or deleted in DataMasterListener</li>
-              <li>The syncToListener automation triggers automatically</li>
-              <li>Data is sent to the destination app's syncToListener function</li>
-              <li>Records are synchronized to this DataSourceListener2 entity</li>
+              <li>External systems update data in this DataSourceListener2 entity</li>
+              <li>A scheduled automation refetches data every 5 minutes</li>
+              <li>Changes are detected and processed automatically</li>
+              <li>Updated records are synchronized to downstream systems</li>
             </ol>
           </div>
 
@@ -45,7 +46,7 @@ export default function DataSourceListener2Instructions() {
             <ul className="space-y-1">
               <li><strong>Entity Name:</strong> DataSourceListener2</li>
               <li><strong>Fields:</strong> unique_id, name</li>
-              <li><strong>Trigger Events:</strong> create, update, delete</li>
+              <li><strong>Refetch Interval:</strong> Every 5 minutes</li>
             </ul>
           </div>
 
@@ -53,8 +54,9 @@ export default function DataSourceListener2Instructions() {
             <h3 className="font-medium text-foreground mb-2">Usage</h3>
             <ul className="list-disc list-inside space-y-1">
               <li>Use "Create Sample" to generate test records</li>
-              <li>Click "Refresh" to reload the latest data</li>
-              <li>Monitor this page to verify synchronization is working correctly</li>
+              <li>Click "Refresh" to manually reload the latest data</li>
+              <li>Monitor this page to verify data updates are being captured</li>
+              <li>The system automatically refetches every 5 minutes for updates</li>
             </ul>
           </div>
         </div>

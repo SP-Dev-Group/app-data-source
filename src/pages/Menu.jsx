@@ -38,13 +38,13 @@ export default function Menu() {
         className="flex flex-col gap-3 w-full max-w-xs"
       >
         <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" onClick={() => navigate("/datasourcedaily")}>
-          Data Source 2am Daily
+          Data Source Daily at 2am
         </Button>
         <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white" onClick={() => navigate("/datasourcemanual")}>
           Data Source Manual
         </Button>
         <Button className="w-full bg-green-600 hover:bg-green-700 text-white" onClick={() => navigate("/datasourcelistener5min")}>
-          Data Source 5 min Refresh
+          Data Source Refresh every 5 mins
         </Button>
         <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white" onClick={() => navigate("/datasourcelistener")}>
           Data Source Listener

@@ -37,16 +37,16 @@ export default function Menu() {
         transition={{ duration: 0.6, delay: 0.1 }}
         className="flex flex-col gap-3 w-full max-w-xs"
       >
-        <Button variant="outline" className="w-full" onClick={() => navigate("/datamasterdaily")}>
+        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" onClick={() => navigate("/datamasterdaily")}>
           Data Master 2am Daily
         </Button>
-        <Button variant="outline" className="w-full" onClick={() => navigate("/datamastermanual")}>
+        <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white" onClick={() => navigate("/datamastermanual")}>
           Data Master Manual
         </Button>
-        <Button variant="outline" className="w-full" onClick={() => navigate("/datasourcelistener5min")}>
+        <Button className="w-full bg-green-600 hover:bg-green-700 text-white" onClick={() => navigate("/datasourcelistener5min")}>
           Data Source 5 min Refresh
         </Button>
-        <Button variant="outline" className="w-full" onClick={() => navigate("/datasourcelistener")}>
+        <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white" onClick={() => navigate("/datasourcelistener")}>
           Data Source Listener
         </Button>
       </motion.div>

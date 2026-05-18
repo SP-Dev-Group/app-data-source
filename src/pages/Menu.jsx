@@ -12,6 +12,11 @@ export default function Menu() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6 gap-4 relative">
+      <div className="absolute top-4 left-6">
+        <div className="bg-black rounded-lg px-4 py-2">
+          <span className="text-primary font-medium">Data Master</span>
+        </div>
+      </div>
       <div className="absolute top-4 right-6">
         <Button variant="outline" onClick={handleLogout}>Logout</Button>
       </div>

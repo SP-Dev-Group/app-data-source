@@ -35,6 +35,11 @@ export default function DataMasterDaily() {
 
   return (
     <div className="min-h-screen bg-background px-6 py-12 relative">
+      <div className="absolute top-4 left-6">
+        <div className="bg-black rounded-lg px-4 py-2">
+          <span className="text-primary font-medium">Data Master</span>
+        </div>
+      </div>
       <div className="absolute top-4 left-6 flex items-center gap-2">
         <button
           onClick={() => navigator.clipboard.writeText("App ID: 6a0a3a832f954c38e4a31c7b")}

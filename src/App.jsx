@@ -9,7 +9,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Home from './pages/Home';
 import DataMasterDaily1 from './pages/DataMasterDaily1';
 import Menu from './pages/Menu';
-import DataMasterManual3 from './pages/DataMasterManual3';
+import DataMasterManual4 from './pages/DataMasterManual4';
 import DataSourceListener5min3 from './pages/DataSourceListener5min3';
 import DataSourceListener3 from './pages/DataSourceListener3';
 
@@ -42,7 +42,7 @@ const AuthenticatedApp = () => {
       <Route path="/" element={<Home />} />
       <Route path="/datamasterdaily1" element={<DataMasterDaily1 />} />
       <Route path="/menu" element={<Menu />} />
-      <Route path="/datamastermanual3" element={<DataMasterManual3 />} />
+      <Route path="/datamastermanual4" element={<DataMasterManual4 />} />
       <Route path="/datasourcelistener5min3" element={<DataSourceListener5min3 />} />
       <Route path="/datasourcelistener3" element={<DataSourceListener3 />} />
       <Route path="*" element={<PageNotFound />} />

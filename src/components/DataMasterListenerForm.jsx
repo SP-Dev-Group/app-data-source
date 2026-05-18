@@ -6,14 +6,14 @@ import { X } from "lucide-react";
 
 export default function DataMasterListenerForm({ onSubmit, onCancel }) {
   const [formData, setFormData] = useState({
-    unique_id: "",
     name: "",
     email: "",
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    const uid = `UID-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    onSubmit({ ...formData, unique_id: uid });
   };
 
   return (
@@ -25,16 +25,6 @@ export default function DataMasterListenerForm({ onSubmit, onCancel }) {
         </Button>
       </div>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <Label htmlFor="unique_id">Unique ID</Label>
-          <Input
-            id="unique_id"
-            value={formData.unique_id}
-            onChange={(e) => setFormData({ ...formData, unique_id: e.target.value })}
-            placeholder="e.g., UID-ABC123"
-            required
-          />
-        </div>
         <div>
           <Label htmlFor="name">Name</Label>
           <Input

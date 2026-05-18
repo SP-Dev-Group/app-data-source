@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Copy, RotateCcw } from "lucide-react";
 
-export default function DataMaster() {
+export default function DataMasterDaily() {
   const navigate = useNavigate();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -69,7 +69,7 @@ export default function DataMaster() {
       </div>
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center justify-center gap-2 mb-2">
-          <h1 className="text-3xl font-light tracking-tight text-foreground text-center">Data Master</h1>
+          <h1 className="text-3xl font-light tracking-tight text-foreground text-center">Data Master Daily</h1>
           <Button
             variant="ghost"
             size="icon"

@@ -40,6 +40,9 @@ export default function Menu() {
         <Button variant="outline" className="w-full" onClick={() => navigate("/datamasterlistener")}>
           Data Master Listener
         </Button>
+        <Button variant="outline" className="w-full" onClick={() => navigate("/datasourcelistener2")}>
+          Data Source Listener 2
+        </Button>
       </motion.div>
     </div>
   );

@@ -79,7 +79,10 @@ export default function DataSourceListener2() {
         </Button>
       </div>
       <div className="max-w-xl mx-auto">
-        <h1 className="text-3xl font-light tracking-tight text-foreground text-center mb-2">Data Source 'Listener Event' 2</h1>
+        <div className="text-center mb-4">
+          <h1 className="text-3xl font-light tracking-tight text-foreground">Data Source 2</h1>
+          <p className="text-sm font-light text-muted-foreground mt-1">with Listener Event</p>
+        </div>
         <p className="text-sm font-light uppercase tracking-widest text-muted-foreground mb-4 text-center">Listener Data</p>
         {!loading && <p className="text-xs text-muted-foreground mb-4">{records.length} record{records.length !== 1 ? 's' : ''}</p>}
         {loading ? (

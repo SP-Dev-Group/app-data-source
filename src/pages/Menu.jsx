@@ -44,7 +44,7 @@ export default function Menu() {
           Data Master Listener
         </Button>
         <Button variant="outline" className="w-full" onClick={() => navigate("/datasourcelistener2")}>
-          Data Source Listener 2
+          Data Source 5 minute Refresh
         </Button>
       </motion.div>
     </div>

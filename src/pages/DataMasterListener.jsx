@@ -24,11 +24,9 @@ export default function DataMasterListener() {
 
   return (
     <div className="min-h-screen bg-background px-6 py-12 relative">
-      <div className="absolute top-4 left-6">
-        <DataMasterListenerInstructions />
-      </div>
-      <div className="absolute top-4 right-6">
+      <div className="absolute top-4 right-6 flex flex-col gap-2">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
+        <DataMasterListenerInstructions />
       </div>
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-light tracking-tight text-foreground text-center mb-2">Data Master Listener</h1>

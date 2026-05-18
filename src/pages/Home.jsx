@@ -8,6 +8,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-6 relative">
+      <div className="absolute top-4 left-6">
+        <div className="bg-black rounded-lg px-4 py-2">
+          <span className="text-primary font-medium">Data Master</span>
+        </div>
+      </div>
       <div className="absolute top-4 right-6">
         <Button variant="outline" onClick={() => setLoginOpen(true)}>Login</Button>
       </div>

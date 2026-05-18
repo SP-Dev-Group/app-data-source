@@ -73,15 +73,6 @@ export default function DataSourceListener5min() {
         <DataSourceListener2Instructions />
         <Button
           variant="outline"
-          onClick={loadRecords}
-          disabled={loading}
-          className="flex items-center gap-2"
-        >
-          <RotateCcw className="w-4 h-4" />
-          Refresh
-        </Button>
-        <Button
-          variant="outline"
           onClick={createSample}
           disabled={creating}
           className="flex items-center gap-2"

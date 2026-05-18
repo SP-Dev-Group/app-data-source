@@ -24,6 +24,9 @@ export default function DataMasterListener() {
 
   return (
     <div className="min-h-screen bg-background px-6 py-12 relative">
+      <div className="absolute top-4 left-6">
+        <DataMasterListenerInstructions />
+      </div>
       <div className="absolute top-4 right-6">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
       </div>
@@ -39,7 +42,6 @@ export default function DataMasterListener() {
           >
             <RotateCcw className="w-4 h-4" />
           </Button>
-          <DataMasterListenerInstructions />
         </div>
         <p className="text-sm font-light uppercase tracking-widest text-muted-foreground mb-8 text-center">Listener Data</p>
         {loading ? (

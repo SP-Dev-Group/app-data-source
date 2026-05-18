@@ -1,14 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { HelpCircle } from "lucide-react";
 
 export default function DataMasterListenerInstructions() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-8 w-8">
-          <HelpCircle className="w-4 h-4" />
-        </Button>
+        <Button variant="outline">Instructions</Button>
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader>

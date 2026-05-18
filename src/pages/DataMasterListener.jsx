@@ -2,14 +2,16 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { RotateCcw } from "lucide-react";
+import { RotateCcw, Plus } from "lucide-react";
 import DataMasterListenerInstructions from "@/components/DataMasterListenerInstructions";
+import DataMasterListenerForm from "@/components/DataMasterListenerForm";
 
 export default function DataMasterListener() {
   const navigate = useNavigate();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   const generateSample = async () => {
     setGenerating(true);
@@ -19,6 +21,12 @@ export default function DataMasterListener() {
     const email = `${name.split(" ")[0].toLowerCase()}.${uid.toLowerCase()}@example.com`;
     await base44.entities.DataMasterListener.create({ unique_id: uid, name, email });
     setGenerating(false);
+    loadRecords();
+  };
+
+  const handleAddRecord = async (data) => {
+    await base44.entities.DataMasterListener.create(data);
+    setShowForm(false);
     loadRecords();
   };
 
@@ -44,13 +52,20 @@ export default function DataMasterListener() {
       <div className="absolute top-4 right-6 flex flex-col gap-2">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
         <DataMasterListenerInstructions />
-        <Button variant="outline" onClick={generateSample} disabled={generating}>
-          {generating ? "Generating..." : "Generate Sample"}
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setShowForm(!showForm)}>
+            <Plus className="w-4 h-4 mr-2" />
+            {showForm ? "Close" : "Add Record"}
+          </Button>
+          <Button variant="outline" onClick={generateSample} disabled={generating}>
+            {generating ? "Generating..." : "Generate Sample"}
+          </Button>
+        </div>
       </div>
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-light tracking-tight text-foreground text-center mb-2">Data Master Listener</h1>
         <p className="text-sm font-light uppercase tracking-widest text-muted-foreground mb-4 text-center">Listener Data</p>
+        {showForm && <DataMasterListenerForm onSubmit={handleAddRecord} onCancel={() => setShowForm(false)} />}
         {!loading && <p className="text-xs text-muted-foreground mb-4">{records.length} record{records.length !== 1 ? 's' : ''}</p>}
         <div className="mb-4">
           <Button

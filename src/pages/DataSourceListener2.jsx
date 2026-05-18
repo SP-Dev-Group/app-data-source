@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { RotateCcw, Plus } from "lucide-react";
+import { toast } from "sonner";
+import { RotateCcw, Plus, Copy } from "lucide-react";
 
 export default function DataSourceListener2() {
   const navigate = useNavigate();
@@ -38,7 +39,18 @@ export default function DataSourceListener2() {
         <div className="bg-black rounded-lg px-4 py-2">
           <span className="text-primary font-medium">Data Source</span>
         </div>
-        <p className="text-xs font-mono text-muted-foreground mt-1">DataSourceListener2</p>
+        <div className="flex items-center gap-2 mt-1">
+          <p className="text-xs font-mono text-muted-foreground">DataSourceListener2</p>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText("DataSourceListener2");
+              toast.success("Entity name copied");
+            }}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Copy className="w-3 h-3" />
+          </button>
+        </div>
       </div>
       <div className="absolute top-4 right-6 flex flex-col gap-2">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>

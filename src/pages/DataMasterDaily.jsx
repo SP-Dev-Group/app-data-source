@@ -16,14 +16,14 @@ export default function DataMasterDaily() {
     const names = ["Alice Johnson", "Bob Smith", "Carol White", "David Lee", "Emma Brown"];
     const name = names[Math.floor(Math.random() * names.length)];
     const email = `${name.split(" ")[0].toLowerCase()}.${uid.toLowerCase()}@example.com`;
-    await base44.entities.DataMaster.create({ unique_id: uid, name, email });
+    await base44.entities.DataMaster2am.create({ unique_id: uid, name, email });
     setGenerating(false);
     loadRecords();
   };
 
   const loadRecords = () => {
     setLoading(true);
-    base44.entities.DataMaster.list().then((data) => {
+    base44.entities.DataMaster2am.list().then((data) => {
       setRecords(data);
       setLoading(false);
     });

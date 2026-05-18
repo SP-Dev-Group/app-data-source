@@ -17,14 +17,14 @@ export default function DataSourceListener5min() {
     const uid = `UID-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     const names = ["Alpha System", "Beta Platform", "Gamma Service", "Delta Module", "Epsilon Core"];
     const name = names[Math.floor(Math.random() * names.length)];
-    await base44.entities.DataSourceListener2.create({ unique_id: uid, name });
+    await base44.entities.DataSourceRefresh5mins.create({ unique_id: uid, name });
     setCreating(false);
     loadRecords();
   };
 
   const loadRecords = () => {
     setLoading(true);
-    base44.entities.DataSourceListener2.list().then((data) => {
+    base44.entities.DataSourceRefresh5mins.list().then((data) => {
       setRecords(data);
       setLoading(false);
     });
@@ -44,10 +44,10 @@ export default function DataSourceListener5min() {
           <span className="text-blue-400 font-medium">Data Source</span>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-xs font-mono text-muted-foreground">Entity: DataSourceListener2</p>
+          <p className="text-xs font-mono text-muted-foreground">Entity: DataSourceRefresh5mins</p>
           <button
             onClick={() => {
-              navigator.clipboard.writeText("DataSourceListener2");
+              navigator.clipboard.writeText("DataSourceRefresh5mins");
               toast.success("Entity name copied");
             }}
             className="text-muted-foreground hover:text-foreground transition-colors"

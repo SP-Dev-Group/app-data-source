@@ -1,5 +1,5 @@
 {
-  "name": "DataSourceListener2",
+  "name": "DataSourceRefresh5mins",
   "type": "object",
   "properties": {
     "unique_id": {

@@ -11,6 +11,7 @@ import DataMasterDaily from './pages/DataMasterDaily';
 import Menu from './pages/Menu';
 import DataMasterListener from './pages/DataMasterListener';
 import DataSourceListener2 from './pages/DataSourceListener2';
+import DataSourceListener3 from './pages/DataSourceListener3';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -43,6 +44,7 @@ const AuthenticatedApp = () => {
       <Route path="/menu" element={<Menu />} />
       <Route path="/datamasterlistener" element={<DataMasterListener />} />
       <Route path="/datasourcelistener2" element={<DataSourceListener2 />} />
+      <Route path="/datasourcelistener3" element={<DataSourceListener3 />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

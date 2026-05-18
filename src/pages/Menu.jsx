@@ -46,6 +46,9 @@ export default function Menu() {
         <Button variant="outline" className="w-full" onClick={() => navigate("/datasourcelistener2")}>
           Data Source 5 minute Refresh
         </Button>
+        <Button variant="outline" className="w-full" onClick={() => navigate("/datasourcelistener3")}>
+          Data Source Listener 3
+        </Button>
       </motion.div>
     </div>
   );

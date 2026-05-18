@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { RotateCcw, Plus, Copy } from "lucide-react";
 import DataSourceListener2Instructions from "@/components/DataSourceListener2Instructions";
 
-export default function DataSourceListener2() {
+export default function DataSourceListener5min() {
   const navigate = useNavigate();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -36,7 +36,7 @@ export default function DataSourceListener2() {
 
   return (
     <div className="min-h-screen bg-background px-6 py-12 relative">
-      <div className="absolute top-0 left-0 right-0 h-[15px] bg-black flex items-center">
+      <div className="absolute top-0 left-0 right-0 h-[15px] h-[15px] bg-black flex items-center">
         <div className="h-full w-full bg-blue-400"></div>
       </div>
       <div className="absolute top-8 left-6">
@@ -92,7 +92,7 @@ export default function DataSourceListener2() {
       </div>
       <div className="max-w-xl mx-auto pt-20">
         <div className="text-center mb-4">
-          <h1 className="text-3xl font-light tracking-tight text-foreground">Data Source 2</h1>
+          <h1 className="text-3xl font-light tracking-tight text-foreground">Data Source 5 min Refetch</h1>
           <p className="text-sm font-light text-muted-foreground mt-1">with Listener Event</p>
         </div>
         {!loading && <p className="text-xs text-muted-foreground mb-4">{records.length} record{records.length !== 1 ? 's' : ''}</p>}

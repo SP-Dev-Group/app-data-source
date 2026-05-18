@@ -1,5 +1,5 @@
 {
-  "name": "DataSourceListener3",
+  "name": "DataSourceListener",
   "type": "object",
   "properties": {
     "unique_id": {

@@ -7,7 +7,7 @@ export default function Home() {
   const [loginOpen, setLoginOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-6 relative">
+    <div className="min-h-screen flex items-center justify-center bg-background px-6 pt-20 relative">
       <div className="absolute top-0 left-0 right-0 h-[15px] bg-black flex items-center">
         <div className="h-full w-full bg-blue-400"></div>
       </div>

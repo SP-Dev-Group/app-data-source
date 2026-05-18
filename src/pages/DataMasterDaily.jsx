@@ -53,6 +53,17 @@ export default function DataMasterDaily() {
             <Copy className="w-3 h-3" />
           </button>
         </div>
+        <div className="flex items-center gap-2 mt-1">
+          <p className="text-xs font-mono text-muted-foreground">Function: syncToListener</p>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText("syncToListener");
+            }}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Copy className="w-3 h-3" />
+          </button>
+        </div>
       </div>
       <div className="absolute top-8 right-6 flex flex-col gap-2 items-end">
         <div className="flex gap-2 items-center">

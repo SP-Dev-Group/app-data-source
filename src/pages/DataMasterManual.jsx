@@ -82,7 +82,7 @@ export default function DataMasterManual() {
           <DataMasterListenerForm onSubmit={addRecord} />
         )}
         <div className="text-center mb-4">
-          <h1 className="text-3xl font-light tracking-tight text-foreground">Data Master Manual</h1>
+          <h1 className="text-3xl font-light tracking-tight text-purple-600">Data Master Manual</h1>
           <p className="text-sm font-light text-muted-foreground mt-1">Manual data entry and management</p>
         </div>
         {!loading && <p className="text-xs text-muted-foreground mb-4">{records.length} record{records.length !== 1 ? 's' : ''}</p>}

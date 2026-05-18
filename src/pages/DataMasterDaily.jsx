@@ -16,14 +16,14 @@ export default function DataMasterDaily() {
     const names = ["Alice Johnson", "Bob Smith", "Carol White", "David Lee", "Emma Brown"];
     const name = names[Math.floor(Math.random() * names.length)];
     const email = `${name.split(" ")[0].toLowerCase()}.${uid.toLowerCase()}@example.com`;
-    await base44.entities.DataMaster2am.create({ unique_id: uid, name, email });
+    await base44.entities.DataSource2am.create({ unique_id: uid, name, email });
     setGenerating(false);
     loadRecords();
   };
 
   const loadRecords = () => {
     setLoading(true);
-    base44.entities.DataMaster2am.list().then((data) => {
+    base44.entities.DataSource2am.list().then((data) => {
       setRecords(data);
       setLoading(false);
     });
@@ -43,10 +43,10 @@ export default function DataMasterDaily() {
           <span className="text-blue-400 font-medium">Data Source</span>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-xs font-mono text-blue-600">Entity: DataMaster2am</p>
+          <p className="text-xs font-mono text-blue-600">Entity: DataSource2am</p>
           <button
             onClick={() => {
-              navigator.clipboard.writeText("DataMaster2am");
+              navigator.clipboard.writeText("DataSource2am");
             }}
             className="text-blue-600 hover:text-blue-700 transition-colors"
           >

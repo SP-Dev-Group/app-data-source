@@ -78,8 +78,10 @@ export default function DataSourceListener() {
       </div>
       <div className="max-w-xl mx-auto pt-20">
         <div className="text-center mb-4">
-          <h1 className="text-3xl font-light tracking-tight text-orange-600">Data Source</h1>
-          <p className="text-sm font-light text-muted-foreground mt-1">with Listener Event</p>
+          <div className="bg-orange-600 rounded-lg px-6 py-3 inline-block">
+            <h1 className="text-3xl font-light tracking-tight text-white">Data Source</h1>
+          </div>
+          <p className="text-sm font-light text-muted-foreground mt-3">with Listener Event</p>
         </div>
         {!loading && <p className="text-xs text-muted-foreground mb-4">{records.length} record{records.length !== 1 ? 's' : ''}</p>}
         {loading ? (

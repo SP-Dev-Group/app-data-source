@@ -82,8 +82,10 @@ export default function DataMasterManual() {
           <DataMasterListenerForm onSubmit={addRecord} />
         )}
         <div className="text-center mb-4">
-          <h1 className="text-3xl font-light tracking-tight text-purple-600">Data Master Manual</h1>
-          <p className="text-sm font-light text-muted-foreground mt-1">Manual data entry and management</p>
+          <div className="bg-purple-600 rounded-lg px-6 py-3 inline-block">
+            <h1 className="text-3xl font-light tracking-tight text-white">Data Master Manual</h1>
+          </div>
+          <p className="text-sm font-light text-muted-foreground mt-3">Manual data entry and management</p>
         </div>
         {!loading && <p className="text-xs text-muted-foreground mb-4">{records.length} record{records.length !== 1 ? 's' : ''}</p>}
         {loading ? (

@@ -13,7 +13,7 @@ export default function Menu() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6 gap-4 relative">
       <div className="absolute top-0 left-0 right-0 h-[15px] bg-black flex items-center">
-        <div className="h-full w-full bg-gradient-to-r from-blue-500 to-blue-600 opacity-30"></div>
+        <div className="h-full w-full bg-blue-400"></div>
       </div>
       <div className="absolute top-4 left-6">
         <div className="bg-black rounded-lg px-4 py-2">

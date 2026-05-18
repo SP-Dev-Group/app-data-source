@@ -44,7 +44,7 @@ export default function DataSourceListener2() {
           <span className="text-blue-400 font-medium">Data Source</span>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-xs font-mono text-muted-foreground">DataSourceListener2</p>
+          <p className="text-xs font-mono text-muted-foreground">Entity: DataSourceListener2</p>
           <button
             onClick={() => {
               navigator.clipboard.writeText("DataSourceListener2");
@@ -56,7 +56,7 @@ export default function DataSourceListener2() {
           </button>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-xs font-mono text-muted-foreground">functions/handleDataSourceListener2Changes.ts</p>
+          <p className="text-xs font-mono text-muted-foreground">Function: functions/handleDataSourceListener2Changes.ts</p>
           <button
             onClick={() => {
               navigator.clipboard.writeText("functions/handleDataSourceListener2Changes.ts");

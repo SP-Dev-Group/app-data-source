@@ -40,7 +40,7 @@ export default function DataMasterDaily() {
       </div>
       <div className="absolute top-8 left-6">
         <div className="bg-black rounded-lg px-4 py-2">
-          <span className="text-blue-400 font-medium">Data Master</span>
+          <span className="text-blue-400 font-medium">Data Source</span>
         </div>
         <div className="flex items-center gap-2 mt-1">
           <p className="text-xs font-mono text-blue-600">Entity: DataMaster2am</p>

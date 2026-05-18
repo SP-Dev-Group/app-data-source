@@ -81,6 +81,7 @@ export default function DataMaster() {
           </Button>
         </div>
         <p className="text-sm font-light uppercase tracking-widest text-muted-foreground mb-8 text-center">Exposed Data</p>
+        {!loading && <p className="text-xs text-muted-foreground mb-4">{records.length} record{records.length !== 1 ? 's' : ''}</p>}
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="w-6 h-6 border-2 border-muted-foreground border-t-foreground rounded-full animate-spin" />

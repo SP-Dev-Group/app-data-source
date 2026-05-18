@@ -40,23 +40,6 @@ export default function DataMasterDaily() {
           <span className="text-primary font-medium">Data Master</span>
         </div>
       </div>
-      <div className="absolute top-4 left-6 flex items-center gap-2">
-        <button
-          onClick={() => navigator.clipboard.writeText("App ID: 6a0a3a832f954c38e4a31c7b")}
-          className="text-xs text-muted-foreground font-mono hover:text-foreground cursor-pointer transition-colors flex items-center gap-1"
-          title="Click to copy"
-        >
-          <Copy className="w-3 h-3" />
-          App ID: 6a0a3a832f954c38e4a31c7b
-        </button>
-        <button
-          onClick={() => navigator.clipboard.writeText("6a0a3a832f954c38e4a31c7b")}
-          className="text-xs text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
-          title="Copy ID only"
-        >
-          <Copy className="w-3 h-3" />
-        </button>
-      </div>
       <div className="absolute top-4 right-6 flex flex-col gap-2 items-end">
         <div className="flex gap-2 items-center">
           <button
@@ -85,7 +68,24 @@ export default function DataMasterDaily() {
             <RotateCcw className="w-4 h-4" />
           </Button>
         </div>
-        <p className="text-sm font-light uppercase tracking-widest text-muted-foreground mb-8 text-center">Exposed Data</p>
+        <p className="text-sm font-light uppercase tracking-widest text-muted-foreground mb-2 text-center">Exposed Data</p>
+        <div className="flex justify-center mb-4">
+          <button
+            onClick={() => navigator.clipboard.writeText("App ID: 6a0a3a832f954c38e4a31c7b")}
+            className="text-xs text-muted-foreground font-mono hover:text-foreground cursor-pointer transition-colors flex items-center gap-1"
+            title="Click to copy"
+          >
+            <Copy className="w-3 h-3" />
+            App ID: 6a0a3a832f954c38e4a31c7b
+          </button>
+          <button
+            onClick={() => navigator.clipboard.writeText("6a0a3a832f954c38e4a31c7b")}
+            className="text-xs text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+            title="Copy ID only"
+          >
+            <Copy className="w-3 h-3" />
+          </button>
+        </div>
         {!loading && <p className="text-xs text-muted-foreground mb-4">{records.length} record{records.length !== 1 ? 's' : ''}</p>}
         {loading ? (
           <div className="flex items-center justify-center py-20">

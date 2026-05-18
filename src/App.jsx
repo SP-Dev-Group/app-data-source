@@ -43,7 +43,7 @@ const AuthenticatedApp = () => {
       <Route path="/datasourcedaily" element={<DataSourceDaily />} />
       <Route path="/menu" element={<Menu />} />
       <Route path="/datasourcemanual" element={<DataSourceManual />} />
-      <Route path="/datasourcelistener5min" element={<DataSourceListener5min />} />
+      <Route path="/datasourcerefresh5min" element={<DataSourceListener5min />} />
       <Route path="/datasourcelistener" element={<DataSourceListener />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>

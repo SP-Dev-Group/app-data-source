@@ -41,26 +41,24 @@ export default function DataSourceListener2() {
       </div>
       <div className="absolute top-4 right-6 flex flex-col gap-2">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={loadRecords}
-            disabled={loading}
-            className="flex items-center gap-2"
-          >
-            <RotateCcw className="w-4 h-4" />
-            Refresh
-          </Button>
-          <Button
-            variant="outline"
-            onClick={createSample}
-            disabled={creating}
-            className="flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" />
-            {creating ? "Creating..." : "Create Sample"}
-          </Button>
-        </div>
+        <Button
+          variant="outline"
+          onClick={loadRecords}
+          disabled={loading}
+          className="flex items-center gap-2"
+        >
+          <RotateCcw className="w-4 h-4" />
+          Refresh
+        </Button>
+        <Button
+          variant="outline"
+          onClick={createSample}
+          disabled={creating}
+          className="flex items-center gap-2"
+        >
+          <Plus className="w-4 h-4" />
+          {creating ? "Creating..." : "Create Sample"}
+        </Button>
       </div>
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-light tracking-tight text-foreground text-center mb-2">Data Source Listener 2</h1>

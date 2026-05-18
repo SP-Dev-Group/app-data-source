@@ -38,7 +38,7 @@ export default function Menu() {
         className="flex flex-col gap-3 w-full max-w-xs"
       >
         <Button variant="outline" className="w-full" onClick={() => navigate("/datamasterdaily")}>
-          Data Master 2am Daily <span className="text-green-600 font-bold text-sm align-super">1</span>
+          Data Master 2am Daily <span className="text-green-600 font-bold text-[10px] -mt-1">1</span>
         </Button>
         <Button variant="outline" className="w-full" onClick={() => navigate("/datamasterlistener")}>
           Data Master Listener

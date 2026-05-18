@@ -6,7 +6,7 @@ import { RotateCcw, Plus, Copy } from "lucide-react";
 import DataMasterListenerInstructions from "@/components/DataMasterListenerInstructions";
 import DataMasterListenerForm from "@/components/DataMasterListenerForm";
 
-export default function DataMasterListener() {
+export default function DataMasterManual3() {
   const navigate = useNavigate();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -52,10 +52,10 @@ export default function DataMasterListener() {
           <span className="text-blue-400 font-medium">Data Master</span>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-xs font-mono text-muted-foreground">DataMasterListener</p>
+          <p className="text-xs font-mono text-muted-foreground">DataMasterManual3</p>
           <button
             onClick={() => {
-              navigator.clipboard.writeText("DataMasterListener");
+              navigator.clipboard.writeText("DataMasterManual3");
             }}
             className="text-muted-foreground hover:text-foreground transition-colors"
           >
@@ -77,8 +77,9 @@ export default function DataMasterListener() {
         </div>
       </div>
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-light tracking-tight text-foreground text-center mb-2">Data Master Listener</h1>
-        <p className="text-sm font-light uppercase tracking-widest text-muted-foreground mb-4 text-center">Listener Data</p>
+        <h1 className="text-3xl font-light tracking-tight text-foreground text-center mb-2">
+          Data Master Manual <span className="text-green-600 font-bold text-[10px] -mt-1">3</span>
+        </h1>
         {showForm && <DataMasterListenerForm onSubmit={handleAddRecord} onCancel={() => setShowForm(false)} />}
         {!loading && <p className="text-xs text-muted-foreground mb-4">{records.length} record{records.length !== 1 ? 's' : ''}</p>}
         <div className="mb-4">

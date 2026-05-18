@@ -55,6 +55,18 @@ export default function DataSourceListener2() {
             <Copy className="w-3 h-3" />
           </button>
         </div>
+        <div className="flex items-center gap-2 mt-1">
+          <p className="text-xs font-mono text-muted-foreground">functions/handleDataSourceListener2Changes.ts</p>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText("functions/handleDataSourceListener2Changes.ts");
+              toast.success("Function path copied");
+            }}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Copy className="w-3 h-3" />
+          </button>
+        </div>
       </div>
       <div className="absolute top-8 right-6 flex flex-col gap-2">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>

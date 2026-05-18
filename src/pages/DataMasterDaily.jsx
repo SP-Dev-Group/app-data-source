@@ -43,10 +43,10 @@ export default function DataMasterDaily() {
           <span className="text-blue-400 font-medium">Data Master</span>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-xs font-mono text-muted-foreground">DataMasterDaily</p>
+          <p className="text-xs font-mono text-muted-foreground">Entity: DataMaster2am</p>
           <button
             onClick={() => {
-              navigator.clipboard.writeText("DataMasterDaily");
+              navigator.clipboard.writeText("DataMaster2am");
             }}
             className="text-muted-foreground hover:text-foreground transition-colors"
           >

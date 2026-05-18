@@ -71,7 +71,7 @@ export default function DataMasterDaily() {
       </div>
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center justify-center gap-2 mb-2">
-          <h1 className="text-3xl font-light tracking-tight text-foreground text-center">Data Master Daily</h1>
+          <h1 className="text-3xl font-light tracking-tight text-foreground text-center">Data Master Daily at 2am</h1>
         </div>
         <div className="mb-4">
           <Button

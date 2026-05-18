@@ -79,14 +79,8 @@ export default function DataMasterDaily() {
         <Button variant="outline" onClick={generateSample} disabled={generating}>
           {generating ? "Generating..." : "Generate Sample"}
         </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={loadRecords}
-          disabled={loading}
-          className="h-9 w-9"
-        >
-          <RotateCcw className="w-4 h-4" />
+        <Button variant="outline" onClick={loadRecords} disabled={loading}>
+          {loading ? "Refreshing..." : "Refresh"}
         </Button>
       </div>
       <div className="max-w-3xl mx-auto">

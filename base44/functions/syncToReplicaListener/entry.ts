@@ -19,33 +19,34 @@ Deno.serve(async (req) => {
             }, { status: 400 });
         }
 
-        const sourceAppId = Deno.env.get('SOURCE_APP_ID');
-        const destAppServiceRoleKey = Deno.env.get('DEST_APP_SERVICE_ROLE_KEY');
+        const serviceRoleKey = Deno.env.get('DEST_APP_SERVICE_ROLE_KEY');
         
-        if (!sourceAppId) {
-            return Response.json({ error: 'SOURCE_APP_ID not configured' }, { status: 500 });
-        }
-        
-        if (!destAppServiceRoleKey) {
+        if (!serviceRoleKey) {
             return Response.json({ error: 'DEST_APP_SERVICE_ROLE_KEY not configured' }, { status: 500 });
         }
+
+        console.log(`DataSourceLive ${eventType} event:`, {
+            unique_id: record.unique_id,
+            name: record.name
+        });
         
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 30000);
         
-        const destAppId = '6a0a3ce671984e92b2b0f452';
+        const destAppId = '6a0a3a832f954c38e4a31c7b';
         const response = await fetch(`https://app.base44.com/apps/${destAppId}/functions/syncToSourceListener`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${destAppServiceRoleKey}`,
+                'Authorization': `Bearer ${serviceRoleKey}`,
             },
             body: JSON.stringify({
-                event_type: eventType,
-                source_app_id: sourceAppId,
-                unique_id: record.unique_id,
-                name: record.name,
-                email: record.email,
+                event: { type: eventType },
+                data: {
+                    unique_id: record.unique_id,
+                    name: record.name,
+                    email: record.email,
+                }
             }),
             signal: controller.signal,
         });

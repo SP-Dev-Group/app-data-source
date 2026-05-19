@@ -26,7 +26,7 @@ Deno.serve(async (req) => {
         }
 
         // Destination app ID (the listener app)
-        const destAppId = '6a0a3a832f954c38e4a31c7b';
+        const destAppId = '6a0a3ce671984e92b2b0f452';
         
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 30000);

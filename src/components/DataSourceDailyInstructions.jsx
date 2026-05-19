@@ -16,11 +16,11 @@ export default function DataSourceDailyInstructions() {
     <>
       <Button
         variant="outline"
-        size="icon"
         onClick={() => setOpen(true)}
-        title="Instructions"
+        className="flex items-center gap-2"
       >
         <Info className="h-4 w-4" />
+        Information
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>

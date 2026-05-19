@@ -19,19 +19,16 @@ Deno.serve(async (req) => {
             }, { status: 400 });
         }
 
-        const serviceRoleKey = Deno.env.get('DEST_APP_SERVICE_ROLE_KEY2');
         const sourceAppId = Deno.env.get('SOURCE_APP_ID');
-        
-        if (!serviceRoleKey) {
-            return Response.json({ error: 'DEST_APP_SERVICE_ROLE_KEY2 not configured' }, { status: 500 });
-        }
+        const destAppId = Deno.env.get('DEST_APP_SERVICE_ROLE_KEY');
         
         if (!sourceAppId) {
             return Response.json({ error: 'SOURCE_APP_ID not configured' }, { status: 500 });
         }
-
-        // Destination app ID (the listener app)
-        const destAppId = '6a0a3ce671984e92b2b0f452';
+        
+        if (!destAppId) {
+            return Response.json({ error: 'DEST_APP_SERVICE_ROLE_KEY not configured' }, { status: 500 });
+        }
         
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 30000);
@@ -40,7 +37,7 @@ Deno.serve(async (req) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${serviceRoleKey}`,
+                'Authorization': `Bearer ${Deno.env.get('BASE44_SERVICE_ROLE_KEY')}`,
             },
             body: JSON.stringify({
                 event_type: eventType,

@@ -1,0 +1,33 @@
+{
+  "name": "DataSourceLiveErrorLog",
+  "type": "object",
+  "properties": {
+    "source": {
+      "type": "string",
+      "description": "Where the error originated (e.g. createSample, loadRecords)"
+    },
+    "message": {
+      "type": "string",
+      "description": "Error message"
+    },
+    "details": {
+      "type": "string",
+      "description": "Additional error details or stack trace"
+    },
+    "level": {
+      "type": "string",
+      "enum": [
+        "error",
+        "warning",
+        "info"
+      ],
+      "default": "error",
+      "description": "Log level"
+    }
+  },
+  "required": [
+    "source",
+    "message",
+    "level"
+  ]
+}

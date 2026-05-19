@@ -3,30 +3,51 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import DataSourceLiveInstructions from "@/components/DataSourceLiveInstructions";
-import { Copy, Plus } from "lucide-react";
+import DataSourceLiveErrorLogs from "@/components/DataSourceLiveErrorLogs";
+import { Copy, Plus, ScrollText } from "lucide-react";
+
+const logError = (source, error) => {
+  base44.entities.DataSourceLiveErrorLog.create({
+    source,
+    message: error?.message || String(error),
+    details: error?.stack || "",
+    level: "error",
+  });
+};
 
 export default function DataSourceLive() {
   const navigate = useNavigate();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
+  const [logsOpen, setLogsOpen] = useState(false);
 
   const createSample = async () => {
     setCreating(true);
-    const uid = `UID-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-    const names = ["Alpha Listener", "Beta Listener", "Gamma Listener", "Delta Listener", "Epsilon Listener"];
-    const name = names[Math.floor(Math.random() * names.length)];
-    await base44.entities.DataSourceLive.create({ unique_id: uid, name });
-    setCreating(false);
-    loadRecords();
+    try {
+      const uid = `UID-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+      const names = ["Alpha Listener", "Beta Listener", "Gamma Listener", "Delta Listener", "Epsilon Listener"];
+      const name = names[Math.floor(Math.random() * names.length)];
+      await base44.entities.DataSourceLive.create({ unique_id: uid, name });
+      loadRecords();
+    } catch (err) {
+      logError("createSample", err);
+    } finally {
+      setCreating(false);
+    }
   };
 
   const loadRecords = () => {
     setLoading(true);
-    base44.entities.DataSourceLive.list().then((data) => {
-      setRecords(data);
-      setLoading(false);
-    });
+    base44.entities.DataSourceLive.list()
+      .then((data) => {
+        setRecords(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        logError("loadRecords", err);
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -54,9 +75,14 @@ export default function DataSourceLive() {
           </button>
         </div>
       </div>
+      <DataSourceLiveErrorLogs open={logsOpen} onOpenChange={setLogsOpen} />
       <div className="absolute top-8 right-6 flex flex-col gap-2">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
         <DataSourceLiveInstructions />
+        <Button variant="outline" onClick={() => setLogsOpen(true)} className="flex items-center gap-2">
+          <ScrollText className="w-4 h-4" />
+          Error Logs
+        </Button>
         <Button
           variant="outline"
           onClick={createSample}

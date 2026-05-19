@@ -20,24 +20,25 @@ Deno.serve(async (req) => {
         }
 
         const sourceAppId = Deno.env.get('SOURCE_APP_ID');
-        const destAppId = Deno.env.get('DEST_APP_SERVICE_ROLE_KEY');
+        const destAppServiceRoleKey = Deno.env.get('DEST_APP_SERVICE_ROLE_KEY');
         
         if (!sourceAppId) {
             return Response.json({ error: 'SOURCE_APP_ID not configured' }, { status: 500 });
         }
         
-        if (!destAppId) {
+        if (!destAppServiceRoleKey) {
             return Response.json({ error: 'DEST_APP_SERVICE_ROLE_KEY not configured' }, { status: 500 });
         }
         
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 30000);
         
+        const destAppId = '6a0a3ce671984e92b2b0f452';
         const response = await fetch(`https://app.base44.com/apps/${destAppId}/functions/syncToSourceListener`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${Deno.env.get('BASE44_SERVICE_ROLE_KEY')}`,
+                'Authorization': `Bearer ${destAppServiceRoleKey}`,
             },
             body: JSON.stringify({
                 event_type: eventType,

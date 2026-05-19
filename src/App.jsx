@@ -10,8 +10,8 @@ import Home from './pages/Home';
 import DataSourceDaily from './pages/DataSourceDaily';
 import Menu from './pages/Menu';
 import DataSourceManual from './pages/DataSourceManual';
-import DataSourceListener5min from './pages/DataSourceListener5min';
-import DataSourceListener from './pages/DataSourceListener';
+import DataSourceRefresh5min from './pages/DataSourceRefresh5min';
+import DataSourceLive from './pages/DataSourceLive';
 
 
 const AuthenticatedApp = () => {
@@ -44,8 +44,8 @@ const AuthenticatedApp = () => {
       <Route path="/datasourcedaily" element={<DataSourceDaily />} />
       <Route path="/menu" element={<Menu />} />
       <Route path="/datasourcemanual" element={<DataSourceManual />} />
-      <Route path="/datasourcerefresh5min" element={<DataSourceListener5min />} />
-      <Route path="/datasourcelistener" element={<DataSourceListener />} />
+      <Route path="/datasourcerefresh5min" element={<DataSourceRefresh5min />} />
+      <Route path="/datasourcelistener" element={<DataSourceLive />} />
 
       <Route path="*" element={<PageNotFound />} />
     </Routes>

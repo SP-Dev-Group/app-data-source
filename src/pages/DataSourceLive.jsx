@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { RotateCcw, Plus, Copy } from "lucide-react";
-import DataSourceListener2Instructions from "@/components/DataSourceListener2Instructions";
+import { Copy, Plus } from "lucide-react";
 
-export default function DataSourceListener5min() {
+export default function DataSourceLive() {
   const navigate = useNavigate();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,16 +13,16 @@ export default function DataSourceListener5min() {
   const createSample = async () => {
     setCreating(true);
     const uid = `UID-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-    const names = ["Alpha System", "Beta Platform", "Gamma Service", "Delta Module", "Epsilon Core"];
+    const names = ["Alpha Listener", "Beta Listener", "Gamma Listener", "Delta Listener", "Epsilon Listener"];
     const name = names[Math.floor(Math.random() * names.length)];
-    await base44.entities.DataSourceRefresh5mins.create({ unique_id: uid, name });
+    await base44.entities.DataSourceLive.create({ unique_id: uid, name });
     setCreating(false);
     loadRecords();
   };
 
   const loadRecords = () => {
     setLoading(true);
-    base44.entities.DataSourceRefresh5mins.list().then((data) => {
+    base44.entities.DataSourceLive.list().then((data) => {
       setRecords(data);
       setLoading(false);
     });
@@ -36,7 +34,7 @@ export default function DataSourceListener5min() {
 
   return (
     <div className="min-h-screen bg-background px-6 py-12 relative">
-      <div className="absolute top-0 left-0 right-0 h-[15px] h-[15px] bg-black flex items-center">
+      <div className="absolute top-0 left-0 right-0 h-[15px] bg-black flex items-center">
         <div className="h-full w-full bg-blue-400"></div>
       </div>
       <div className="absolute top-8 left-6">
@@ -44,23 +42,10 @@ export default function DataSourceListener5min() {
           <span className="text-blue-400 font-medium">Data Source</span>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-xs font-mono text-muted-foreground">Entity: DataSourceRefresh5mins</p>
+          <p className="text-xs font-mono text-muted-foreground">Entity: DataSourceLive</p>
           <button
             onClick={() => {
-              navigator.clipboard.writeText("DataSourceRefresh5mins");
-              toast.success("Entity name copied");
-            }}
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <Copy className="w-3 h-3" />
-          </button>
-        </div>
-        <div className="flex items-center gap-2 mt-1">
-          <p className="text-xs font-mono text-muted-foreground">Function: functions/handleDataSourceListener2Changes.ts</p>
-          <button
-            onClick={() => {
-              navigator.clipboard.writeText("functions/handleDataSourceListener2Changes.ts");
-              toast.success("Function path copied");
+              navigator.clipboard.writeText("DataSourceLive");
             }}
             className="text-muted-foreground hover:text-foreground transition-colors"
           >
@@ -70,7 +55,6 @@ export default function DataSourceListener5min() {
       </div>
       <div className="absolute top-8 right-6 flex flex-col gap-2">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
-        <DataSourceListener2Instructions />
         <Button
           variant="outline"
           onClick={createSample}
@@ -83,10 +67,10 @@ export default function DataSourceListener5min() {
       </div>
       <div className="max-w-xl mx-auto pt-20">
         <div className="text-center mb-4">
-          <div className="bg-green-600 rounded-lg px-6 py-3 inline-block">
-            <h1 className="text-3xl font-light tracking-tight text-white">Data Source Refresh every 5 mins</h1>
+          <div className="bg-orange-600 rounded-lg px-6 py-3 inline-block">
+            <h1 className="text-3xl font-light tracking-tight text-white">Data Source Live</h1>
           </div>
-          <p className="text-sm font-light text-muted-foreground mt-3">with Listener Event</p>
+          <p className="text-sm font-light text-muted-foreground mt-3">Event-based data tracking</p>
         </div>
         {!loading && <p className="text-xs text-muted-foreground mb-4">{records.length} record{records.length !== 1 ? 's' : ''}</p>}
         {loading ? (

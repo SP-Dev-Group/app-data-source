@@ -42,7 +42,7 @@ export default function DataSourceListener2Instructions() {
           <div>
             <h3 className="font-medium text-foreground mb-2">Entity Details</h3>
             <ul className="space-y-1">
-              <li><strong>Entity Name:</strong> DataSourceListener2</li>
+              <li><strong>Entity Name:</strong> DataSourceRefresh5mins</li>
               <li><strong>Fields:</strong> unique_id, name</li>
               <li><strong>Refetch Interval:</strong> Every 5 minutes</li>
             </ul>

@@ -32,8 +32,8 @@ export default function DataSourceListener2Instructions() {
           <div>
             <h3 className="font-medium text-foreground mb-2">How It Works</h3>
             <ol className="list-decimal list-inside space-y-1">
-              <li>External systems update data in this DataSourceListener2 entity</li>
-              <li>A scheduled automation refetches data every 5 minutes</li>
+              <li>External systems update data in DataReplica5mins entity</li>
+              <li>In the Replica app a scheduled automation refetches data every 5 minutes</li>
               <li>Changes are detected and processed automatically</li>
               <li>Updated records are synchronized to downstream systems</li>
             </ol>

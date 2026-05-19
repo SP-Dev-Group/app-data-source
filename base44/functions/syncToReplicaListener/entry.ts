@@ -31,7 +31,7 @@ Deno.serve(async (req) => {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 30000);
         
-        const response = await fetch(`https://app.base44.com/apps/${destAppId}/api/functions/syncToListener`, {
+        const response = await fetch(`https://app.base44.com/apps/${destAppId}/api/functions/syncToReplicaListener`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

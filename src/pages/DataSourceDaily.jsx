@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Copy, RotateCcw } from "lucide-react";
+import DataSourceDailyInstructions from "@/components/DataSourceDailyInstructions";
 
 export default function DataSourceDaily() {
   const navigate = useNavigate();
@@ -76,6 +77,7 @@ export default function DataSourceDaily() {
           </button>
           <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
         </div>
+        <DataSourceDailyInstructions />
         <Button variant="outline" onClick={generateSample} disabled={generating}>
           {generating ? "Generating..." : "Generate Sample"}
         </Button>

@@ -20,9 +20,14 @@ Deno.serve(async (req) => {
         }
 
         const serviceRoleKey = Deno.env.get('DEST_APP_SERVICE_ROLE_KEY2');
+        const sourceAppId = Deno.env.get('SOURCE_APP_ID');
         
         if (!serviceRoleKey) {
             return Response.json({ error: 'DEST_APP_SERVICE_ROLE_KEY2 not configured' }, { status: 500 });
+        }
+        
+        if (!sourceAppId) {
+            return Response.json({ error: 'SOURCE_APP_ID not configured' }, { status: 500 });
         }
 
         // Destination app ID (the listener app)
@@ -39,6 +44,7 @@ Deno.serve(async (req) => {
             },
             body: JSON.stringify({
                 event_type: eventType,
+                source_app_id: sourceAppId,
                 unique_id: record.unique_id,
                 name: record.name,
                 email: record.email,

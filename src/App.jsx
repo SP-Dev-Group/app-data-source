@@ -11,6 +11,7 @@ import DataSourceDaily from './pages/DataSourceDaily';
 import Menu from './pages/Menu';
 import DataSourceManual from './pages/DataSourceManual';
 import DataSourceListener5min from './pages/DataSourceListener5min';
+import DataSourceListener from './pages/DataSourceListener';
 
 
 const AuthenticatedApp = () => {
@@ -44,6 +45,7 @@ const AuthenticatedApp = () => {
       <Route path="/menu" element={<Menu />} />
       <Route path="/datasourcemanual" element={<DataSourceManual />} />
       <Route path="/datasourcerefresh5min" element={<DataSourceListener5min />} />
+      <Route path="/datasourcelistener" element={<DataSourceListener />} />
 
       <Route path="*" element={<PageNotFound />} />
     </Routes>

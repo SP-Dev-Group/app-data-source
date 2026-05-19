@@ -5,10 +5,9 @@ Deno.serve(async (req) => {
         const base44 = createClientFromRequest(req);
         const body = await req.json();
         
-        // Entity automations wrap data in body.data
-        // For delete events, body.data is null, use body.old_data
-        const eventType = body.event?.type;
-        const record = body.data || body.old_data || body;
+        // Handle both entity automation payload and manual test payload
+        const eventType = body.event?.type || 'manual';
+        const record = body.data || body.old_data || (body.unique_id ? body : null);
         
         if (!record || !record.unique_id) {
             return Response.json({ 

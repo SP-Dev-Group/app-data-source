@@ -31,7 +31,7 @@ Deno.serve(async (req) => {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 30000);
         
-        const response = await fetch(`https://app.base44.com/apps/${destAppId}/api/functions/syncToReplicaListener`, {
+        const response = await fetch(`https://app.base44.com/apps/${destAppId}/functions/webhookListener`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -48,10 +48,13 @@ Deno.serve(async (req) => {
         
         clearTimeout(timeoutId);
 
-        const result = await response.json();
+        const resultText = await response.text();
+        let result;
+        try { result = JSON.parse(resultText); } catch { result = { raw: resultText }; }
         
         if (!response.ok) {
-            return Response.json({ error: result.error || 'Sync failed' }, { status: response.status });
+            console.error(`Dest app responded ${response.status}:`, resultText);
+            return Response.json({ error: result.error || 'Sync failed', status: response.status, detail: resultText }, { status: response.status });
         }
         
         return Response.json({ success: true, result });

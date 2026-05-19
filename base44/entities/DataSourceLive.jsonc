@@ -1,5 +1,5 @@
 {
-  "name": "DataSourceListener",
+  "name": "DataSourceLive",
   "type": "object",
   "properties": {
     "unique_id": {

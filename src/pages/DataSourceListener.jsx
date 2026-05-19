@@ -15,14 +15,14 @@ export default function DataSourceListener() {
     const uid = `UID-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     const names = ["Alpha Listener", "Beta Listener", "Gamma Listener", "Delta Listener", "Epsilon Listener"];
     const name = names[Math.floor(Math.random() * names.length)];
-    await base44.entities.DataSourceListener.create({ unique_id: uid, name });
+    await base44.entities.DataSourceLive.create({ unique_id: uid, name });
     setCreating(false);
     loadRecords();
   };
 
   const loadRecords = () => {
     setLoading(true);
-    base44.entities.DataSourceListener.list().then((data) => {
+    base44.entities.DataSourceLive.list().then((data) => {
       setRecords(data);
       setLoading(false);
     });
@@ -42,10 +42,10 @@ export default function DataSourceListener() {
           <span className="text-blue-400 font-medium">Data Source</span>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-xs font-mono text-muted-foreground">Entity: DataSourceListener</p>
+          <p className="text-xs font-mono text-muted-foreground">Entity: DataSourceLive</p>
           <button
             onClick={() => {
-              navigator.clipboard.writeText("DataSourceListener");
+              navigator.clipboard.writeText("DataSourceLive");
             }}
             className="text-muted-foreground hover:text-foreground transition-colors"
           >
@@ -68,7 +68,7 @@ export default function DataSourceListener() {
       <div className="max-w-xl mx-auto pt-20">
         <div className="text-center mb-4">
           <div className="bg-orange-600 rounded-lg px-6 py-3 inline-block">
-            <h1 className="text-3xl font-light tracking-tight text-white">Data Source Listener</h1>
+            <h1 className="text-3xl font-light tracking-tight text-white">Data Source Live</h1>
           </div>
           <p className="text-sm font-light text-muted-foreground mt-3">Event-based data tracking</p>
         </div>

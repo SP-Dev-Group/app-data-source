@@ -19,7 +19,7 @@ Deno.serve(async (req) => {
             }, { status: 400 });
         }
 
-        console.log(`DataSourceListener2 ${eventType} event:`, {
+        console.log(`DataSourceLive ${eventType} event:`, {
             unique_id: record.unique_id,
             name: record.name
         });
@@ -51,7 +51,7 @@ Deno.serve(async (req) => {
         
         return Response.json({ 
             success: true, 
-            message: `Processed ${eventType} event for DataSourceListener2`,
+            message: `Processed ${eventType} event for DataSourceLive`,
             data: {
                 unique_id: record.unique_id,
                 name: record.name,
@@ -60,7 +60,7 @@ Deno.serve(async (req) => {
             }
         });
     } catch (error) {
-        console.error("DataSourceListener2 error:", error);
+        console.error("DataSourceLive error:", error);
         return Response.json({ error: error.message }, { status: 500 });
     }
 });

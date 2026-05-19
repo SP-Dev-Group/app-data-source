@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
+import DataSourceLiveInstructions from "@/components/DataSourceLiveInstructions";
 import { Copy, Plus } from "lucide-react";
 
 export default function DataSourceLive() {
@@ -55,6 +56,7 @@ export default function DataSourceLive() {
       </div>
       <div className="absolute top-8 right-6 flex flex-col gap-2">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
+        <DataSourceLiveInstructions />
         <Button
           variant="outline"
           onClick={createSample}

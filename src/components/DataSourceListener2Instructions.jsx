@@ -25,9 +25,7 @@ export default function DataSourceListener2Instructions() {
           <div>
             <h3 className="font-medium text-foreground mb-2">Purpose</h3>
             <p>
-              This entity serves as an external database that is refetched every 5 minutes 
-              to check for updates. It acts as a data source listener that receives 
-              synchronized data from external systems.
+              This entity serves as a Single Source of Truth (Source) database that is refetched every 5 minutes from the Replica app.
             </p>
           </div>
           

@@ -19,10 +19,10 @@ Deno.serve(async (req) => {
             }, { status: 400 });
         }
 
-        const serviceRoleKey = Deno.env.get('DEST_APP_SERVICE_ROLE_KEY');
+        const serviceRoleKey = Deno.env.get('DEST_APP_SERVICE_ROLE_KEY2');
         
         if (!serviceRoleKey) {
-            return Response.json({ error: 'DEST_APP_SERVICE_ROLE_KEY not configured' }, { status: 500 });
+            return Response.json({ error: 'DEST_APP_SERVICE_ROLE_KEY2 not configured' }, { status: 500 });
         }
 
         // Destination app ID (the listener app)

@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
         const timeoutId = setTimeout(() => controller.abort(), 30000);
         
         const destAppId = '6a0a3a832f954c38e4a31c7b';
-        const response = await fetch(`https://app.base44.com/apps/${destAppId}/functions/syncToSourceListener`, {
+        const response = await fetch(`https://app.base44.com/apps/${destAppId}/functions/webhookListener2`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

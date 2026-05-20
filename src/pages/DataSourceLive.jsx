@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import DataSourceLiveInstructions from "@/components/DataSourceLiveInstructions";
+import ReplicaInstructions from "@/components/ReplicaInstructions";
 import DataSourceLiveErrorLogs from "@/components/DataSourceLiveErrorLogs";
 import { Copy, Plus, ScrollText } from "lucide-react";
 
@@ -79,6 +80,7 @@ export default function DataSourceLive() {
       <div className="absolute top-8 right-6 flex flex-col gap-2">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
         <DataSourceLiveInstructions />
+        <ReplicaInstructions />
         <Button variant="outline" onClick={() => setLogsOpen(true)} className="flex items-center gap-2">
           <ScrollText className="w-4 h-4" />
           Error Logs

@@ -9,7 +9,7 @@ import {
 import { useState } from "react";
 import { Info } from "lucide-react";
 
-export default function DataSourceLiveInstructions() {
+export default function ReplicaInstructions() {
   const [open, setOpen] = useState(false);
 
   return (
@@ -20,44 +20,39 @@ export default function DataSourceLiveInstructions() {
         className="flex items-center gap-2"
       >
         <Info className="h-4 w-4" />
-        Source Instructions
+        Replica Instructions
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Data Source Live</DialogTitle>
+            <DialogTitle>Replica Instructions</DialogTitle>
             <DialogDescription>
-              Event-based data tracking and real-time synchronization
+              Replica data synchronization and mirroring
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 text-sm text-muted-foreground">
             <div>
               <h3 className="font-semibold mb-2 text-foreground">What is this?</h3>
               <p>
-                Data Source Live captures and tracks real-time data changes as they occur in the system. This entity serves as a live data source that responds immediately to changes without scheduled intervals.
+                The Replica system mirrors and synchronizes data from the source application to maintain consistency across environments.
               </p>
             </div>
             <div>
               <h3 className="font-semibold mb-2 text-foreground">How it works</h3>
               <ol className="list-decimal list-inside space-y-1">
-                <li>Changes are captured in real-time as they happen</li>
-                <li>Records are immediately available in the DataSourceLive entity</li>
-                <li>Data syncs instantaneously to connected systems</li>
-                <li>No delays or scheduled intervals required</li>
+                <li>Source data changes are captured</li>
+                <li>Changes are transmitted to the replica application</li>
+                <li>Replica records are created or updated to match source</li>
+                <li>Data remains synchronized across systems</li>
               </ol>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2 text-foreground">Entity Details</h3>
-              <p>Entity: DataSourceLive</p>
-              <p className="mt-1">Fields: unique_id, name</p>
             </div>
             <div>
               <h3 className="font-semibold mb-2 text-foreground">Actions</h3>
               <ul className="list-disc list-inside space-y-1">
-                <li>Click "Create Sample" to add test records</li>
-                <li>View all live tracked records in the table below</li>
-                <li>Monitor real-time data changes as they occur</li>
+                <li>Monitor replica synchronization status</li>
+                <li>View replicated records and their status</li>
+                <li>Verify data consistency between source and replica</li>
               </ul>
             </div>
           </div>

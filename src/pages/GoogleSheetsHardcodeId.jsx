@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { ArrowLeft, Plus, RefreshCw, Wand2 } from "lucide-react";
 import GoogleSheetsHardcodeIdInstructions from "@/components/GoogleSheetsHardcodeIdInstructions";
 
-const SPREADSHEET_ID = "1PrQBRtxpNVq1OIRMnmS0fxBdgMVNqKwXQ0Dl5W7FHLk";
+const SPREADSHEET_ID = "1oY8jrQvKDNlntcBpqQ0sk9fjotkeSDby8k3z1HsOUmg";
 const SHEET_NAME = "Sheet1";
 
 function generateUID() {

@@ -22,8 +22,10 @@ Deno.serve(async (req) => {
     const data = await res.json();
     if (!res.ok) return Response.json({ error: data.error?.message || 'Sheets API error' }, { status: res.status });
 
-    const rows = (data.values || []).map((row) => ({ unique_id: row[0] || '', name: row[1] || '' }));
-    return Response.json({ rows });
+    const values = data.values || [];
+    const headers = values.length > 0 ? values[0] : ['Unique ID', 'Name'];
+    const rows = values.slice(1).map((row) => ({ unique_id: row[0] || '', name: row[1] || '' }));
+    return Response.json({ headers, rows });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }

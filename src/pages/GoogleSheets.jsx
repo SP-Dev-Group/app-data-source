@@ -17,6 +17,7 @@ export default function GoogleSheets() {
   const [sheetName, setSheetName] = useState(() => localStorage.getItem("gs_sheetName") || "Sheet1");
   const [name, setName] = useState("");
   const [rows, setRows] = useState([]);
+  const [headers, setHeaders] = useState(['Unique ID', 'Name']);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [addingSample, setAddingSample] = useState(false);
@@ -33,7 +34,10 @@ export default function GoogleSheets() {
     setError("");
     const res = await base44.functions.invoke("sheetsReadRows", { spreadsheetId: spreadsheetId.trim(), sheetName: sheetName.trim() || "Sheet1" });
     if (res.data?.error) setError(res.data.error);
-    else setRows(res.data?.rows || []);
+    else {
+      setHeaders(res.data?.headers || ['Unique ID', 'Name']);
+      setRows(res.data?.rows || []);
+    }
     setLoading(false);
   };
 
@@ -155,15 +159,19 @@ export default function GoogleSheets() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b bg-muted/20">
-                  <th className="text-left px-5 py-3 font-medium text-muted-foreground">Unique ID</th>
-                  <th className="text-left px-5 py-3 font-medium text-muted-foreground">Name</th>
+                  {headers.map((header, i) => (
+                    <th key={i} className="text-left px-5 py-3 font-medium text-muted-foreground">{header}</th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
                 {rows.map((r, i) => (
                   <tr key={i} className="border-b last:border-0 hover:bg-muted/10">
-                    <td className="px-5 py-3 font-mono text-xs text-muted-foreground">{r.unique_id}</td>
-                    <td className="px-5 py-3">{r.name}</td>
+                    {headers.map((_, j) => (
+                      <td key={j} className="px-5 py-3 font-mono text-xs text-muted-foreground">
+                        {j === 0 ? r.unique_id : r.name}
+                      </td>
+                    ))}
                   </tr>
                 ))}
               </tbody>

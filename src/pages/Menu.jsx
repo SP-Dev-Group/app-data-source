@@ -49,7 +49,7 @@ export default function Menu() {
         <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white" onClick={() => navigate("/datasourcelistener")}>
           Data Source Listener
         </Button>
-        <Button className="w-full bg-red-500 hover:bg-red-600 text-white" onClick={() => navigate("/googleformtemplate")}>
+        <Button className="w-full bg-red-500 hover:bg-red-600 text-white" onClick={() => navigate("/googlemenu")}>
           Google Menu
         </Button>
       </motion.div>

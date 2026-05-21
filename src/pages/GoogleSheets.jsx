@@ -1,30 +1,177 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ArrowLeft, Plus, RefreshCw, Wand2 } from "lucide-react";
+import { motion } from "framer-motion";
+
+function generateUID() {
+  return "UID-" + Math.random().toString(36).substring(2, 10).toUpperCase();
+}
 
 export default function GoogleSheets() {
   const navigate = useNavigate();
 
+  const [spreadsheetId, setSpreadsheetId] = useState(() => localStorage.getItem("gs_spreadsheetId") || "");
+  const [sheetName, setSheetName] = useState(() => localStorage.getItem("gs_sheetName") || "Sheet1");
+  const [name, setName] = useState("");
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [addingSample, setAddingSample] = useState(false);
+  const [error, setError] = useState("");
+
+  const saveConfig = () => {
+    localStorage.setItem("gs_spreadsheetId", spreadsheetId);
+    localStorage.setItem("gs_sheetName", sheetName);
+  };
+
+  const loadRows = async () => {
+    if (!spreadsheetId.trim()) return;
+    setLoading(true);
+    setError("");
+    const res = await base44.functions.invoke("sheetsReadRows", { spreadsheetId: spreadsheetId.trim(), sheetName: sheetName.trim() || "Sheet1" });
+    if (res.data?.error) setError(res.data.error);
+    else setRows(res.data?.rows || []);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (spreadsheetId) loadRows();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!name.trim() || !spreadsheetId.trim()) return;
+    setSubmitting(true);
+    setError("");
+    const res = await base44.functions.invoke("sheetsAppendRow", {
+      spreadsheetId: spreadsheetId.trim(),
+      sheetName: sheetName.trim() || "Sheet1",
+      uniqueId: generateUID(),
+      name: name.trim(),
+    });
+    if (res.data?.error) setError(res.data.error);
+    else { setName(""); await loadRows(); }
+    setSubmitting(false);
+  };
+
+  const handleAddSample = async () => {
+    if (!spreadsheetId.trim()) return;
+    setAddingSample(true);
+    setError("");
+    const sampleNames = ["Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Theta"];
+    const randomName = sampleNames[Math.floor(Math.random() * sampleNames.length)] + "-" + Math.floor(Math.random() * 1000);
+    const res = await base44.functions.invoke("sheetsAppendRow", {
+      spreadsheetId: spreadsheetId.trim(),
+      sheetName: sheetName.trim() || "Sheet1",
+      uniqueId: generateUID(),
+      name: randomName,
+    });
+    if (res.data?.error) setError(res.data.error);
+    else await loadRows();
+    setAddingSample(false);
+  };
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6 gap-4 relative">
-      <div className="absolute top-0 left-0 right-0 h-[15px] bg-black flex items-center">
-        <div className="h-full w-full bg-green-500"></div>
+    <div className="min-h-screen bg-background p-6">
+      <div className="max-w-3xl mx-auto">
+
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" onClick={() => navigate("/googlemenu")}>
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <h1 className="text-2xl font-semibold">Google Sheets</h1>
+          </div>
+          <Button onClick={handleAddSample} disabled={addingSample || !spreadsheetId.trim()} variant="outline" className="flex items-center gap-2">
+            <Wand2 className="h-4 w-4" />
+            {addingSample ? "Adding..." : "Add Sample"}
+          </Button>
+        </div>
+
+        {/* Config */}
+        <div className="bg-card border rounded-lg p-5 mb-6 space-y-3">
+          <h2 className="font-medium text-sm text-muted-foreground uppercase tracking-wide">Spreadsheet Config</h2>
+          <div className="flex gap-3">
+            <Input
+              placeholder="Spreadsheet ID (from Google Sheets URL)"
+              value={spreadsheetId}
+              onChange={(e) => setSpreadsheetId(e.target.value)}
+              className="flex-1"
+            />
+            <Input
+              placeholder="Sheet name (e.g. Sheet1)"
+              value={sheetName}
+              onChange={(e) => setSheetName(e.target.value)}
+              className="w-40"
+            />
+            <Button variant="secondary" onClick={() => { saveConfig(); loadRows(); }}>Load</Button>
+          </div>
+          <p className="text-xs text-muted-foreground">Find the Spreadsheet ID in the Google Sheets URL: .../spreadsheets/d/<strong>SPREADSHEET_ID</strong>/edit</p>
+        </div>
+
+        {/* Manual Form */}
+        <form onSubmit={handleSubmit} className="bg-card border rounded-lg p-5 mb-6 space-y-4">
+          <h2 className="font-medium text-sm text-muted-foreground uppercase tracking-wide">Add Record to Sheet</h2>
+          <div className="flex gap-3">
+            <Input
+              placeholder="Enter name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="flex-1"
+            />
+            <Button type="submit" disabled={submitting || !name.trim() || !spreadsheetId.trim()} className="flex items-center gap-2">
+              <Plus className="h-4 w-4" />
+              {submitting ? "Saving..." : "Submit"}
+            </Button>
+          </div>
+          <p className="text-xs text-muted-foreground">A unique ID will be auto-generated and written to column A, name to column B.</p>
+        </form>
+
+        {error && (
+          <div className="bg-destructive/10 text-destructive text-sm rounded-lg px-4 py-3 mb-4">{error}</div>
+        )}
+
+        {/* Rows Table */}
+        <div className="bg-card border rounded-lg overflow-hidden">
+          <div className="px-5 py-3 border-b bg-muted/30 flex items-center justify-between">
+            <h2 className="font-medium text-sm">Sheet Data <span className="text-muted-foreground">({rows.length} rows)</span></h2>
+            <Button variant="ghost" size="icon" onClick={loadRows} disabled={loading || !spreadsheetId.trim()}>
+              <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+            </Button>
+          </div>
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : rows.length === 0 ? (
+            <div className="text-center py-12 text-muted-foreground text-sm">
+              {spreadsheetId.trim() ? "No rows found. Add a record above or click \"Add Sample\"." : "Enter a Spreadsheet ID above and click Load."}
+            </div>
+          ) : (
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b bg-muted/20">
+                  <th className="text-left px-5 py-3 font-medium text-muted-foreground">Unique ID</th>
+                  <th className="text-left px-5 py-3 font-medium text-muted-foreground">Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((r, i) => (
+                  <tr key={i} className="border-b last:border-0 hover:bg-muted/10">
+                    <td className="px-5 py-3 font-mono text-xs text-muted-foreground">{r.unique_id}</td>
+                    <td className="px-5 py-3">{r.name}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+
       </div>
-      <div className="absolute top-8 left-6">
-        <Button variant="ghost" onClick={() => navigate("/googlemenu")} className="flex items-center gap-2">
-          <ArrowLeft className="h-4 w-4" />
-          Back
-        </Button>
-      </div>
-      <motion.h1
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-3xl font-light tracking-tight text-foreground"
-      >
-        Google Sheets
-      </motion.h1>
     </div>
   );
 }

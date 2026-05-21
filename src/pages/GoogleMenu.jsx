@@ -34,6 +34,15 @@ export default function GoogleMenu() {
         <Button className="w-full bg-red-500 hover:bg-red-600 text-white" onClick={() => navigate("/googleformtemplate")}>
           Google Form Template
         </Button>
+        <Button className="w-full bg-green-600 hover:bg-green-700 text-white" onClick={() => navigate("/googlesheets")}>
+          Google Sheets
+        </Button>
+        <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white" onClick={() => navigate("/googlefirebase")}>
+          Firebase / Firestore
+        </Button>
+        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" onClick={() => navigate("/googlesql")}>
+          Google Cloud SQL / BigQuery
+        </Button>
       </motion.div>
     </div>
   );

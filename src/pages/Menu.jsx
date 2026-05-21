@@ -50,7 +50,7 @@ export default function Menu() {
           Data Source Listener
         </Button>
         <Button className="w-full bg-red-500 hover:bg-red-600 text-white" onClick={() => navigate("/googleformtemplate")}>
-          Google Form Template
+          Google Menu
         </Button>
       </motion.div>
     </div>

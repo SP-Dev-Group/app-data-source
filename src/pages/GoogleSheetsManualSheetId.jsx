@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Plus, RefreshCw, Wand2 } from "lucide-react";
+import GoogleSheetsManualSheetIdInstructions from "@/components/GoogleSheetsManualSheetIdInstructions";
 
 function generateUID() {
   return "UID-" + Math.random().toString(36).substring(2, 10).toUpperCase();
@@ -79,6 +80,7 @@ export default function GoogleSheetsManualSheetId() {
 
   return (
     <div className="min-h-screen bg-background p-6">
+      <GoogleSheetsManualSheetIdInstructions />
       <div className="max-w-3xl mx-auto">
 
         {/* Header */}

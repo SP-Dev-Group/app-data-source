@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Plus, RefreshCw, Wand2 } from "lucide-react";
+import GoogleSheetsHardcodeIdInstructions from "@/components/GoogleSheetsHardcodeIdInstructions";
 
 const SPREADSHEET_ID = "1PrQBRtxpNVq1OIRMnmS0fxBdgMVNqKwXQ0Dl5W7FHLk";
 const SHEET_NAME = "Sheet1";
@@ -73,6 +74,7 @@ export default function GoogleSheetsHardcodeId() {
 
   return (
     <div className="min-h-screen bg-background p-6">
+      <GoogleSheetsHardcodeIdInstructions />
       <div className="max-w-3xl mx-auto">
 
         {/* Header */}

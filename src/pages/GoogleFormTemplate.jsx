@@ -9,7 +9,7 @@ function generateUID() {
   return "UID-" + Math.random().toString(36).substring(2, 10).toUpperCase();
 }
 
-export default function GooglePage() {
+export default function GoogleFormTemplate() {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState("");
@@ -64,7 +64,7 @@ export default function GooglePage() {
                 <ArrowLeft className="h-5 w-5" />
               </Button>
             </Link>
-            <h1 className="text-2xl font-semibold">Google Data</h1>
+            <h1 className="text-2xl font-semibold">Google Data Form Template</h1>
           </div>
           <Button
             onClick={handleAddSample}

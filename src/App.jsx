@@ -12,7 +12,7 @@ import Menu from './pages/Menu';
 import DataSourceManual from './pages/DataSourceManual';
 import DataSourceRefresh5min from './pages/DataSourceRefresh5min';
 import DataSourceLive from './pages/DataSourceLive';
-import GooglePage from './pages/GooglePage';
+import GoogleFormTemplate from './pages/GoogleFormTemplate';
 
 
 const AuthenticatedApp = () => {
@@ -47,7 +47,7 @@ const AuthenticatedApp = () => {
       <Route path="/datasourcemanual" element={<DataSourceManual />} />
       <Route path="/datasourcerefresh5min" element={<DataSourceRefresh5min />} />
       <Route path="/datasourcelistener" element={<DataSourceLive />} />
-      <Route path="/google" element={<GooglePage />} />
+      <Route path="/googleformtemplate" element={<GoogleFormTemplate />} />
 
       <Route path="*" element={<PageNotFound />} />
     </Routes>

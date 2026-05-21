@@ -14,7 +14,9 @@ import DataSourceRefresh5min from './pages/DataSourceRefresh5min';
 import DataSourceLive from './pages/DataSourceLive';
 import GoogleFormTemplate from './pages/GoogleFormTemplate';
 import GoogleMenu from './pages/GoogleMenu';
-import GoogleSheets from './pages/GoogleSheets';
+import GoogleSheetsMenu from './pages/GoogleSheetsMenu';
+import GoogleSheetsManualSheetId from './pages/GoogleSheetsManualSheetId';
+import GoogleSheetsHardcodeId from './pages/GoogleSheetsHardcodeId';
 import GoogleFirebase from './pages/GoogleFirebase';
 import GoogleSQL from './pages/GoogleSQL';
 
@@ -53,7 +55,9 @@ const AuthenticatedApp = () => {
       <Route path="/datasourcelistener" element={<DataSourceLive />} />
       <Route path="/googlemenu" element={<GoogleMenu />} />
       <Route path="/googleformtemplate" element={<GoogleFormTemplate />} />
-      <Route path="/googlesheets" element={<GoogleSheets />} />
+      <Route path="/googlesheetsMenu" element={<GoogleSheetsMenu />} />
+      <Route path="/googlesheetsmanualsheetid" element={<GoogleSheetsManualSheetId />} />
+      <Route path="/googlesheetshardcodeid" element={<GoogleSheetsHardcodeId />} />
       <Route path="/googlefirebase" element={<GoogleFirebase />} />
       <Route path="/googlesql" element={<GoogleSQL />} />
 

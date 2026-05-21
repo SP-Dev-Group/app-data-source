@@ -34,7 +34,7 @@ export default function GoogleMenu() {
         <Button className="w-full bg-red-500 hover:bg-red-600 text-white" onClick={() => navigate("/googleformtemplate")}>
           Google Form Template
         </Button>
-        <Button className="w-full bg-green-600 hover:bg-green-700 text-white" onClick={() => navigate("/googlesheets")}>
+        <Button className="w-full bg-green-600 hover:bg-green-700 text-white" onClick={() => navigate("/googlesheetsMenu")}>
           Google Sheets
         </Button>
         <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white" onClick={() => navigate("/googlefirebase")}>

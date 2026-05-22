@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, getDocs, addDoc, orderBy, query } from "firebase/firestore";
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, orderBy, query } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Plus, RefreshCw, Wand2 } from "lucide-react";
+import { ArrowLeft, Plus, RefreshCw, Wand2, Pencil, Trash2, Check, X } from "lucide-react";
 import GoogleFirebaseInstructions from "@/components/GoogleFirebaseInstructions";
 import GoogleFirebaseSecurity from "@/components/GoogleFirebaseSecurity";
 import IAMSecurity from "@/components/IAMSecurity";
@@ -25,19 +25,22 @@ export default function GoogleFirebase() {
   const [submitting, setSubmitting] = useState(false);
   const [addingSample, setAddingSample] = useState(false);
   const [error, setError] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [editName, setEditName] = useState("");
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const loadRows = async () => {
     setLoading(true);
     setError("");
     const q = query(collection(db, COLLECTION), orderBy("created_at", "desc"));
     const snapshot = await getDocs(q);
-    setRows(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    setRows(snapshot.docs.map(d => ({ id: d.id, ...d.data() })));
     setLoading(false);
   };
 
-  useEffect(() => {
-    loadRows();
-  }, []);
+  useEffect(() => { loadRows(); }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,9 +48,7 @@ export default function GoogleFirebase() {
     setSubmitting(true);
     setError("");
     await addDoc(collection(db, COLLECTION), {
-      unique_id: generateUID(),
-      name: name.trim(),
-      created_at: new Date().toISOString(),
+      unique_id: generateUID(), name: name.trim(), created_at: new Date().toISOString(),
     });
     setName("");
     await loadRows();
@@ -60,12 +61,35 @@ export default function GoogleFirebase() {
     const sampleNames = ["Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Theta"];
     const randomName = sampleNames[Math.floor(Math.random() * sampleNames.length)] + "-" + Math.floor(Math.random() * 1000);
     await addDoc(collection(db, COLLECTION), {
-      unique_id: generateUID(),
-      name: randomName,
-      created_at: new Date().toISOString(),
+      unique_id: generateUID(), name: randomName, created_at: new Date().toISOString(),
     });
     await loadRows();
     setAddingSample(false);
+  };
+
+  const startEdit = (r) => { setEditingId(r.id); setEditName(r.name); setDeleteConfirmId(null); };
+  const cancelEdit = () => { setEditingId(null); setEditName(""); };
+
+  const saveEdit = async (r) => {
+    if (!editName.trim()) return;
+    setSaving(true);
+    setError("");
+    await updateDoc(doc(db, COLLECTION, r.id), { name: editName.trim() });
+    cancelEdit();
+    await loadRows();
+    setSaving(false);
+  };
+
+  const confirmDelete = (id) => { setDeleteConfirmId(id); setEditingId(null); };
+  const cancelDelete = () => setDeleteConfirmId(null);
+
+  const doDelete = async (id) => {
+    setDeleting(true);
+    setError("");
+    await deleteDoc(doc(db, COLLECTION, id));
+    setDeleteConfirmId(null);
+    await loadRows();
+    setDeleting(false);
   };
 
   return (
@@ -90,7 +114,6 @@ export default function GoogleFirebase() {
       </div>
 
       <div className="max-w-3xl mx-auto mr-48">
-        {/* Header */}
         <div className="flex items-center mb-8">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon" onClick={() => navigate("/googlemenu")}>
@@ -104,16 +127,10 @@ export default function GoogleFirebase() {
           <p className="text-xs text-muted-foreground">Project: <span className="font-mono text-foreground">sample-sp-2026</span> &nbsp;|&nbsp; Collection: <span className="font-mono text-foreground">{COLLECTION}</span></p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="bg-card border rounded-lg p-5 mb-6 space-y-4">
           <h2 className="font-medium text-sm text-muted-foreground uppercase tracking-wide">Add Record to Firestore</h2>
           <div className="flex gap-3">
-            <Input
-              placeholder="Enter name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="flex-1"
-            />
+            <Input placeholder="Enter name" value={name} onChange={(e) => setName(e.target.value)} className="flex-1" />
             <Button type="submit" disabled={submitting || !name.trim()} className="flex items-center gap-2">
               <Plus className="h-4 w-4" />
               {submitting ? "Saving..." : "Submit"}
@@ -122,16 +139,12 @@ export default function GoogleFirebase() {
           <p className="text-xs text-muted-foreground">A unique ID will be auto-generated and stored alongside the name in Firestore.</p>
         </form>
 
-        {error && (
-          <div className="bg-destructive/10 text-destructive text-sm rounded-lg px-4 py-3 mb-4">{error}</div>
-        )}
+        {error && <div className="bg-destructive/10 text-destructive text-sm rounded-lg px-4 py-3 mb-4">{error}</div>}
 
-        {/* Security Alerts */}
         <div className="mb-6">
           <SecurityAlerts service="Firebase" />
         </div>
 
-        {/* Table */}
         <div className="bg-card border rounded-lg overflow-hidden">
           <div className="px-5 py-3 border-b bg-muted/30 flex items-center justify-between">
             <h2 className="font-medium text-sm">Firestore Data <span className="text-muted-foreground">({rows.length} records)</span></h2>
@@ -152,14 +165,53 @@ export default function GoogleFirebase() {
                   <th className="text-left px-5 py-3 font-medium text-muted-foreground">Unique ID</th>
                   <th className="text-left px-5 py-3 font-medium text-muted-foreground">Name</th>
                   <th className="text-left px-5 py-3 font-medium text-muted-foreground">Created At</th>
+                  <th className="px-5 py-3 w-24"></th>
                 </tr>
               </thead>
               <tbody>
                 {rows.map((r) => (
                   <tr key={r.id} className="border-b last:border-0 hover:bg-muted/10">
                     <td className="px-5 py-3 font-mono text-xs text-muted-foreground">{r.unique_id}</td>
-                    <td className="px-5 py-3 text-xs">{r.name}</td>
+                    <td className="px-5 py-3 text-xs">
+                      {editingId === r.id ? (
+                        <Input value={editName} onChange={(e) => setEditName(e.target.value)} className="h-7 text-xs py-0" autoFocus />
+                      ) : deleteConfirmId === r.id ? (
+                        <span className="text-destructive font-medium">Delete "{r.name}"?</span>
+                      ) : r.name}
+                    </td>
                     <td className="px-5 py-3 font-mono text-xs text-muted-foreground">{r.created_at ? new Date(r.created_at).toLocaleString() : "-"}</td>
+                    <td className="px-5 py-3">
+                      <div className="flex items-center gap-1 justify-end">
+                        {editingId === r.id ? (
+                          <>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 text-green-600" onClick={() => saveEdit(r)} disabled={saving}>
+                              <Check className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={cancelEdit}>
+                              <X className="h-3.5 w-3.5" />
+                            </Button>
+                          </>
+                        ) : deleteConfirmId === r.id ? (
+                          <>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => doDelete(r.id)} disabled={deleting}>
+                              <Check className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={cancelDelete}>
+                              <X className="h-3.5 w-3.5" />
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => startEdit(r)}>
+                              <Pencil className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => confirmDelete(r.id)}>
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>

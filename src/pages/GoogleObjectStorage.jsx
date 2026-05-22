@@ -33,6 +33,19 @@ function AudioPlayer({ audioUrl, autoPlay, audioRef }) {
   return <audio ref={audioRef} controls src={audioUrl} className="w-full" />;
 }
 
+function VideoPlayer({ videoUrl }) {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (videoRef.current && videoUrl) {
+      videoRef.current.load();
+      videoRef.current.play().catch(err => console.error("Video auto-play failed:", err));
+    }
+  }, [videoUrl]);
+
+  return <video ref={videoRef} controls src={videoUrl} className="w-full rounded-lg bg-black" />;
+}
+
 export default function GoogleObjectStorage() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("images");
@@ -123,7 +136,7 @@ export default function GoogleObjectStorage() {
     console.log("Clicking audio file:", file.name, file.id);
     try {
       const res = await base44.functions.invoke("driveGetAudioStream", { fileId: file.id });
-      console.log("Response status:", res.status, "Response data type:", typeof res.data);
+      console.log("Response status:", res.status, "Response data:", res.data);
       
       // Check if we got an error response
       if (res.status >= 400 || res.data?.error) {
@@ -141,6 +154,14 @@ export default function GoogleObjectStorage() {
       // Set the URL first, then play after React renders
       setClickedAudioUrl(audioUrl);
       setPlayingFileId(file.id);
+      
+      // Force reload and play
+      setTimeout(() => {
+        if (audioRef.current) {
+          audioRef.current.load();
+          audioRef.current.play().catch(err => console.error("Auto-play failed:", err));
+        }
+      }, 50);
     } catch (err) {
       setError(err.message || "Failed to load audio");
       console.error("Audio load error:", err);
@@ -164,14 +185,6 @@ export default function GoogleObjectStorage() {
       const videoUrl = URL.createObjectURL(videoBlob);
       console.log("Video URL created:", videoUrl);
       setClickedVideoUrl(videoUrl);
-      
-      // Auto-play the video after it loads
-      setTimeout(() => {
-        const videoElement = document.querySelector('video');
-        if (videoElement) {
-          videoElement.play().catch(err => console.error("Video auto-play failed:", err));
-        }
-      }, 100);
     } catch (err) {
       setError(err.message || "Failed to load video");
       console.error("Video load error:", err);
@@ -393,7 +406,7 @@ export default function GoogleObjectStorage() {
                 <Video className="h-4 w-4 text-purple-600" />
                 Now Playing
               </p>
-              <video controls src={clickedVideoUrl} className="w-full rounded-lg bg-black" />
+              <VideoPlayer videoUrl={clickedVideoUrl} />
             </div>
           )}
 

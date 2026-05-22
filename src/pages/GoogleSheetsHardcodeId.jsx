@@ -74,21 +74,23 @@ export default function GoogleSheetsHardcodeId() {
 
   return (
     <div className="min-h-screen bg-background p-6">
-      <GoogleSheetsHardcodeIdInstructions />
+      <div className="fixed top-6 right-6 flex flex-col gap-2 z-50">
+        <GoogleSheetsHardcodeIdInstructions />
+        <Button onClick={handleAddSample} disabled={addingSample} variant="outline" className="flex items-center gap-2">
+          <Wand2 className="h-4 w-4" />
+          {addingSample ? "Adding..." : "Add Sample"}
+        </Button>
+      </div>
       <div className="max-w-3xl mx-auto">
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center mb-8">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon" onClick={() => navigate("/googlesheetsMenu")}>
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <h1 className="text-2xl font-semibold">Google Sheets — Hard-coded ID</h1>
           </div>
-          <Button onClick={handleAddSample} disabled={addingSample} variant="outline" className="flex items-center gap-2">
-            <Wand2 className="h-4 w-4" />
-            {addingSample ? "Adding..." : "Add Sample"}
-          </Button>
         </div>
 
         <div className="bg-card border rounded-lg p-4 mb-6">

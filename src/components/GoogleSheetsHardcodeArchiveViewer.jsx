@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 
 // Archive sheet for Hardcode page
 const ARCHIVE_SPREADSHEET_ID = "1PtjThbFY89u7_z7fowTsfm-xDV03I4IqFuTN_h_G18w";
-const ARCHIVE_SHEET_NAME = "Archive";
+const ARCHIVE_SHEET_NAME = "Sheet1";
 
 const EVENT_COLORS = {
   created: "bg-green-100 text-green-700",

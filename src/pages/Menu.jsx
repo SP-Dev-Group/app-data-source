@@ -59,6 +59,9 @@ export default function Menu() {
         <Button className="w-full bg-red-500 hover:bg-red-600 text-white" onClick={() => navigate("/googlemenu")}>
           Google Menu
         </Button>
+        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" onClick={() => navigate("/azuremenu")}>
+          Azure Menu
+        </Button>
       </motion.div>
     </div>
   );

@@ -279,6 +279,14 @@ export default function GoogleObjectStorage() {
                   </tbody>
                 </table>
               )}
+
+              {/* Persistent Audio Player */}
+              {activeTab === "audio" && clickedAudioUrl && (
+                <div className="border-t bg-muted/20 p-4">
+                  <p className="text-xs text-muted-foreground mb-2">Now Playing</p>
+                  <audio controls src={clickedAudioUrl} className="w-full" />
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -306,14 +314,7 @@ export default function GoogleObjectStorage() {
             </div>
           )}
 
-          {activeTab === "audio" && clickedAudioUrl && (
-            <div className="mt-4 pt-4 border-t border-border">
-              <p className="text-xs text-muted-foreground mb-2">Audio Player</p>
-              <div className="bg-card rounded-lg p-3">
-                <audio controls src={clickedAudioUrl} className="w-full" />
-              </div>
-            </div>
-          )}
+
         </div>
       </div>
     </div>

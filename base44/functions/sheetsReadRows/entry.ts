@@ -24,7 +24,18 @@ Deno.serve(async (req) => {
 
     const values = data.values || [];
     const headers = values.length > 0 ? values[0] : ['Unique ID', 'Name'];
-    const rows = values.slice(1).map((row) => ({ unique_id: row[0] || '', name: row[1] || '' }));
+    // Use first row as headers, remaining rows as data
+    const rows = values.slice(1).map((row) => {
+      const rowData = {};
+      headers.forEach((header, idx) => {
+        const key = header.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+        rowData[key] = row[idx] || '';
+      });
+      // Also keep unique_id and name for backwards compatibility
+      rowData.unique_id = row[0] || '';
+      rowData.name = row[1] || '';
+      return rowData;
+    });
     return Response.json({ headers, rows });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

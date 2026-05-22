@@ -23,8 +23,9 @@ export default function GoogleSheetsHardcodeArchiveInstructions() {
             <h3 className="font-semibold mb-2">Archive Setup</h3>
             <ol className="list-decimal ml-5 space-y-2">
               <li>Create a new Google Sheet for the archive with headers in the first row</li>
-              <li>Required headers: <strong>Unique ID</strong>, <strong>Name</strong>, <strong>Ver</strong>, <strong>Event</strong>, <strong>Date</strong></li>
-              <li>Base44 will use the top row as headers and skip it when loading data</li>
+              <li>Required headers: <strong>Unique ID</strong> (A), <strong>Name</strong> (B), <strong>Ver</strong> (C), <strong>Event</strong> (D), <strong>Date</strong> (E)</li>
+              <li>Base44 uses the top row as headers and skips it when loading data</li>
+              <li>Archive fields map to columns: Unique ID → A, Name → B, Ver → C, Event → D, Date → E</li>
               <li>The archive spreadsheet ID is: <code className="bg-muted px-1 rounded text-xs">1Gxc4hxadg7XYfMv_NvD9O-rsfLx7kc-8a04YjXbsNdY</code></li>
             </ol>
           </div>

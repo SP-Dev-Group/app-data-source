@@ -31,6 +31,7 @@ export default function GoogleObjectStorage() {
   const [error, setError] = useState("");
   const [folderId, setFolderId] = useState(localStorage.getItem("gs_driveFolderId") || "1yfCUKNYgcbhIkT8pFlEMkFr1hT7ZeJNu");
   const [searchQuery, setSearchQuery] = useState("");
+  const [hoveredImageUrl, setHoveredImageUrl] = useState(null);
   const fileInputRef = useRef(null);
 
   const currentTab = TABS.find(t => t.id === activeTab);
@@ -194,7 +195,12 @@ export default function GoogleObjectStorage() {
                   </thead>
                   <tbody>
                     {filteredFiles.map((f) => (
-                      <tr key={f.id} className="border-b last:border-0 hover:bg-muted/10">
+                      <tr 
+                        key={f.id} 
+                        className="border-b last:border-0 hover:bg-muted/10"
+                        onMouseEnter={() => activeTab === "images" && f.iconLink && setHoveredImageUrl(f.iconLink)}
+                        onMouseLeave={() => setHoveredImageUrl(null)}
+                      >
                         <td className="px-5 py-3 font-medium truncate max-w-[200px]">{f.name}</td>
                         <td className="px-5 py-3 text-muted-foreground">{formatSize(parseInt(f.size))}</td>
                         <td className="px-5 py-3 text-muted-foreground">{f.createdTime ? new Date(f.createdTime).toLocaleDateString() : "—"}</td>
@@ -240,6 +246,14 @@ export default function GoogleObjectStorage() {
               { name: "Google Drive Files", type: "external", db: "Google Drive", id: "1yfCUKNYgcbhIkT8pFlEMkFr1hT7ZeJNu" }
             ]}
           />
+          {activeTab === "images" && hoveredImageUrl && (
+            <div className="mt-4 pt-4 border-t border-border">
+              <p className="text-xs text-muted-foreground mb-2">Preview</p>
+              <div className="aspect-square bg-card rounded-lg overflow-hidden flex items-center justify-center">
+                <img src={hoveredImageUrl} alt="Preview" className="max-w-full max-h-full object-contain" />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

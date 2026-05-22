@@ -9,8 +9,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Sample audio file URL (short public domain sample - more reliable)
-    const sampleAudioUrl = "https://www2.cs.uic.edu/~i101/SoundFiles/BabyElephantWalk60.wav";
+    // Sample audio file URL (reliable CDN-hosted public domain sample)
+    const sampleAudioUrl = "https://cdn.pixabay.com/download/audio/2022/03/10/audio_c9c6a7c26b.mp3?filename=relaxing-piano-music-10446.mp3";
     
     const response = await fetch(sampleAudioUrl);
     

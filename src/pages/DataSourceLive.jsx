@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import DataSourceLiveInstructions from "@/components/DataSourceLiveInstructions";
 import ReplicaInstructions from "@/components/ReplicaInstructions";
 import DataSourceLiveErrorLogs from "@/components/DataSourceLiveErrorLogs";
-import { Copy, Plus, ScrollText } from "lucide-react";
+import { Copy, Plus, ScrollText, Pencil, Trash2, Check, X } from "lucide-react";
 import PageMeta from "@/components/PageMeta";
 
 const logError = (source, error) => {
@@ -23,6 +24,11 @@ export default function DataSourceLive() {
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [logsOpen, setLogsOpen] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [editName, setEditName] = useState("");
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const createSample = async () => {
     setCreating(true);
@@ -50,6 +56,41 @@ export default function DataSourceLive() {
         logError("loadRecords", err);
         setLoading(false);
       });
+  };
+
+  const startEdit = (r) => {
+    setEditingId(r.id);
+    setEditName(r.name);
+    setDeleteConfirmId(null);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditName("");
+  };
+
+  const saveEdit = async (r) => {
+    if (!editName.trim()) return;
+    setSaving(true);
+    await base44.entities.DataSourceLive.update(r.id, { name: editName.trim() });
+    cancelEdit();
+    loadRecords();
+    setSaving(false);
+  };
+
+  const confirmDelete = (id) => {
+    setDeleteConfirmId(id);
+    setEditingId(null);
+  };
+
+  const cancelDelete = () => setDeleteConfirmId(null);
+
+  const doDelete = async (id) => {
+    setDeleting(true);
+    await base44.entities.DataSourceLive.delete(id);
+    setDeleteConfirmId(null);
+    loadRecords();
+    setDeleting(false);
   };
 
   useEffect(() => {
@@ -99,18 +140,57 @@ export default function DataSourceLive() {
                 <tr>
                   <th className="text-left px-4 py-3 font-medium">Unique ID</th>
                   <th className="text-left px-4 py-3 font-medium">Name</th>
+                  <th className="px-4 py-3 w-20"></th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border bg-card">
                 {records.map((row) => (
                   <tr key={row.id} className="hover:bg-muted/40 transition-colors">
                     <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{row.unique_id}</td>
-                    <td className="px-4 py-3">{row.name}</td>
+                    <td className="px-4 py-3">
+                      {editingId === row.id ? (
+                        <Input value={editName} onChange={(e) => setEditName(e.target.value)} className="h-7 text-xs py-0" autoFocus />
+                      ) : deleteConfirmId === row.id ? (
+                        <span className="text-destructive font-medium">Delete?</span>
+                      ) : row.name}
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-1 justify-end">
+                        {editingId === row.id ? (
+                          <>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 text-green-600" onClick={() => saveEdit(row)} disabled={saving}>
+                              <Check className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={cancelEdit}>
+                              <X className="h-3.5 w-3.5" />
+                            </Button>
+                          </>
+                        ) : deleteConfirmId === row.id ? (
+                          <>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => doDelete(row.id)} disabled={deleting}>
+                              <Check className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={cancelDelete}>
+                              <X className="h-3.5 w-3.5" />
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => startEdit(row)}>
+                              <Pencil className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => confirmDelete(row.id)}>
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    </td>
                   </tr>
                 ))}
                 {records.length === 0 && (
                   <tr>
-                    <td colSpan={2} className="px-4 py-8 text-center text-muted-foreground">No records found.</td>
+                    <td colSpan={3} className="px-4 py-8 text-center text-muted-foreground">No records found.</td>
                   </tr>
                 )}
               </tbody>

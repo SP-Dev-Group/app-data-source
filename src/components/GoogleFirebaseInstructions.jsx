@@ -10,7 +10,7 @@ export default function GoogleFirebaseInstructions() {
     <>
       <Button variant="outline" onClick={() => setOpen(true)} className="flex items-center gap-2">
         <HelpCircle className="h-4 w-4" />
-        Setup Guide
+        Instructions
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">

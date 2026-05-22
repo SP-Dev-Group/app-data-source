@@ -229,7 +229,7 @@ export default function GoogleObjectStorage() {
                         onMouseLeave={() => setHoveredImageUrl(null)}
                         onClick={() => {
                           if (activeTab === "images" && f.thumbnailLink) setClickedImageUrl(f.thumbnailLink);
-                          if (activeTab === "audio" && f.webViewLink) setClickedAudioUrl(f.webViewLink);
+                          if (activeTab === "audio" && f.webContentLink) setClickedAudioUrl(f.webContentLink);
                         }}
                       >
                         <td className="px-5 py-3 font-medium truncate max-w-[200px]">{f.name}</td>
@@ -286,11 +286,11 @@ export default function GoogleObjectStorage() {
             </div>
           )}
 
-          {activeTab === "audio" && (hoveredAudioUrl || clickedAudioUrl) && (
+          {activeTab === "audio" && clickedAudioUrl && (
             <div className="mt-4 pt-4 border-t border-border">
               <p className="text-xs text-muted-foreground mb-2">Audio Player</p>
               <div className="bg-card rounded-lg p-3">
-                <audio controls src={hoveredAudioUrl || clickedAudioUrl} className="w-full" />
+                <audio controls src={clickedAudioUrl} className="w-full" />
               </div>
             </div>
           )}

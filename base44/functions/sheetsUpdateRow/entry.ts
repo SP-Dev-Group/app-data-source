@@ -16,6 +16,19 @@ Deno.serve(async (req) => {
 
     const { accessToken } = await base44.asServiceRole.connectors.getConnection("googlesheets");
 
+    // Get the spreadsheet metadata to find the correct sheet ID
+    const spreadsheetRes = await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      }
+    );
+    const spreadsheet = await spreadsheetRes.json();
+    const sheet = spreadsheet.sheets?.find(s => s.properties.title === sheetName);
+    const sheetId = sheet?.properties?.sheetId || 0;
+
     // Update the row using Google Sheets API
     const response = await fetch(
       `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}!A${rowIndex}:B${rowIndex}?valueInputOption=USER_ENTERED`,

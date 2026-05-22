@@ -16,6 +16,19 @@ Deno.serve(async (req) => {
 
     const { accessToken } = await base44.asServiceRole.connectors.getConnection("googlesheets");
 
+    // Get the spreadsheet metadata to find the correct sheet ID
+    const spreadsheetRes = await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      }
+    );
+    const spreadsheet = await spreadsheetRes.json();
+    const sheet = spreadsheet.sheets?.find(s => s.properties.title === sheetName);
+    const sheetId = sheet?.properties?.sheetId || 0;
+
     // Delete the row using Google Sheets API batchUpdate
     const response = await fetch(
       `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}:batchUpdate`,
@@ -30,7 +43,7 @@ Deno.serve(async (req) => {
             {
               deleteDimension: {
                 range: {
-                  sheetId: 0, // Will get actual sheet ID
+                  sheetId: sheetId,
                   dimension: 'ROWS',
                   startIndex: rowIndex - 1,
                   endIndex: rowIndex,

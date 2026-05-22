@@ -35,7 +35,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Failed to reinstate record: ' + JSON.stringify(err) }, { status: 500 });
     }
 
-    // Then, log the reinstatement in the archive
+    // Then, log the reinstatement in the archive using sheetsArchiveRow
     const nextVersion = (version || 1) + 1;
     const archiveRes = await fetch('https://sheets.googleapis.com/v4/spreadsheets/' + archiveSpreadsheetId + '/values/' + encodeURIComponent(archiveSheetName || 'Sheet1') + ':append', {
       method: 'POST',
@@ -44,7 +44,7 @@ Deno.serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        values: [[uniqueId, name, 'reinstated', nextVersion, new Date().toISOString()]],
+        values: [[uniqueId, name, nextVersion, 'reinstated', new Date().toISOString()]],
         valueInputOption: 'RAW',
       }),
     });

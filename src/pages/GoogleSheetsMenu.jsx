@@ -15,7 +15,8 @@ export default function GoogleSheetsMenu() {
           Back
         </Button>
       </div>
-      <div className="absolute top-8 right-6">
+      <div className="absolute top-8 right-6 flex flex-col gap-2">
+        <Button variant="outline" size="sm" onClick={() => navigate("/googlemenu")}>← Menu</Button>
         <PageMeta
           page="GoogleSheetsMenu.jsx"
           functions={[]}

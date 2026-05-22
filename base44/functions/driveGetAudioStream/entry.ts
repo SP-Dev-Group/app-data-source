@@ -37,7 +37,15 @@ Deno.serve(async (req) => {
 
     // Return the file as base64 encoded JSON response
     const fileBuffer = await res.arrayBuffer();
-    const base64 = btoa(String.fromCharCode(...new Uint8Array(fileBuffer)));
+    const uint8Array = new Uint8Array(fileBuffer);
+    
+    // Convert to base64 in chunks to avoid stack overflow
+    let base64 = '';
+    const chunkSize = 16384;
+    for (let i = 0; i < uint8Array.length; i += chunkSize) {
+      const chunk = uint8Array.subarray(i, i + chunkSize);
+      base64 += btoa(String.fromCharCode(...chunk));
+    }
     
     return Response.json({ 
       data: base64,

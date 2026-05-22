@@ -35,6 +35,7 @@ export default function GoogleObjectStorage() {
   const [clickedImageUrl, setClickedImageUrl] = useState(null);
   const [clickedAudioUrl, setClickedAudioUrl] = useState(null);
   const [playingFileId, setPlayingFileId] = useState(null);
+  const audioRef = useRef(null);
   const [downloadingSample, setDownloadingSample] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -122,6 +123,12 @@ export default function GoogleObjectStorage() {
       console.log("Audio URL created:", audioUrl);
       setClickedAudioUrl(audioUrl);
       setPlayingFileId(file.id);
+      // Auto-play the audio
+      setTimeout(() => {
+        if (audioRef.current) {
+          audioRef.current.play().catch(err => console.error("Auto-play failed:", err));
+        }
+      }, 100);
     } catch (err) {
       setError(err.message || "Failed to load audio");
       console.error("Audio load error:", err);
@@ -297,7 +304,7 @@ export default function GoogleObjectStorage() {
               {activeTab === "audio" && clickedAudioUrl && (
                 <div className="border-t bg-muted/20 p-4">
                   <p className="text-xs text-muted-foreground mb-2">Now Playing</p>
-                  <audio controls src={clickedAudioUrl} className="w-full" />
+                  <audio ref={audioRef} controls src={clickedAudioUrl} className="w-full" />
                 </div>
               )}
             </div>

@@ -8,7 +8,7 @@ Deno.serve(async (req) => {
 
     const { accessToken } = await base44.asServiceRole.connectors.getConnection('googledrive');
 
-    const { fileUrl, fileName, fileType } = await req.json();
+    const { fileUrl, fileName, fileType, folderId } = await req.json();
     if (!fileUrl || !fileName) return Response.json({ error: 'Missing fileUrl or fileName' }, { status: 400 });
 
     // Download the file from Base44 storage
@@ -16,8 +16,12 @@ Deno.serve(async (req) => {
     if (!fileRes.ok) return Response.json({ error: 'Failed to download file' }, { status: 500 });
     const fileBuffer = await fileRes.arrayBuffer();
 
-    // Create file metadata
-    const metadata = { name: fileName, mimeType: fileType || 'application/octet-stream' };
+    // Create file metadata with optional parent folder
+    const metadata = { 
+      name: fileName, 
+      mimeType: fileType || 'application/octet-stream',
+      parents: folderId ? [folderId] : []
+    };
 
     // Multipart upload to Google Drive
     const boundary = '-------314159265358979323846';

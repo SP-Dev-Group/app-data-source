@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { ArrowLeft, Image, Music, Video, Upload, Trash2, ExternalLink, RefreshCw } from "lucide-react";
 import PageMeta from "@/components/PageMeta";
 import { base44 } from "@/api/base44Client";
@@ -26,6 +27,7 @@ export default function GoogleObjectStorage() {
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const [folderId, setFolderId] = useState(localStorage.getItem("gs_driveFolderId") || "");
   const fileInputRef = useRef(null);
 
   const currentTab = TABS.find(t => t.id === activeTab);
@@ -54,7 +56,8 @@ export default function GoogleObjectStorage() {
       const fileUrl = uploadRes.file_url;
       
       // Then upload to Google Drive using the backend function
-      const res = await base44.functions.invoke("driveUploadFile", { fileUrl, fileName: file.name, fileType: file.type });
+      const folderId = localStorage.getItem("gs_driveFolderId") || "";
+      const res = await base44.functions.invoke("driveUploadFile", { fileUrl, fileName: file.name, fileType: file.type, folderId });
       if (res.data?.error) setError(res.data.error);
       else await loadFiles();
     } catch (err) {
@@ -124,7 +127,18 @@ export default function GoogleObjectStorage() {
             {/* File List */}
             <div className="bg-card border rounded-lg overflow-hidden">
               <div className="px-5 py-3 border-b bg-muted/30 flex items-center justify-between">
-                <h2 className="font-medium text-sm">{currentTab.label} <span className="text-muted-foreground">({files.length})</span></h2>
+                <div className="flex items-center gap-4">
+                  <h2 className="font-medium text-sm">{currentTab.label} <span className="text-muted-foreground">({files.length})</span></h2>
+                  <Input
+                    placeholder="Drive Folder ID (optional)"
+                    value={folderId}
+                    onChange={(e) => {
+                      setFolderId(e.target.value);
+                      localStorage.setItem("gs_driveFolderId", e.target.value);
+                    }}
+                    className="w-48 h-7 text-xs"
+                  />
+                </div>
                 <div className="flex items-center gap-2">
                   <Button variant="ghost" size="icon" onClick={loadFiles} disabled={loading}>
                     <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />

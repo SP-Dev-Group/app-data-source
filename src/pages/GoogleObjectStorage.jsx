@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Image, Music, Video, Upload, Trash2, ExternalLink, RefreshCw, Search } from "lucide-react";
+import { ArrowLeft, Image, Music, Video, Upload, Trash2, ExternalLink, RefreshCw, Search, Download } from "lucide-react";
 import PageMeta from "@/components/PageMeta";
 import GoogleObjectStorageInstructions from "@/components/GoogleObjectStorageInstructions";
 import { base44 } from "@/api/base44Client";
@@ -33,6 +33,7 @@ export default function GoogleObjectStorage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [hoveredImageUrl, setHoveredImageUrl] = useState(null);
   const [clickedImageUrl, setClickedImageUrl] = useState(null);
+  const [downloadingSample, setDownloadingSample] = useState(false);
   const fileInputRef = useRef(null);
 
   const currentTab = TABS.find(t => t.id === activeTab);
@@ -77,6 +78,29 @@ export default function GoogleObjectStorage() {
     const res = await base44.functions.invoke("driveDeleteFile", { fileId });
     if (res.data?.error) setError(res.data.error);
     else setFiles(prev => prev.filter(f => f.id !== fileId));
+  };
+
+  const handleDownloadSample = async (type) => {
+    setDownloadingSample(true);
+    setError("");
+    try {
+      const functionName = type === "audio" ? "downloadSampleAudio" : "downloadSampleVideo";
+      const res = await base44.functions.invoke(functionName);
+      
+      // Create blob and download
+      const blob = new Blob([res.data], { type: type === "audio" ? "audio/mpeg" : "video/mp4" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = type === "audio" ? "sample-audio.mp3" : "sample-video.mp4";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (err) {
+      setError(err.message || "Download failed");
+    }
+    setDownloadingSample(false);
   };
 
   const filteredFiles = files.filter((f) =>
@@ -157,6 +181,18 @@ export default function GoogleObjectStorage() {
                   <Button variant="ghost" size="icon" onClick={loadFiles} disabled={loading}>
                     <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
                   </Button>
+                  {(activeTab === "audio" || activeTab === "video") && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleDownloadSample(activeTab)}
+                      disabled={downloadingSample}
+                      className="flex items-center gap-2"
+                    >
+                      <Download className="h-4 w-4" />
+                      {downloadingSample ? "Downloading..." : `Sample ${activeTab === "audio" ? "Audio" : "Video"}`}
+                    </Button>
+                  )}
                   <Button
                     size="sm"
                     onClick={() => fileInputRef.current?.click()}
@@ -242,7 +278,7 @@ export default function GoogleObjectStorage() {
           <GoogleObjectStorageInstructions />
           <PageMeta
             page="GoogleObjectStorage.jsx"
-            functions={["driveListFiles", "driveUploadFile", "driveDeleteFile"]}
+            functions={["driveListFiles", "driveUploadFile", "driveDeleteFile", "downloadSampleAudio", "downloadSampleVideo"]}
             automations={[]}
             entities={[
               { name: "Google Drive Files", type: "external", db: "Google Drive", id: "1yfCUKNYgcbhIkT8pFlEMkFr1hT7ZeJNu" }

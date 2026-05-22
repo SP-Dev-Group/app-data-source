@@ -183,18 +183,6 @@ export default function GoogleObjectStorage() {
                   <Button variant="ghost" size="icon" onClick={loadFiles} disabled={loading}>
                     <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
                   </Button>
-                  {(activeTab === "audio" || activeTab === "video") && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleDownloadSample(activeTab)}
-                      disabled={downloadingSample}
-                      className="flex items-center gap-2"
-                    >
-                      <Download className="h-4 w-4" />
-                      {downloadingSample ? "Downloading..." : `Sample ${activeTab === "audio" ? "Audio" : "Video"}`}
-                    </Button>
-                  )}
                   <Button
                     size="sm"
                     onClick={() => fileInputRef.current?.click()}

@@ -23,6 +23,44 @@ function formatSize(bytes) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+// Check if browser can play a specific MIME type
+function isFormatSupported(mimeType) {
+  if (!mimeType) return false;
+  
+  // Audio formats
+  if (mimeType.startsWith('audio/')) {
+    const audio = document.createElement('audio');
+    // MP3 and WAV are widely supported
+    if (mimeType === 'audio/mpeg' || mimeType === 'audio/wav' || mimeType === 'audio/mp3') return true;
+    return audio.canPlayType(mimeType) !== '';
+  }
+  
+  // Video formats
+  if (mimeType.startsWith('video/')) {
+    const video = document.createElement('video');
+    // MP4, WebM, OGG are widely supported
+    if (mimeType === 'video/mp4' || mimeType === 'video/webm' || mimeType === 'video/ogg') return true;
+    return video.canPlayType(mimeType) !== '';
+  }
+  
+  return false;
+}
+
+// Get browser support message for unsupported formats
+function getUnsupportedMessage(mimeType) {
+  if (!mimeType) return "Unknown format";
+  if (mimeType === 'video/x-msvideo' || mimeType === 'video/avi') {
+    return "AVI format is not supported in browsers. Convert to MP4.";
+  }
+  if (mimeType === 'video/quicktime') {
+    return "MOV format may not be supported. Convert to MP4.";
+  }
+  if (mimeType === 'video/x-flv') {
+    return "FLV format is not supported. Convert to MP4.";
+  }
+  return `Format ${mimeType} may not be supported in your browser.`;
+}
+
 
 
 export default function GoogleObjectStorage() {
@@ -114,6 +152,13 @@ export default function GoogleObjectStorage() {
     setError("");
     setSelectedFile(file);
     console.log("Clicking media file:", file.name, file.id, "Tab:", activeTab);
+    
+    // Check format compatibility before attempting playback
+    if (file.mimeType && !isFormatSupported(file.mimeType)) {
+      setError(getUnsupportedMessage(file.mimeType));
+      return;
+    }
+    
     try {
       const res = await base44.functions.invoke("driveGetAudioStream", { fileId: file.id });
       
@@ -276,6 +321,7 @@ export default function GoogleObjectStorage() {
                       <th className="text-left px-5 py-3 font-medium text-muted-foreground">Name</th>
                       <th className="text-left px-5 py-3 font-medium text-muted-foreground">Size</th>
                       <th className="text-left px-5 py-3 font-medium text-muted-foreground">Created Time</th>
+                      <th className="text-left px-5 py-3 font-medium text-muted-foreground">Compatibility</th>
                       <th className="px-5 py-3"></th>
                     </tr>
                   </thead>
@@ -301,6 +347,25 @@ export default function GoogleObjectStorage() {
                         <td className="px-5 py-3 font-medium truncate max-w-[200px]">{f.name}</td>
                         <td className="px-5 py-3 text-muted-foreground">{formatSize(parseInt(f.size))}</td>
                         <td className="px-5 py-3 text-muted-foreground">{f.createdTime ? new Date(f.createdTime).toLocaleString() : "—"}</td>
+                        <td className="px-5 py-3">
+                          {f.mimeType && (
+                            isFormatSupported(f.mimeType) ? (
+                              <span className="flex items-center gap-1 text-green-600 text-xs">
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                </svg>
+                                Supported
+                              </span>
+                            ) : (
+                              <span className="flex items-center gap-1 text-red-600 text-xs" title={getUnsupportedMessage(f.mimeType)}>
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                                </svg>
+                                Not Supported
+                              </span>
+                            )
+                          )}
+                        </td>
                         <td className="px-5 py-3">
                           <div className="flex items-center gap-1 justify-end">
                             {f.webViewLink && (

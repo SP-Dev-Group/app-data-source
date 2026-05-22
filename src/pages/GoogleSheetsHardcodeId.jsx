@@ -69,10 +69,23 @@ export default function GoogleSheetsHardcodeId() {
       uniqueId: newUid,
       name: name.trim(),
     });
-    if (res.data?.error) setError(res.data.error);
-    else {
-      await archiveRow(newUid, name.trim(), "created", 1);
-      setName(""); await loadRows();
+    if (res.data?.error) {
+      setError(res.data.error);
+    } else {
+      const archiveRes = await base44.functions.invoke("sheetsArchiveRow", {
+        spreadsheetId: ARCHIVE_SPREADSHEET_ID,
+        sheetName: ARCHIVE_SHEET_NAME,
+        uniqueId: newUid,
+        name: name.trim(),
+        ver: 1,
+        event: "created",
+        date: new Date().toISOString(),
+      });
+      if (archiveRes.data?.error) {
+        setError("Record created but archive failed: " + archiveRes.data.error);
+      }
+      setName("");
+      await loadRows();
     }
     setSubmitting(false);
   };
@@ -86,8 +99,23 @@ export default function GoogleSheetsHardcodeId() {
     const res = await base44.functions.invoke("sheetsAppendRow", {
       spreadsheetId: SPREADSHEET_ID, sheetName: SHEET_NAME, uniqueId: newUid, name: randomName,
     });
-    if (res.data?.error) setError(res.data.error);
-    else { await archiveRow(newUid, randomName, "created", 1); await loadRows(); }
+    if (res.data?.error) {
+      setError(res.data.error);
+    } else {
+      const archiveRes = await base44.functions.invoke("sheetsArchiveRow", {
+        spreadsheetId: ARCHIVE_SPREADSHEET_ID,
+        sheetName: ARCHIVE_SHEET_NAME,
+        uniqueId: newUid,
+        name: randomName,
+        ver: 1,
+        event: "created",
+        date: new Date().toISOString(),
+      });
+      if (archiveRes.data?.error) {
+        setError("Record created but archive failed: " + archiveRes.data.error);
+      }
+      await loadRows();
+    }
     setAddingSample(false);
   };
 

@@ -5,14 +5,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Plus, Copy } from "lucide-react";
 import DataSourceListener2Instructions from "@/components/DataSourceListener2Instructions";
-import PageInfo from "@/components/PageInfo";
-
-const PAGE_INFO = [
-  { label: "Page", value: "pages/DataSourceRefresh5min.jsx" },
-  { label: "Function", value: "syncToReplicaListener2" },
-  { label: "Automation", value: "Every 5 minutes (scheduled)" },
-  { label: "Entity", value: "DataSourceRefresh5mins (Base44)" },
-];
+import PageMeta from "@/components/PageMeta";
 
 export default function DataSourceRefresh5min() {
   const navigate = useNavigate();
@@ -77,9 +70,18 @@ export default function DataSourceRefresh5min() {
         </div>
       </div>
       <div className="absolute top-8 right-6 flex flex-col gap-2">
-        <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
+        <div className="flex gap-2 items-center justify-end">
+          <PageMeta
+            page="DataSourceRefresh5min.jsx"
+            functions={[]}
+            automations={[]}
+            entities={[
+              { name: "DataSourceRefresh5mins", type: "base44" }
+            ]}
+          />
+          <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
+        </div>
         <DataSourceListener2Instructions />
-        <PageInfo info={PAGE_INFO} />
         <Button
           variant="outline"
           onClick={createSample}

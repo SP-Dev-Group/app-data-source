@@ -17,7 +17,13 @@ export default function Home() {
           <span className="text-primary font-medium">Data Master</span>
         </div>
       </div>
-      <div className="absolute top-8 right-6">
+      <div className="absolute top-8 right-6 flex items-center gap-2">
+        <PageMeta
+          page="Home.jsx"
+          functions={[]}
+          automations={[]}
+          entities={[]}
+        />
         <Button variant="outline" onClick={() => setLoginOpen(true)}>Login</Button>
       </div>
       <motion.h1

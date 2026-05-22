@@ -6,15 +6,7 @@ import DataSourceLiveInstructions from "@/components/DataSourceLiveInstructions"
 import ReplicaInstructions from "@/components/ReplicaInstructions";
 import DataSourceLiveErrorLogs from "@/components/DataSourceLiveErrorLogs";
 import { Copy, Plus, ScrollText } from "lucide-react";
-import PageInfo from "@/components/PageInfo";
-
-const PAGE_INFO = [
-  { label: "Page", value: "pages/DataSourceLive.jsx" },
-  { label: "Function", value: "pushToReplica" },
-  { label: "Automation", value: "Entity create/update trigger on DataSourceLive" },
-  { label: "Entity", value: "DataSourceLive (Base44)" },
-  { label: "Entity", value: "DataSourceLiveErrorLog (Base44)" },
-];
+import PageMeta from "@/components/PageMeta";
 
 const logError = (source, error) => {
   base44.entities.DataSourceLiveErrorLog.create({
@@ -87,9 +79,22 @@ export default function DataSourceLive() {
       </div>
       <DataSourceLiveErrorLogs open={logsOpen} onOpenChange={setLogsOpen} />
       <div className="absolute top-8 right-6 flex flex-col gap-2">
-        <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
+        <div className="flex gap-2 items-center justify-end">
+          <PageMeta
+            page="DataSourceLive.jsx"
+            functions={[]}
+            automations={[
+              "AutomationListener → pushToReplica (entity: DataSourceLive, create/update/delete)",
+              "Automation Listener to DataSourceLive entity → syncToReplicaListener (entity: DataSourceLive, create/update/delete)"
+            ]}
+            entities={[
+              { name: "DataSourceLive", type: "base44" },
+              { name: "DataSourceLiveErrorLog", type: "base44" }
+            ]}
+          />
+          <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
+        </div>
         <DataSourceLiveInstructions />
-        <PageInfo info={PAGE_INFO} />
         <ReplicaInstructions />
         <Button variant="outline" onClick={() => setLogsOpen(true)} className="flex items-center gap-2">
           <ScrollText className="w-4 h-4" />

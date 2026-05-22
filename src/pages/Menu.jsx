@@ -21,7 +21,13 @@ export default function Menu() {
           <span className="text-blue-400 font-medium">Data Master</span>
         </div>
       </div>
-      <div className="absolute top-8 right-6">
+      <div className="absolute top-8 right-6 flex items-center gap-2">
+        <PageMeta
+          page="Menu.jsx"
+          functions={[]}
+          automations={[]}
+          entities={[]}
+        />
         <Button variant="outline" onClick={handleLogout}>Logout</Button>
       </div>
       <motion.h1

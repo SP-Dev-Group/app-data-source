@@ -23,9 +23,17 @@ function formatSize(bytes) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-// Check if browser can play a specific MIME type
+// Check if browser can play/display a specific MIME type
 function isFormatSupported(mimeType) {
   if (!mimeType) return false;
+  
+  // Image formats - all widely supported in browsers
+  if (mimeType.startsWith('image/')) {
+    // JPEG, PNG, GIF, WebP, SVG are all widely supported
+    if (mimeType === 'image/jpeg' || mimeType === 'image/png' || mimeType === 'image/gif' || 
+        mimeType === 'image/webp' || mimeType === 'image/svg+xml') return true;
+    return true; // Most image formats work in browsers
+  }
   
   // Audio formats
   if (mimeType.startsWith('audio/')) {

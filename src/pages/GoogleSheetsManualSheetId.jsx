@@ -124,10 +124,9 @@ export default function GoogleSheetsManualSheetId() {
     if (!editName.trim()) return;
     setSaving(true);
     setError("");
-    // rowIndex: +1 for 1-indexed (array index 0 = row 1, but row 0 is headers, so array index 0 = row 2... wait, we sliced headers, so array index 0 = row 1)
-    // Actually: rows array is already sliced to skip header, so array index 0 = Google Sheets row 1 (first data row)
-    // Therefore: rowIndex = i + 1 (not +2)
-    const rowIndex = i + 1;
+    // sheetsReadRows slices off headers, so array index 0 = Google Sheets row 2 (first data row after header)
+    // Therefore: rowIndex = i + 2
+    const rowIndex = i + 2;
     const nextVer = await getNextVersion(rows[i].unique_id);
     const res = await base44.functions.invoke("sheetsUpdateRow", {
       spreadsheetId: spreadsheetId.trim(), sheetName: sheetName.trim() || "Sheet1",
@@ -144,7 +143,8 @@ export default function GoogleSheetsManualSheetId() {
   const doDelete = async (i) => {
     setDeleting(true);
     setError("");
-    const rowIndex = i + 1;
+    // sheetsReadRows slices off headers, so array index 0 = Google Sheets row 2
+    const rowIndex = i + 2;
     const nextVer = await getNextVersion(rows[i].unique_id);
     const res = await base44.functions.invoke("sheetsDeleteRow", {
       spreadsheetId: spreadsheetId.trim(), sheetName: sheetName.trim() || "Sheet1", rowIndex,

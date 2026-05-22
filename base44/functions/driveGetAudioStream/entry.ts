@@ -11,10 +11,22 @@ Deno.serve(async (req) => {
 
     const { accessToken } = await base44.asServiceRole.connectors.getConnection('googledrive');
 
-    // Get file metadata to get the download URL
-    const metadataUrl = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`;
-    
-    const res = await fetch(metadataUrl, {
+    // First, get file metadata to determine MIME type
+    const metadataRes = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?fields=mimeType`, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+
+    if (!metadataRes.ok) {
+      const error = await metadataRes.json().catch(() => ({ error: { message: 'Failed to fetch file metadata' } }));
+      return Response.json({ error: error.error?.message || 'Drive API error' }, { status: metadataRes.status });
+    }
+
+    const metadata = await metadataRes.json();
+    const mimeType = metadata.mimeType || 'application/octet-stream';
+
+    // Now get the file content
+    const downloadUrl = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`;
+    const res = await fetch(downloadUrl, {
       headers: { Authorization: `Bearer ${accessToken}` }
     });
 
@@ -23,11 +35,11 @@ Deno.serve(async (req) => {
       return Response.json({ error: error.error?.message || 'Drive API error' }, { status: res.status });
     }
 
-    // Return the audio file with proper headers
-    const audioBuffer = await res.arrayBuffer();
-    return new Response(audioBuffer, {
+    // Return the file with proper headers
+    const fileBuffer = await res.arrayBuffer();
+    return new Response(fileBuffer, {
       headers: {
-        'Content-Type': 'audio/mpeg',
+        'Content-Type': mimeType,
         'Access-Control-Allow-Origin': '*',
         'Content-Disposition': 'inline',
       }

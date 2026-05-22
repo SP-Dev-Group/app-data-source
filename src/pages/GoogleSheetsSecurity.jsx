@@ -7,27 +7,21 @@ export default function GoogleSheetsSecurity() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-background flex flex-col">
+      <div className="flex flex-1 overflow-hidden">
+        <div className="flex-1 p-6 overflow-y-auto">
+          <div className="max-w-2xl mx-auto">
 
-        {/* Header */}
-        <div className="flex items-center justify-between gap-3 mb-8">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" onClick={() => navigate("/googlesheetsMenu")}>
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div className="flex items-center gap-2">
-              <Shield className="h-6 w-6 text-primary" />
-              <h1 className="text-2xl font-semibold">Security: Protect Sheets</h1>
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-8">
+              <Button variant="ghost" size="icon" onClick={() => navigate("/googlesheetsMenu")}>
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <div className="flex items-center gap-2">
+                <Shield className="h-6 w-6 text-primary" />
+                <h1 className="text-2xl font-semibold">Security: Protect Sheets</h1>
+              </div>
             </div>
-          </div>
-          <PageMeta
-            page="GoogleSheetsSecurity.jsx"
-            functions={[]}
-            automations={[]}
-            entities={[]}
-          />
-        </div>
 
         {/* Instructions */}
         <div className="bg-card border rounded-lg p-6 space-y-6">
@@ -86,6 +80,16 @@ export default function GoogleSheetsSecurity() {
           </div>
         </div>
 
+          </div>
+        </div>
+        <div className="w-56 border-l border-border bg-muted/20 p-4 flex flex-col gap-2 overflow-y-auto">
+          <PageMeta
+            page="GoogleSheetsSecurity.jsx"
+            functions={[]}
+            automations={[]}
+            entities={[]}
+          />
+        </div>
       </div>
     </div>
   );

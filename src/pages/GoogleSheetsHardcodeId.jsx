@@ -74,27 +74,9 @@ export default function GoogleSheetsHardcodeId() {
   };
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="fixed top-6 right-6 flex flex-col gap-2 z-50 w-40">
-        <PageMeta
-          page="GoogleSheetsHardcodeId.jsx"
-          functions={["sheetsReadRows", "sheetsAppendRow"]}
-          automations={[]}
-          entities={[
-            { name: "Sheet1", type: "external", db: "Google Sheets", spreadsheetId: "1oY8jrQvKDNlntcBpqQ0sk9fjotkeSDby8k3z1HsOUmg", sheet: "Sheet1" }
-          ]}
-        />
-        <GoogleSheetsHardcodeIdInstructions />
-        <Button onClick={handleAddSample} disabled={addingSample} variant="outline" className="flex items-center gap-2">
-          <Wand2 className="h-4 w-4" />
-          {addingSample ? "Adding..." : "Add Sample"}
-        </Button>
-        <Button onClick={() => navigate("/googlesheetssecurity")} variant="outline" className="flex items-center gap-2">
-          <Shield className="h-4 w-4" />
-          Security
-        </Button>
-      </div>
-      <div className="max-w-3xl mx-auto mr-48">
+    <div className="min-h-screen bg-background flex flex-col">
+      <div className="flex flex-1 overflow-hidden">
+        <div className="flex-1 p-6 overflow-y-auto">
 
         {/* Header */}
         <div className="flex items-center mb-8">
@@ -170,6 +152,26 @@ export default function GoogleSheetsHardcodeId() {
           )}
         </div>
 
+        </div>
+        <div className="w-56 border-l border-border bg-muted/20 p-4 flex flex-col gap-2 overflow-y-auto">
+          <PageMeta
+            page="GoogleSheetsHardcodeId.jsx"
+            functions={["sheetsReadRows", "sheetsAppendRow"]}
+            automations={[]}
+            entities={[
+              { name: "Sheet1", type: "external", db: "Google Sheets", spreadsheetId: "1oY8jrQvKDNlntcBpqQ0sk9fjotkeSDby8k3z1HsOUmg", sheet: "Sheet1" }
+            ]}
+          />
+          <GoogleSheetsHardcodeIdInstructions />
+          <Button onClick={handleAddSample} disabled={addingSample} variant="outline" size="sm" className="flex items-center gap-2">
+            <Wand2 className="h-4 w-4" />
+            {addingSample ? "Adding..." : "Add Sample"}
+          </Button>
+          <Button onClick={() => navigate("/googlesheetssecurity")} variant="outline" size="sm" className="flex items-center gap-2">
+            <Shield className="h-4 w-4" />
+            Security
+          </Button>
+        </div>
       </div>
     </div>
   );

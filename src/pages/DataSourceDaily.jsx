@@ -36,7 +36,7 @@ export default function DataSourceDaily() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background px-6 py-12 relative">
+    <div className="min-h-screen bg-background flex flex-col relative">
       <div className="absolute top-0 left-0 right-0 h-[15px] bg-black flex items-center">
         <div className="h-full w-full bg-blue-600"></div>
       </div>
@@ -67,34 +67,9 @@ export default function DataSourceDaily() {
           </button>
         </div>
       </div>
-      <div className="absolute top-8 right-6 flex flex-col gap-2 items-end">
-        <div className="flex gap-2 items-center">
-          <PageMeta
-            page="DataSourceDaily.jsx"
-            functions={[]}
-            automations={[]}
-            entities={[
-              { name: "DataSource2am", type: "base44" }
-            ]}
-          />
-          <button
-            onClick={() => navigator.clipboard.writeText("6a0a3a832f954c38e4a31c7b")}
-            className="text-xs text-muted-foreground font-mono hover:text-foreground cursor-pointer transition-colors flex items-center gap-1"
-            title="Copy ID only"
-          >
-            <Copy className="w-3 h-3" />
-          </button>
-          <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
-        </div>
-        <DataSourceDailyInstructions />
-        <Button variant="outline" onClick={generateSample} disabled={generating}>
-          {generating ? "Generating..." : "Generate Sample"}
-        </Button>
-        <Button variant="outline" onClick={loadRecords} disabled={loading}>
-          {loading ? "Refreshing..." : "Refresh"}
-        </Button>
-      </div>
-      <div className="max-w-3xl mx-auto">
+      <div className="flex flex-1 overflow-hidden">
+        <div className="flex-1 px-6 py-12 overflow-y-auto">
+          <div className="max-w-3xl mx-auto">
         <div className="flex items-center justify-center gap-2 mb-2">
           <div className="bg-blue-600 rounded-lg px-6 py-3">
             <h1 className="text-3xl font-light tracking-tight text-white text-center">Data Source Daily at 2am</h1>
@@ -151,6 +126,35 @@ export default function DataSourceDaily() {
             </table>
           </div>
         )}
+          </div>
+        </div>
+        <div className="w-56 border-l border-border bg-muted/20 p-4 flex flex-col gap-2 overflow-y-auto">
+          <div className="flex gap-2 items-center justify-end flex-wrap">
+            <PageMeta
+              page="DataSourceDaily.jsx"
+              functions={[]}
+              automations={[]}
+              entities={[
+                { name: "DataSource2am", type: "base44" }
+              ]}
+            />
+            <button
+              onClick={() => navigator.clipboard.writeText("6a0a3a832f954c38e4a31c7b")}
+              className="text-xs text-muted-foreground font-mono hover:text-foreground cursor-pointer transition-colors flex items-center gap-1"
+              title="Copy ID only"
+            >
+              <Copy className="w-3 h-3" />
+            </button>
+            <Button variant="outline" size="sm" onClick={() => navigate("/menu")}>← Menu</Button>
+          </div>
+          <DataSourceDailyInstructions />
+          <Button variant="outline" size="sm" onClick={generateSample} disabled={generating}>
+            {generating ? "Generating..." : "Generate Sample"}
+          </Button>
+          <Button variant="outline" size="sm" onClick={loadRecords} disabled={loading}>
+            {loading ? "Refreshing..." : "Refresh"}
+          </Button>
+        </div>
       </div>
     </div>
   );

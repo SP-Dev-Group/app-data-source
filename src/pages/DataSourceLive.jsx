@@ -57,7 +57,7 @@ export default function DataSourceLive() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background px-6 py-12 relative">
+    <div className="min-h-screen bg-background flex flex-col relative">
       <div className="absolute top-0 left-0 right-0 h-[15px] bg-black flex items-center">
         <div className="h-full w-full bg-blue-400"></div>
       </div>
@@ -78,39 +78,9 @@ export default function DataSourceLive() {
         </div>
       </div>
       <DataSourceLiveErrorLogs open={logsOpen} onOpenChange={setLogsOpen} />
-      <div className="absolute top-8 right-6 flex flex-col gap-2">
-        <div className="flex gap-2 items-center justify-end">
-          <PageMeta
-            page="DataSourceLive.jsx"
-            functions={[]}
-            automations={[
-              "AutomationListener → pushToReplica (entity: DataSourceLive, create/update/delete)",
-              "Automation Listener to DataSourceLive entity → syncToReplicaListener (entity: DataSourceLive, create/update/delete)"
-            ]}
-            entities={[
-              { name: "DataSourceLive", type: "base44" },
-              { name: "DataSourceLiveErrorLog", type: "base44" }
-            ]}
-          />
-          <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
-        </div>
-        <DataSourceLiveInstructions />
-        <ReplicaInstructions />
-        <Button variant="outline" onClick={() => setLogsOpen(true)} className="flex items-center gap-2">
-          <ScrollText className="w-4 h-4" />
-          Error Logs
-        </Button>
-        <Button
-          variant="outline"
-          onClick={createSample}
-          disabled={creating}
-          className="flex items-center gap-2"
-        >
-          <Plus className="w-4 h-4" />
-          {creating ? "Creating..." : "Create Sample"}
-        </Button>
-      </div>
-      <div className="max-w-xl mx-auto pt-20">
+      <div className="flex flex-1 overflow-hidden">
+        <div className="flex-1 px-6 py-12 overflow-y-auto">
+          <div className="max-w-xl mx-auto pt-20">
         <div className="text-center mb-4">
           <div className="bg-orange-600 rounded-lg px-6 py-3 inline-block">
             <h1 className="text-3xl font-light tracking-tight text-white">Data Source Live</h1>
@@ -147,6 +117,41 @@ export default function DataSourceLive() {
             </table>
           </div>
         )}
+          </div>
+        </div>
+        <div className="w-56 border-l border-border bg-muted/20 p-4 flex flex-col gap-2 overflow-y-auto">
+          <div className="flex gap-2 items-center justify-end flex-wrap">
+            <PageMeta
+              page="DataSourceLive.jsx"
+              functions={[]}
+              automations={[
+                "AutomationListener → pushToReplica (entity: DataSourceLive, create/update/delete)",
+                "Automation Listener to DataSourceLive entity → syncToReplicaListener (entity: DataSourceLive, create/update/delete)"
+              ]}
+              entities={[
+                { name: "DataSourceLive", type: "base44" },
+                { name: "DataSourceLiveErrorLog", type: "base44" }
+              ]}
+            />
+            <Button variant="outline" size="sm" onClick={() => navigate("/menu")}>← Menu</Button>
+          </div>
+          <DataSourceLiveInstructions />
+          <ReplicaInstructions />
+          <Button variant="outline" size="sm" onClick={() => setLogsOpen(true)} className="flex items-center gap-2">
+            <ScrollText className="w-4 h-4" />
+            Error Logs
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={createSample}
+            disabled={creating}
+            className="flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            {creating ? "Creating..." : "Create Sample"}
+          </Button>
+        </div>
       </div>
     </div>
   );

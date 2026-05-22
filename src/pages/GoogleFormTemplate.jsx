@@ -59,32 +59,22 @@ export default function GoogleFormTemplate() {
   };
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen bg-background flex flex-col">
+      <div className="flex flex-1 overflow-hidden">
+        <div className="flex-1 p-6 overflow-y-auto">
+          <div className="max-w-3xl mx-auto">
 
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <Link to="/googlemenu">
-              <Button variant="ghost" size="icon">
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-            </Link>
-            <h1 className="text-2xl font-semibold">Google Data Form Template</h1>
-          </div>
-          <div className="flex items-center gap-2">
-            <PageInfo info={PAGE_INFO} />
-            <Button
-              onClick={handleAddSample}
-              disabled={addingSample}
-              variant="outline"
-              className="flex items-center gap-2"
-            >
-              <Wand2 className="h-4 w-4" />
-              {addingSample ? "Adding..." : "Add Sample"}
-            </Button>
-          </div>
-        </div>
+            {/* Header */}
+            <div className="flex items-center mb-8">
+              <div className="flex items-center gap-3">
+                <Link to="/googlemenu">
+                  <Button variant="ghost" size="icon">
+                    <ArrowLeft className="h-5 w-5" />
+                  </Button>
+                </Link>
+                <h1 className="text-2xl font-semibold">Google Data Form Template</h1>
+              </div>
+            </div>
 
         {/* Manual Form */}
         <form onSubmit={handleSubmit} className="bg-card border rounded-lg p-5 mb-8 space-y-4">
@@ -135,6 +125,21 @@ export default function GoogleFormTemplate() {
           )}
         </div>
 
+          </div>
+        </div>
+        <div className="w-56 border-l border-border bg-muted/20 p-4 flex flex-col gap-2 overflow-y-auto">
+          <PageInfo info={PAGE_INFO} />
+          <Button
+            onClick={handleAddSample}
+            disabled={addingSample}
+            variant="outline"
+            size="sm"
+            className="flex items-center gap-2"
+          >
+            <Wand2 className="h-4 w-4" />
+            {addingSample ? "Adding..." : "Add Sample"}
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -4,8 +4,9 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Image, Music, Video, Upload, Trash2, ExternalLink, RefreshCw } from "lucide-react";
+import { ArrowLeft, Image, Music, Video, Upload, Trash2, ExternalLink, RefreshCw, Search } from "lucide-react";
 import PageMeta from "@/components/PageMeta";
+import GoogleObjectStorageInstructions from "@/components/GoogleObjectStorageInstructions";
 import { base44 } from "@/api/base44Client";
 
 const TABS = [
@@ -29,6 +30,7 @@ export default function GoogleObjectStorage() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
   const [folderId, setFolderId] = useState(localStorage.getItem("gs_driveFolderId") || "1yfCUKNYgcbhIkT8pFlEMkFr1hT7ZeJNu");
+  const [searchQuery, setSearchQuery] = useState("");
   const fileInputRef = useRef(null);
 
   const currentTab = TABS.find(t => t.id === activeTab);
@@ -75,18 +77,15 @@ export default function GoogleObjectStorage() {
     else setFiles(prev => prev.filter(f => f.id !== fileId));
   };
 
+  const filteredFiles = files.filter((f) =>
+    !searchQuery || f.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="min-h-screen bg-background flex flex-col relative">
       <div className="absolute top-0 left-0 right-0 h-[15px] bg-black">
         <div className="h-full w-full bg-purple-500"></div>
       </div>
-      <div className="absolute top-8 left-6">
-        <Button variant="ghost" onClick={() => navigate("/googlemenu")} className="flex items-center gap-2">
-          <ArrowLeft className="h-4 w-4" />
-          Google Menu
-        </Button>
-      </div>
-
       <div className="flex flex-1 overflow-hidden">
         <div className="flex-1 px-6 py-12 overflow-y-auto">
           <div className="max-w-3xl mx-auto pt-12">
@@ -129,7 +128,13 @@ export default function GoogleObjectStorage() {
             <div className="bg-card border rounded-lg overflow-hidden">
               <div className="px-5 py-3 border-b bg-muted/30 flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <h2 className="font-medium text-sm">{currentTab.label} <span className="text-muted-foreground">({files.length})</span></h2>
+                  <h2 className="font-medium text-sm">{currentTab.label} <span className="text-muted-foreground">({filteredFiles.length})</span></h2>
+                  <Input
+                    placeholder="Search files..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-48 h-7 text-xs"
+                  />
                   <Select
                     value={folderId}
                     onValueChange={(value) => {
@@ -173,9 +178,9 @@ export default function GoogleObjectStorage() {
                 <div className="flex items-center justify-center py-12">
                   <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                 </div>
-              ) : files.length === 0 ? (
+              ) : filteredFiles.length === 0 ? (
                 <div className="text-center py-12 text-muted-foreground text-sm">
-                  No {activeTab} found. Click Upload to add files.
+                  {searchQuery ? `No files matching "${searchQuery}"` : `No ${activeTab} found. Click Upload to add files.`}
                 </div>
               ) : (
                 <table className="w-full text-sm">
@@ -188,7 +193,7 @@ export default function GoogleObjectStorage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {files.map((f) => (
+                    {filteredFiles.map((f) => (
                       <tr key={f.id} className="border-b last:border-0 hover:bg-muted/10">
                         <td className="px-5 py-3 font-medium truncate max-w-[200px]">{f.name}</td>
                         <td className="px-5 py-3 text-muted-foreground">{formatSize(parseInt(f.size))}</td>
@@ -222,6 +227,11 @@ export default function GoogleObjectStorage() {
         </div>
 
         <div className="w-56 border-l border-border bg-muted/20 p-4 flex flex-col gap-2 overflow-y-auto">
+          <Button variant="outline" size="sm" onClick={() => navigate("/googlemenu")} className="flex items-center gap-2 text-xs h-8 justify-start">
+            <ArrowLeft className="h-3 w-3" />
+            Google Menu
+          </Button>
+          <GoogleObjectStorageInstructions />
           <PageMeta
             page="GoogleObjectStorage.jsx"
             functions={["driveListFiles", "driveUploadFile", "driveDeleteFile"]}

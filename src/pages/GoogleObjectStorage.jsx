@@ -307,8 +307,11 @@ export default function GoogleObjectStorage() {
 
               {/* Persistent Audio Player */}
               {activeTab === "audio" && clickedAudioUrl && (
-                <div className="border-t bg-muted/20 p-4">
-                  <p className="text-xs text-muted-foreground mb-2">Now Playing</p>
+                <div className="border-t bg-purple-50 p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Music className="h-4 w-4 text-purple-600" />
+                    <p className="text-xs font-medium text-purple-700">Now Playing</p>
+                  </div>
                   <audio ref={audioRef} controls src={clickedAudioUrl} className="w-full" />
                 </div>
               )}

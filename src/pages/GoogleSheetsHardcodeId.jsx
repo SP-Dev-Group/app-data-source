@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Plus, RefreshCw, Wand2 } from "lucide-react";
+import { ArrowLeft, Plus, RefreshCw, Wand2, Shield } from "lucide-react";
 import GoogleSheetsHardcodeIdInstructions from "@/components/GoogleSheetsHardcodeIdInstructions";
 
 const SPREADSHEET_ID = "1oY8jrQvKDNlntcBpqQ0sk9fjotkeSDby8k3z1HsOUmg";
@@ -79,6 +79,10 @@ export default function GoogleSheetsHardcodeId() {
         <Button onClick={handleAddSample} disabled={addingSample} variant="outline" className="flex items-center gap-2">
           <Wand2 className="h-4 w-4" />
           {addingSample ? "Adding..." : "Add Sample"}
+        </Button>
+        <Button onClick={() => navigate("/googlesheetssecurity")} variant="outline" className="flex items-center gap-2">
+          <Shield className="h-4 w-4" />
+          Security
         </Button>
       </div>
       <div className="max-w-3xl mx-auto mr-48">

@@ -17,6 +17,7 @@ import GoogleMenu from './pages/GoogleMenu';
 import GoogleSheetsMenu from './pages/GoogleSheetsMenu';
 import GoogleSheetsManualSheetId from './pages/GoogleSheetsManualSheetId';
 import GoogleSheetsHardcodeId from './pages/GoogleSheetsHardcodeId';
+import GoogleSheetsSecurity from './pages/GoogleSheetsSecurity';
 import GoogleFirebase from './pages/GoogleFirebase';
 import GoogleSQL from './pages/GoogleSQL';
 
@@ -58,6 +59,7 @@ const AuthenticatedApp = () => {
       <Route path="/googlesheetsMenu" element={<GoogleSheetsMenu />} />
       <Route path="/googlesheetsmanualsheetid" element={<GoogleSheetsManualSheetId />} />
       <Route path="/googlesheetshardcodeid" element={<GoogleSheetsHardcodeId />} />
+      <Route path="/googlesheetssecurity" element={<GoogleSheetsSecurity />} />
       <Route path="/googlefirebase" element={<GoogleFirebase />} />
       <Route path="/googlesql" element={<GoogleSQL />} />
 

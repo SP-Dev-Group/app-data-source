@@ -33,8 +33,8 @@ export default function GoogleObjectStorage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [hoveredImageUrl, setHoveredImageUrl] = useState(null);
   const [clickedImageUrl, setClickedImageUrl] = useState(null);
-  const [hoveredAudioFileId, setHoveredAudioFileId] = useState(null);
-  const [clickedAudioFileId, setClickedAudioFileId] = useState(null);
+  const [hoveredAudioUrl, setHoveredAudioUrl] = useState(null);
+  const [clickedAudioUrl, setClickedAudioUrl] = useState(null);
   const [downloadingSample, setDownloadingSample] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -103,37 +103,6 @@ export default function GoogleObjectStorage() {
       setError(err.message || "Download failed");
     }
     setDownloadingSample(false);
-  };
-
-  const handleUploadSample = async (type) => {
-    setUploading(true);
-    setError("");
-    try {
-      const functionName = type === "audio" ? "downloadSampleAudio" : "downloadSampleVideo";
-      const res = await base44.functions.invoke(functionName);
-      
-      // Create blob and upload to Base44 storage
-      const blob = new Blob([res.data], { type: type === "audio" ? "audio/mpeg" : "video/mp4" });
-      const file = new File([blob], type === "audio" ? "sample-audio.mp3" : "sample-video.mp4", { type: type === "audio" ? "audio/mpeg" : "video/mp4" });
-      
-      const uploadRes = await base44.integrations.Core.UploadFile({ file });
-      const fileUrl = uploadRes.file_url;
-      
-      // Upload to Google Drive
-      const folderId = localStorage.getItem("gs_driveFolderId") || "";
-      const driveRes = await base44.functions.invoke("driveUploadFile", { 
-        fileUrl, 
-        fileName: type === "audio" ? "sample-audio.wav" : "sample-video.mp4", 
-        fileType: type === "audio" ? "audio/wav" : "video/mp4", 
-        folderId 
-      });
-      
-      if (driveRes.data?.error) setError(driveRes.data.error);
-      else await loadFiles();
-    } catch (err) {
-      setError(err.message || "Upload failed");
-    }
-    setUploading(false);
   };
 
   const filteredFiles = files.filter((f) =>
@@ -215,28 +184,16 @@ export default function GoogleObjectStorage() {
                     <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
                   </Button>
                   {(activeTab === "audio" || activeTab === "video") && (
-                    <>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleUploadSample(activeTab)}
-                        disabled={uploading}
-                        className="flex items-center gap-2"
-                      >
-                        <Upload className="h-4 w-4" />
-                        {uploading ? "Uploading..." : `Upload Sample ${activeTab === "audio" ? "MP3" : "Video"}`}
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleDownloadSample(activeTab)}
-                        disabled={downloadingSample}
-                        className="flex items-center gap-2"
-                      >
-                        <Download className="h-4 w-4" />
-                        {downloadingSample ? "Downloading..." : `Download Sample ${activeTab === "audio" ? "MP3" : "Video"}`}
-                      </Button>
-                    </>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleDownloadSample(activeTab)}
+                      disabled={downloadingSample}
+                      className="flex items-center gap-2"
+                    >
+                      <Download className="h-4 w-4" />
+                      {downloadingSample ? "Downloading..." : `Sample ${activeTab === "audio" ? "Audio" : "Video"}`}
+                    </Button>
                   )}
                   <Button
                     size="sm"
@@ -282,15 +239,15 @@ export default function GoogleObjectStorage() {
                         className="border-b last:border-0 hover:bg-muted/10 cursor-pointer"
                         onMouseEnter={() => {
                           if (activeTab === "images" && f.thumbnailLink) setHoveredImageUrl(f.thumbnailLink);
-                          if (activeTab === "audio" && f.id) setHoveredAudioFileId(f.id);
+                          if (activeTab === "audio" && f.webViewLink) setHoveredAudioUrl(f.webViewLink);
                         }}
                         onMouseLeave={() => {
                           setHoveredImageUrl(null);
-                          setHoveredAudioFileId(null);
+                          setHoveredAudioUrl(null);
                         }}
                         onClick={() => {
                           if (activeTab === "images" && f.thumbnailLink) setClickedImageUrl(f.thumbnailLink);
-                          if (activeTab === "audio" && f.id) setClickedAudioFileId(f.id);
+                          if (activeTab === "audio" && f.webViewLink) setClickedAudioUrl(f.webViewLink);
                         }}
                       >
                         <td className="px-5 py-3 font-medium truncate max-w-[200px]">{f.name}</td>
@@ -332,7 +289,7 @@ export default function GoogleObjectStorage() {
           <GoogleObjectStorageInstructions />
           <PageMeta
             page="GoogleObjectStorage.jsx"
-            functions={["driveListFiles", "driveUploadFile", "driveDeleteFile", "downloadSampleAudio", "downloadSampleVideo", "driveStreamAudio"]}
+            functions={["driveListFiles", "driveUploadFile", "driveDeleteFile", "downloadSampleAudio", "downloadSampleVideo"]}
             automations={[]}
             entities={[
               { name: "Google Drive Files", type: "external", db: "Google Drive", id: "1yfCUKNYgcbhIkT8pFlEMkFr1hT7ZeJNu" }
@@ -347,14 +304,11 @@ export default function GoogleObjectStorage() {
             </div>
           )}
 
-          {activeTab === "audio" && (hoveredAudioFileId || clickedAudioFileId) && (
+          {activeTab === "audio" && (hoveredAudioUrl || clickedAudioUrl) && (
             <div className="mt-4 pt-4 border-t border-border">
               <p className="text-xs text-muted-foreground mb-2">Audio Player</p>
               <div className="bg-card rounded-lg p-3">
-                <audio controls className="w-full">
-                  <source src={`/api/functions/driveStreamAudio?fileId=${hoveredAudioFileId || clickedAudioFileId}`} type="audio/mpeg" />
-                  Your browser does not support the audio element.
-                </audio>
+                <audio controls src={hoveredAudioUrl || clickedAudioUrl} className="w-full" />
               </div>
             </div>
           )}

@@ -299,7 +299,7 @@ export default function GoogleObjectStorage() {
           <GoogleObjectStorageInstructions />
           <PageMeta
             page="GoogleObjectStorage.jsx"
-            functions={["driveListFiles", "driveUploadFile", "driveDeleteFile", "downloadSampleAudio", "downloadSampleVideo"]}
+            functions={["driveListFiles", "driveUploadFile", "driveDeleteFile", "driveGetAudioStream", "downloadSampleAudio", "downloadSampleVideo"]}
             automations={[]}
             entities={[
               { name: "Google Drive Files", type: "external", db: "Google Drive", id: "1yfCUKNYgcbhIkT8pFlEMkFr1hT7ZeJNu" }

@@ -33,8 +33,8 @@ export default function GoogleObjectStorage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [hoveredImageUrl, setHoveredImageUrl] = useState(null);
   const [clickedImageUrl, setClickedImageUrl] = useState(null);
-  const [hoveredAudioUrl, setHoveredAudioUrl] = useState(null);
-  const [clickedAudioUrl, setClickedAudioUrl] = useState(null);
+  const [hoveredAudioFileId, setHoveredAudioFileId] = useState(null);
+  const [clickedAudioFileId, setClickedAudioFileId] = useState(null);
   const [downloadingSample, setDownloadingSample] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -239,15 +239,15 @@ export default function GoogleObjectStorage() {
                         className="border-b last:border-0 hover:bg-muted/10 cursor-pointer"
                         onMouseEnter={() => {
                           if (activeTab === "images" && f.thumbnailLink) setHoveredImageUrl(f.thumbnailLink);
-                          if (activeTab === "audio" && f.webContentLink) setHoveredAudioUrl(f.webContentLink);
+                          if (activeTab === "audio" && f.id) setHoveredAudioFileId(f.id);
                         }}
                         onMouseLeave={() => {
                           setHoveredImageUrl(null);
-                          setHoveredAudioUrl(null);
+                          setHoveredAudioFileId(null);
                         }}
                         onClick={() => {
                           if (activeTab === "images" && f.thumbnailLink) setClickedImageUrl(f.thumbnailLink);
-                          if (activeTab === "audio" && f.webContentLink) setClickedAudioUrl(f.webContentLink);
+                          if (activeTab === "audio" && f.id) setClickedAudioFileId(f.id);
                         }}
                       >
                         <td className="px-5 py-3 font-medium truncate max-w-[200px]">{f.name}</td>
@@ -289,7 +289,7 @@ export default function GoogleObjectStorage() {
           <GoogleObjectStorageInstructions />
           <PageMeta
             page="GoogleObjectStorage.jsx"
-            functions={["driveListFiles", "driveUploadFile", "driveDeleteFile", "downloadSampleAudio", "downloadSampleVideo"]}
+            functions={["driveListFiles", "driveUploadFile", "driveDeleteFile", "downloadSampleAudio", "downloadSampleVideo", "driveStreamAudio"]}
             automations={[]}
             entities={[
               { name: "Google Drive Files", type: "external", db: "Google Drive", id: "1yfCUKNYgcbhIkT8pFlEMkFr1hT7ZeJNu" }
@@ -304,11 +304,14 @@ export default function GoogleObjectStorage() {
             </div>
           )}
 
-          {activeTab === "audio" && (hoveredAudioUrl || clickedAudioUrl) && (
+          {activeTab === "audio" && (hoveredAudioFileId || clickedAudioFileId) && (
             <div className="mt-4 pt-4 border-t border-border">
               <p className="text-xs text-muted-foreground mb-2">Audio Player</p>
               <div className="bg-card rounded-lg p-3">
-                <audio controls src={hoveredAudioUrl || clickedAudioUrl} className="w-full" />
+                <audio controls className="w-full">
+                  <source src={`/api/functions/driveStreamAudio?fileId=${hoveredAudioFileId || clickedAudioFileId}`} type="audio/mpeg" />
+                  Your browser does not support the audio element.
+                </audio>
               </div>
             </div>
           )}

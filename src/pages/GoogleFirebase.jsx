@@ -9,6 +9,7 @@ import GoogleFirebaseInstructions from "@/components/GoogleFirebaseInstructions"
 import GoogleFirebaseSecurity from "@/components/GoogleFirebaseSecurity";
 import IAMSecurity from "@/components/IAMSecurity";
 import SecurityAlerts from "@/components/SecurityAlerts";
+import PageMeta from "@/components/PageMeta";
 
 const COLLECTION = "records";
 
@@ -70,6 +71,15 @@ export default function GoogleFirebase() {
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="fixed top-6 right-6 flex flex-col gap-2 z-50 w-40">
+        <PageMeta
+          page="GoogleFirebase.jsx"
+          functions={[]}
+          automations={["Monthly Firebase Security Check → checkFirebaseSecurity (scheduled, 1st of month)"]}
+          entities={[
+            { name: "SecurityAlert", type: "base44" },
+            { name: "records", type: "external", db: "Firebase Firestore", project: "sample-sp-2026", collection: "records" }
+          ]}
+        />
         <GoogleFirebaseInstructions />
         <GoogleFirebaseSecurity />
         <IAMSecurity service="Firebase" />

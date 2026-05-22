@@ -5,6 +5,12 @@ import { Button } from "@/components/ui/button";
 import DataMasterListenerInstructions from "@/components/DataMasterListenerInstructions";
 import DataMasterListenerForm from "@/components/DataMasterListenerForm";
 import { Copy, RotateCcw, Plus } from "lucide-react";
+import PageInfo from "@/components/PageInfo";
+
+const PAGE_INFO = [
+  { label: "Page", value: "pages/DataSourceManual.jsx" },
+  { label: "Entity", value: "DataSourceManual (Base44)" },
+];
 
 export default function DataSourceManual() {
   const navigate = useNavigate();
@@ -65,6 +71,7 @@ export default function DataSourceManual() {
       <div className="absolute top-8 right-6 flex flex-col gap-2">
         <Button variant="outline" onClick={() => navigate("/menu")}>← Menu</Button>
         <DataMasterListenerInstructions />
+        <PageInfo info={PAGE_INFO} />
         <Button
           variant="outline"
           onClick={() => setShowForm(!showForm)}

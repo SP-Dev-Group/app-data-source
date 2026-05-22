@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import LoginModal from "@/components/LoginModal";
+import PageMeta from "@/components/PageMeta";
 
 export default function Home() {
   const [loginOpen, setLoginOpen] = useState(false);

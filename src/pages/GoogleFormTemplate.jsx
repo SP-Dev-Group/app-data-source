@@ -4,6 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Plus, Wand2 } from "lucide-react";
+import PageInfo from "@/components/PageInfo";
+
+const PAGE_INFO = [
+  { label: "Page", value: "pages/GoogleFormTemplate.jsx" },
+  { label: "Entity", value: "GoogleData (Base44)" },
+];
 
 function generateUID() {
   return "UID-" + Math.random().toString(36).substring(2, 10).toUpperCase();
@@ -66,15 +72,18 @@ export default function GoogleFormTemplate() {
             </Link>
             <h1 className="text-2xl font-semibold">Google Data Form Template</h1>
           </div>
-          <Button
-            onClick={handleAddSample}
-            disabled={addingSample}
-            variant="outline"
-            className="flex items-center gap-2"
-          >
-            <Wand2 className="h-4 w-4" />
-            {addingSample ? "Adding..." : "Add Sample"}
-          </Button>
+          <div className="flex items-center gap-2">
+            <PageInfo info={PAGE_INFO} />
+            <Button
+              onClick={handleAddSample}
+              disabled={addingSample}
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              <Wand2 className="h-4 w-4" />
+              {addingSample ? "Adding..." : "Add Sample"}
+            </Button>
+          </div>
         </div>
 
         {/* Manual Form */}

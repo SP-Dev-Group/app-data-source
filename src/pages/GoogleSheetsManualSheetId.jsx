@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Plus, RefreshCw, Wand2, Shield } from "lucide-react";
 import GoogleSheetsManualSheetIdInstructions from "@/components/GoogleSheetsManualSheetIdInstructions";
+import PageMeta from "@/components/PageMeta";
 
 function generateUID() {
   return "UID-" + Math.random().toString(36).substring(2, 10).toUpperCase();
@@ -81,6 +82,14 @@ export default function GoogleSheetsManualSheetId() {
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="fixed top-6 right-6 flex flex-col gap-2 z-50 w-40">
+        <PageMeta
+          page="GoogleSheetsManualSheetId.jsx"
+          functions={["sheetsReadRows", "sheetsAppendRow"]}
+          automations={[]}
+          entities={[
+            { name: "Sheet (user-defined)", type: "external", db: "Google Sheets", spreadsheetId: "Entered at runtime via UI", sheet: "Entered at runtime via UI" }
+          ]}
+        />
         <GoogleSheetsManualSheetIdInstructions />
         <Button onClick={handleAddSample} disabled={addingSample || !spreadsheetId.trim()} variant="outline" className="flex items-center gap-2">
           <Wand2 className="h-4 w-4" />

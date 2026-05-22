@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Plus, RefreshCw, Wand2, Shield } from "lucide-react";
 import GoogleSheetsHardcodeIdInstructions from "@/components/GoogleSheetsHardcodeIdInstructions";
+import PageMeta from "@/components/PageMeta";
 
 const SPREADSHEET_ID = "1oY8jrQvKDNlntcBpqQ0sk9fjotkeSDby8k3z1HsOUmg";
 const SHEET_NAME = "Sheet1";
@@ -75,6 +76,14 @@ export default function GoogleSheetsHardcodeId() {
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="fixed top-6 right-6 flex flex-col gap-2 z-50 w-40">
+        <PageMeta
+          page="GoogleSheetsHardcodeId.jsx"
+          functions={["sheetsReadRows", "sheetsAppendRow"]}
+          automations={[]}
+          entities={[
+            { name: "Sheet1", type: "external", db: "Google Sheets", spreadsheetId: "1oY8jrQvKDNlntcBpqQ0sk9fjotkeSDby8k3z1HsOUmg", sheet: "Sheet1" }
+          ]}
+        />
         <GoogleSheetsHardcodeIdInstructions />
         <Button onClick={handleAddSample} disabled={addingSample} variant="outline" className="flex items-center gap-2">
           <Wand2 className="h-4 w-4" />

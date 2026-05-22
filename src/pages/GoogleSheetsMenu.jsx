@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Shield } from "lucide-react";
+import PageMeta from "@/components/PageMeta";
 
 export default function GoogleSheetsMenu() {
   const navigate = useNavigate();
@@ -13,6 +14,14 @@ export default function GoogleSheetsMenu() {
           <ArrowLeft className="h-4 w-4" />
           Back
         </Button>
+      </div>
+      <div className="absolute top-8 right-6">
+        <PageMeta
+          page="GoogleSheetsMenu.jsx"
+          functions={[]}
+          automations={[]}
+          entities={[]}
+        />
       </div>
       <motion.h1
         initial={{ opacity: 0, y: 12 }}

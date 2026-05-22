@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Plus, RefreshCw, Wand2 } from "lucide-react";
 import GoogleFirebaseInstructions from "@/components/GoogleFirebaseInstructions";
+import GoogleFirebaseSecurity from "@/components/GoogleFirebaseSecurity";
 
 const COLLECTION = "records";
 
@@ -68,6 +69,7 @@ export default function GoogleFirebase() {
     <div className="min-h-screen bg-background p-6">
       <div className="fixed top-6 right-6 flex flex-col gap-2 z-50 w-40">
         <GoogleFirebaseInstructions />
+        <GoogleFirebaseSecurity />
         <Button onClick={handleAddSample} disabled={addingSample} variant="outline" className="flex items-center gap-2">
           <Wand2 className="h-4 w-4" />
           {addingSample ? "Adding..." : "Add Sample"}

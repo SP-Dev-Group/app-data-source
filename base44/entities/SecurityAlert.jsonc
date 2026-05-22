@@ -1,0 +1,54 @@
+{
+  "name": "SecurityAlert",
+  "type": "object",
+  "properties": {
+    "service": {
+      "type": "string",
+      "description": "The service this alert relates to (e.g. Firebase, GoogleSheets)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Short title of the security update"
+    },
+    "summary": {
+      "type": "string",
+      "description": "Summary of what changed or what needs attention"
+    },
+    "action_items": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of specific actions to take"
+    },
+    "google_side_actioned": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether actions on Google's side have been completed"
+    },
+    "our_side_actioned": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether actions on our app side have been completed"
+    },
+    "read_confirmed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the dev has confirmed they've read this alert"
+    },
+    "check_date": {
+      "type": "string",
+      "description": "ISO date when this alert was generated"
+    },
+    "source_hash": {
+      "type": "string",
+      "description": "Hash of the content to detect duplicates"
+    }
+  },
+  "required": [
+    "service",
+    "title",
+    "summary",
+    "check_date"
+  ]
+}

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import SecurityAlerts from "@/components/SecurityAlerts";
 
 export default function GoogleMenu() {
   const navigate = useNavigate();
@@ -25,6 +26,15 @@ export default function GoogleMenu() {
       >
         Google Menu
       </motion.h1>
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.05 }}
+        className="w-full max-w-sm mb-2"
+      >
+        <SecurityAlerts service="Firebase" compact />
+      </motion.div>
+
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { ArrowLeft, Plus, RefreshCw, Wand2 } from "lucide-react";
 import GoogleFirebaseInstructions from "@/components/GoogleFirebaseInstructions";
 import GoogleFirebaseSecurity from "@/components/GoogleFirebaseSecurity";
+import SecurityAlerts from "@/components/SecurityAlerts";
 
 const COLLECTION = "records";
 
@@ -112,6 +113,11 @@ export default function GoogleFirebase() {
         {error && (
           <div className="bg-destructive/10 text-destructive text-sm rounded-lg px-4 py-3 mb-4">{error}</div>
         )}
+
+        {/* Security Alerts */}
+        <div className="mb-6">
+          <SecurityAlerts service="Firebase" />
+        </div>
 
         {/* Table */}
         <div className="bg-card border rounded-lg overflow-hidden">

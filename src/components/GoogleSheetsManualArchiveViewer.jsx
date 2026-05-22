@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 
 // Archive sheet for Manual Sheet ID page
 const ARCHIVE_SPREADSHEET_ID = "1Gxc4hxadg7XYfMv_NvD9O-rsfLx7kc-8a04YjXbsNdY";
-const ARCHIVE_SHEET_NAME = "Archive";
+const ARCHIVE_SHEET_NAME = "Sheet1";
 
 const EVENT_COLORS = {
   created: "bg-green-100 text-green-700",

@@ -199,17 +199,15 @@ export default function DataSourceManual() {
           </div>
         </div>
         <div className="w-56 border-l border-border bg-muted/20 p-4 flex flex-col gap-2 overflow-y-auto">
-          <div className="flex gap-2 items-center justify-end flex-wrap">
-            <PageMeta
-              page="DataSourceManual.jsx"
-              functions={[]}
-              automations={[]}
-              entities={[
-                { name: "DataSourceManual", type: "base44" }
-              ]}
-            />
-            <Button variant="outline" size="sm" onClick={() => navigate("/menu")}>← Menu</Button>
-          </div>
+          <PageMeta
+            page="DataSourceManual.jsx"
+            functions={[]}
+            automations={[]}
+            entities={[
+              { name: "DataSourceManual", type: "base44" }
+            ]}
+          />
+          <Button variant="outline" size="sm" onClick={() => navigate("/menu")}>← Menu</Button>
           <DataMasterListenerInstructions />
           <Button
             variant="outline"

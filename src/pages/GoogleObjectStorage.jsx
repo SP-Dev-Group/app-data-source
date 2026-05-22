@@ -33,6 +33,8 @@ export default function GoogleObjectStorage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [hoveredImageUrl, setHoveredImageUrl] = useState(null);
   const [clickedImageUrl, setClickedImageUrl] = useState(null);
+  const [hoveredAudioUrl, setHoveredAudioUrl] = useState(null);
+  const [clickedAudioUrl, setClickedAudioUrl] = useState(null);
   const [downloadingSample, setDownloadingSample] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -235,9 +237,18 @@ export default function GoogleObjectStorage() {
                       <tr 
                         key={f.id} 
                         className="border-b last:border-0 hover:bg-muted/10 cursor-pointer"
-                        onMouseEnter={() => activeTab === "images" && f.thumbnailLink && setHoveredImageUrl(f.thumbnailLink)}
-                        onMouseLeave={() => setHoveredImageUrl(null)}
-                        onClick={() => activeTab === "images" && f.thumbnailLink && setClickedImageUrl(f.thumbnailLink)}
+                        onMouseEnter={() => {
+                          if (activeTab === "images" && f.thumbnailLink) setHoveredImageUrl(f.thumbnailLink);
+                          if (activeTab === "audio" && f.webViewLink) setHoveredAudioUrl(f.webViewLink);
+                        }}
+                        onMouseLeave={() => {
+                          setHoveredImageUrl(null);
+                          setHoveredAudioUrl(null);
+                        }}
+                        onClick={() => {
+                          if (activeTab === "images" && f.thumbnailLink) setClickedImageUrl(f.thumbnailLink);
+                          if (activeTab === "audio" && f.webViewLink) setClickedAudioUrl(f.webViewLink);
+                        }}
                       >
                         <td className="px-5 py-3 font-medium truncate max-w-[200px]">{f.name}</td>
                         <td className="px-5 py-3 text-muted-foreground">{formatSize(parseInt(f.size))}</td>
@@ -289,6 +300,15 @@ export default function GoogleObjectStorage() {
               <p className="text-xs text-muted-foreground mb-2">Preview</p>
               <div className="aspect-square bg-card rounded-lg overflow-hidden flex items-center justify-center">
                 <img src={hoveredImageUrl || clickedImageUrl} alt="Preview" className="max-w-full max-h-full object-contain" />
+              </div>
+            </div>
+          )}
+
+          {activeTab === "audio" && (hoveredAudioUrl || clickedAudioUrl) && (
+            <div className="mt-4 pt-4 border-t border-border">
+              <p className="text-xs text-muted-foreground mb-2">Audio Player</p>
+              <div className="bg-card rounded-lg p-3">
+                <audio controls src={hoveredAudioUrl || clickedAudioUrl} className="w-full" />
               </div>
             </div>
           )}

@@ -27,7 +27,7 @@ Deno.serve(async (req) => {
     const rows = values.slice(1).map((row) => ({
       unique_id: row[0] || '',
       name: row[1] || '',
-      ver: row[2] || '',
+      ver: row[2] ? parseInt(row[2], 10) : 0,
       event: row[3] || '',
       date: row[4] || '',
     }));

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, Image, Music, Video, Upload, Trash2, ExternalLink, RefreshCw } from "lucide-react";
 import PageMeta from "@/components/PageMeta";
 import { base44 } from "@/api/base44Client";
@@ -27,7 +28,7 @@ export default function GoogleObjectStorage() {
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
-  const [folderId, setFolderId] = useState(localStorage.getItem("gs_driveFolderId") || "");
+  const [folderId, setFolderId] = useState(localStorage.getItem("gs_driveFolderId") || "1yfCUKNYgcbhIkT8pFlEMkFr1hT7ZeJNu");
   const fileInputRef = useRef(null);
 
   const currentTab = TABS.find(t => t.id === activeTab);
@@ -129,15 +130,21 @@ export default function GoogleObjectStorage() {
               <div className="px-5 py-3 border-b bg-muted/30 flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <h2 className="font-medium text-sm">{currentTab.label} <span className="text-muted-foreground">({files.length})</span></h2>
-                  <Input
-                    placeholder="Drive Folder ID (optional)"
+                  <Select
                     value={folderId}
-                    onChange={(e) => {
-                      setFolderId(e.target.value);
-                      localStorage.setItem("gs_driveFolderId", e.target.value);
+                    onValueChange={(value) => {
+                      setFolderId(value);
+                      localStorage.setItem("gs_driveFolderId", value);
                     }}
-                    className="w-48 h-7 text-xs"
-                  />
+                  >
+                    <SelectTrigger className="w-56 h-7 text-xs">
+                      <SelectValue placeholder="Select Drive folder" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1yfCUKNYgcbhIkT8pFlEMkFr1hT7ZeJNu">Base44 Uploads Folder</SelectItem>
+                      <SelectItem value={null}>Root (My Drive)</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button variant="ghost" size="icon" onClick={loadFiles} disabled={loading}>
@@ -220,7 +227,7 @@ export default function GoogleObjectStorage() {
             functions={["driveListFiles", "driveUploadFile", "driveDeleteFile"]}
             automations={[]}
             entities={[
-              { name: "Google Drive Files", type: "external", db: "Google Drive" }
+              { name: "Google Drive Files", type: "external", db: "Google Drive", id: "1yfCUKNYgcbhIkT8pFlEMkFr1hT7ZeJNu" }
             ]}
           />
         </div>

@@ -7,12 +7,12 @@ export default function DataMasterListenerInstructions() {
       <DialogTrigger asChild>
         <Button variant="outline">Instructions</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md max-h-[80vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>Data Source Manual</DialogTitle>
           <DialogDescription>Manually create and manage data records</DialogDescription>
         </DialogHeader>
-        <div className="space-y-4">
+        <div className="space-y-4 overflow-y-auto flex-1 pr-4">
           <div>
             <h3 className="font-semibold mb-2">What is this?</h3>
             <p className="text-sm text-muted-foreground">

@@ -216,7 +216,7 @@ export default function GoogleObjectStorage() {
                     <tr className="border-b bg-muted/20">
                       <th className="text-left px-5 py-3 font-medium text-muted-foreground">Name</th>
                       <th className="text-left px-5 py-3 font-medium text-muted-foreground">Size</th>
-                      <th className="text-left px-5 py-3 font-medium text-muted-foreground">Created</th>
+                      <th className="text-left px-5 py-3 font-medium text-muted-foreground">Created Time</th>
                       <th className="px-5 py-3"></th>
                     </tr>
                   </thead>
@@ -240,7 +240,7 @@ export default function GoogleObjectStorage() {
                       >
                         <td className="px-5 py-3 font-medium truncate max-w-[200px]">{f.name}</td>
                         <td className="px-5 py-3 text-muted-foreground">{formatSize(parseInt(f.size))}</td>
-                        <td className="px-5 py-3 text-muted-foreground">{f.createdTime ? new Date(f.createdTime).toLocaleDateString() : "—"}</td>
+                        <td className="px-5 py-3 text-muted-foreground">{f.createdTime ? new Date(f.createdTime).toLocaleString() : "—"}</td>
                         <td className="px-5 py-3">
                           <div className="flex items-center gap-1 justify-end">
                             {f.webViewLink && (

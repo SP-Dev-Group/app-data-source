@@ -225,14 +225,8 @@ export default function GoogleObjectStorage() {
                       <tr 
                         key={f.id} 
                         className="border-b last:border-0 hover:bg-muted/10 cursor-pointer"
-                        onMouseEnter={() => {
-                          if (activeTab === "images" && f.thumbnailLink) setHoveredImageUrl(f.thumbnailLink);
-                          if (activeTab === "audio" && f.webViewLink) setHoveredAudioUrl(f.webViewLink);
-                        }}
-                        onMouseLeave={() => {
-                          setHoveredImageUrl(null);
-                          setHoveredAudioUrl(null);
-                        }}
+                        onMouseEnter={() => activeTab === "images" && f.thumbnailLink && setHoveredImageUrl(f.thumbnailLink)}
+                        onMouseLeave={() => setHoveredImageUrl(null)}
                         onClick={() => {
                           if (activeTab === "images" && f.thumbnailLink) setClickedImageUrl(f.thumbnailLink);
                           if (activeTab === "audio" && f.webViewLink) setClickedAudioUrl(f.webViewLink);

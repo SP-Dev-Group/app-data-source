@@ -207,7 +207,7 @@ export default function GoogleObjectStorage() {
                   <input
                     ref={fileInputRef}
                     type="file"
-                    accept={`${currentTab.mimePrefix}*`}
+                    accept={activeTab === "images" ? "image/*" : activeTab === "audio" ? "audio/*,.mp3,.wav,.ogg,.m4a,.flac" : "video/*,.mp4,.avi,.mov,.wmv,.flv,.webm"}
                     className="hidden"
                     onChange={handleUpload}
                   />

@@ -3,12 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Plus, RefreshCw, Wand2, Shield, Pencil, Trash2, Check, X } from "lucide-react";
+import { ArrowLeft, Plus, RefreshCw, Wand2, Shield, Pencil, Trash2, Check, X, Archive } from "lucide-react";
 import GoogleSheetsHardcodeIdInstructions from "@/components/GoogleSheetsHardcodeIdInstructions";
+import GoogleSheetsHardcodeArchiveViewer from "@/components/GoogleSheetsHardcodeArchiveViewer";
 import PageMeta from "@/components/PageMeta";
 
 const SPREADSHEET_ID = "1oY8jrQvKDNlntcBpqQ0sk9fjotkeSDby8k3z1HsOUmg";
 const SHEET_NAME = "Sheet1";
+const ARCHIVE_SPREADSHEET_ID = "1PtjThbFY89u7_z7fowTsfm-xDV03I4IqFuTN_h_G18w";
+const ARCHIVE_SHEET_NAME = "Archive";
 
 function generateUID() {
   return "UID-" + Math.random().toString(36).substring(2, 10).toUpperCase();
@@ -29,6 +32,16 @@ export default function GoogleSheetsHardcodeId() {
   const [deleteConfirmIdx, setDeleteConfirmIdx] = useState(null);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [archiveOpen, setArchiveOpen] = useState(false);
+
+  const archiveRow = async (uniqueId, name, event, ver) => {
+    await base44.functions.invoke("sheetsArchiveRow", {
+      spreadsheetId: ARCHIVE_SPREADSHEET_ID,
+      sheetName: ARCHIVE_SHEET_NAME,
+      uniqueId, name, ver, event,
+      date: new Date().toISOString(),
+    });
+  };
 
   const loadRows = async () => {
     setLoading(true);
@@ -49,14 +62,18 @@ export default function GoogleSheetsHardcodeId() {
     if (!name.trim()) return;
     setSubmitting(true);
     setError("");
+    const newUid = generateUID();
     const res = await base44.functions.invoke("sheetsAppendRow", {
       spreadsheetId: SPREADSHEET_ID,
       sheetName: SHEET_NAME,
-      uniqueId: generateUID(),
+      uniqueId: newUid,
       name: name.trim(),
     });
     if (res.data?.error) setError(res.data.error);
-    else { setName(""); await loadRows(); }
+    else {
+      await archiveRow(newUid, name.trim(), "created", 1);
+      setName(""); await loadRows();
+    }
     setSubmitting(false);
   };
 
@@ -65,11 +82,12 @@ export default function GoogleSheetsHardcodeId() {
     setError("");
     const sampleNames = ["Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Theta"];
     const randomName = sampleNames[Math.floor(Math.random() * sampleNames.length)] + "-" + Math.floor(Math.random() * 1000);
+    const newUid = generateUID();
     const res = await base44.functions.invoke("sheetsAppendRow", {
-      spreadsheetId: SPREADSHEET_ID, sheetName: SHEET_NAME, uniqueId: generateUID(), name: randomName,
+      spreadsheetId: SPREADSHEET_ID, sheetName: SHEET_NAME, uniqueId: newUid, name: randomName,
     });
     if (res.data?.error) setError(res.data.error);
-    else await loadRows();
+    else { await archiveRow(newUid, randomName, "created", 1); await loadRows(); }
     setAddingSample(false);
   };
 
@@ -91,7 +109,7 @@ export default function GoogleSheetsHardcodeId() {
       rowIndex, uniqueId: rows[i].unique_id, name: editName.trim(),
     });
     if (res.data?.error) setError(res.data.error);
-    else { cancelEdit(); await loadRows(); }
+    else { await archiveRow(rows[i].unique_id, editName.trim(), "updated", i + 2); cancelEdit(); await loadRows(); }
     setSaving(false);
   };
 
@@ -106,11 +124,13 @@ export default function GoogleSheetsHardcodeId() {
       spreadsheetId: SPREADSHEET_ID, sheetName: SHEET_NAME, rowIndex,
     });
     if (res.data?.error) setError(res.data.error);
-    else { setDeleteConfirmIdx(null); await loadRows(); }
+    else { await archiveRow(rows[i].unique_id, rows[i].name, "deleted", i + 2); setDeleteConfirmIdx(null); await loadRows(); }
     setDeleting(false);
   };
 
   return (
+    <>
+    <GoogleSheetsHardcodeArchiveViewer open={archiveOpen} onOpenChange={setArchiveOpen} />
     <div className="min-h-screen bg-background flex flex-col">
       <div className="flex flex-1 overflow-hidden">
         <div className="flex-1 p-6 overflow-y-auto">
@@ -224,6 +244,10 @@ export default function GoogleSheetsHardcodeId() {
             ]}
           />
           <GoogleSheetsHardcodeIdInstructions />
+          <Button onClick={() => setArchiveOpen(true)} variant="outline" size="sm" className="flex items-center gap-2">
+            <Archive className="h-4 w-4" />
+            Archive
+          </Button>
           <Button onClick={handleAddSample} disabled={addingSample} variant="outline" size="sm" className="flex items-center gap-2">
             <Wand2 className="h-4 w-4" />
             {addingSample ? "Adding..." : "Add Sample"}
@@ -235,5 +259,6 @@ export default function GoogleSheetsHardcodeId() {
         </div>
       </div>
     </div>
+    </>
   );
 }

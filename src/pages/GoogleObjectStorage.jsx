@@ -164,6 +164,14 @@ export default function GoogleObjectStorage() {
       const videoUrl = URL.createObjectURL(videoBlob);
       console.log("Video URL created:", videoUrl);
       setClickedVideoUrl(videoUrl);
+      
+      // Auto-play the video after it loads
+      setTimeout(() => {
+        const videoElement = document.querySelector('video');
+        if (videoElement) {
+          videoElement.play().catch(err => console.error("Video auto-play failed:", err));
+        }
+      }, 100);
     } catch (err) {
       setError(err.message || "Failed to load video");
       console.error("Video load error:", err);

@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Image, Music, Video, Upload, Trash2, ExternalLink, RefreshCw, Search, Download } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ArrowLeft, Image, Music, Video, Upload, Trash2, ExternalLink, RefreshCw, Search, Download, X } from "lucide-react";
 import PageMeta from "@/components/PageMeta";
 import GoogleObjectStorageInstructions from "@/components/GoogleObjectStorageInstructions";
 import { base44 } from "@/api/base44Client";
@@ -22,31 +23,7 @@ function formatSize(bytes) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-function AudioPlayer({ audioUrl, autoPlay, audioRef }) {
-  useEffect(() => {
-    if (audioRef.current && audioUrl) {
-      audioRef.current.load();
-      if (autoPlay) {
-        audioRef.current.play().catch(err => console.error("Auto-play failed:", err));
-      }
-    }
-  }, [audioUrl, autoPlay]);
 
-  return <audio ref={audioRef} controls src={audioUrl} className="w-full" key={audioUrl} />;
-}
-
-function VideoPlayer({ videoUrl }) {
-  const videoRef = useRef(null);
-
-  useEffect(() => {
-    if (videoRef.current && videoUrl) {
-      videoRef.current.load();
-      videoRef.current.play().catch(err => console.error("Video auto-play failed:", err));
-    }
-  }, [videoUrl]);
-
-  return <video ref={videoRef} controls src={videoUrl} className="w-full rounded-lg bg-black" key={videoUrl} />;
-}
 
 export default function GoogleObjectStorage() {
   const navigate = useNavigate();
@@ -59,12 +36,12 @@ export default function GoogleObjectStorage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [hoveredImageUrl, setHoveredImageUrl] = useState(null);
   const [clickedImageUrl, setClickedImageUrl] = useState(null);
-  const [clickedAudioUrl, setClickedAudioUrl] = useState(null);
-  const [clickedVideoUrl, setClickedVideoUrl] = useState(null);
-  const [playingFileId, setPlayingFileId] = useState(null);
-  const audioRef = useRef(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [mediaUrl, setMediaUrl] = useState(null);
+  const [mediaDialogOpen, setMediaDialogOpen] = useState(false);
   const [downloadingSample, setDownloadingSample] = useState(false);
   const fileInputRef = useRef(null);
+  const mediaRef = useRef(null);
 
   const currentTab = TABS.find(t => t.id === activeTab);
 
@@ -133,63 +110,30 @@ export default function GoogleObjectStorage() {
     setDownloadingSample(false);
   };
 
-  const handleAudioClick = async (file) => {
+  const handleMediaClick = async (file) => {
     setError("");
-    console.log("Clicking audio file:", file.name, file.id);
-    try {
-      const res = await base44.functions.invoke("driveGetAudioStream", { fileId: file.id });
-      console.log("Response status:", res.status, "Response data:", res.data);
-      
-      // Check if we got an error response
-      if (res.status >= 400 || res.data?.error) {
-        const errorMsg = typeof res.data === 'string' ? res.data : (res.data?.error || 'Failed to load audio');
-        setError(errorMsg);
-        console.error("Audio load error:", errorMsg);
-        return;
-      }
-      
-      // Create blob URL for the audio stream
-      const audioBlob = new Blob([res.data], { type: 'audio/mpeg' });
-      const audioUrl = URL.createObjectURL(audioBlob);
-      console.log("Audio URL created:", audioUrl, "Blob size:", audioBlob.size);
-      
-      // Set the URL first, then play after React renders
-      setClickedAudioUrl(audioUrl);
-      setPlayingFileId(file.id);
-      
-      // Force reload and play
-      setTimeout(() => {
-        if (audioRef.current) {
-          audioRef.current.load();
-          audioRef.current.play().catch(err => console.error("Auto-play failed:", err));
-        }
-      }, 50);
-    } catch (err) {
-      setError(err.message || "Failed to load audio");
-      console.error("Audio load error:", err);
-    }
-  };
-
-  const handleVideoClick = async (file) => {
-    setError("");
-    console.log("Clicking video file:", file.name, file.id);
+    setSelectedFile(file);
+    console.log("Clicking media file:", file.name, file.id, "Tab:", activeTab);
     try {
       const res = await base44.functions.invoke("driveGetAudioStream", { fileId: file.id });
       
       if (res.status >= 400 || res.data?.error) {
-        const errorMsg = typeof res.data === 'string' ? res.data : (res.data?.error || 'Failed to load video');
+        const errorMsg = typeof res.data === 'string' ? res.data : (res.data?.error || 'Failed to load media');
         setError(errorMsg);
-        console.error("Video load error:", errorMsg);
+        console.error("Media load error:", errorMsg);
         return;
       }
       
-      const videoBlob = new Blob([res.data], { type: 'video/mp4' });
-      const videoUrl = URL.createObjectURL(videoBlob);
-      console.log("Video URL created:", videoUrl);
-      setClickedVideoUrl(videoUrl);
+      const mimeType = activeTab === "audio" ? 'audio/mpeg' : 'video/mp4';
+      const blob = new Blob([res.data], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      console.log("Media URL created:", url);
+      
+      setMediaUrl(url);
+      setMediaDialogOpen(true);
     } catch (err) {
-      setError(err.message || "Failed to load video");
-      console.error("Video load error:", err);
+      setError(err.message || "Failed to load media");
+      console.error("Media load error:", err);
     }
   };
 
@@ -322,11 +266,8 @@ export default function GoogleObjectStorage() {
                           if (activeTab === "images" && f.thumbnailLink) {
                             setClickedImageUrl(f.thumbnailLink);
                           }
-                          if (activeTab === "audio" && f.id) {
-                            handleAudioClick(f);
-                          }
-                          if (activeTab === "video" && f.id) {
-                            handleVideoClick(f);
+                          if ((activeTab === "audio" || activeTab === "video") && f.id) {
+                            handleMediaClick(f);
                           }
                         }}
                       >
@@ -361,20 +302,36 @@ export default function GoogleObjectStorage() {
                 </table>
               )}
 
-              {/* Persistent Audio Player */}
-              {activeTab === "audio" && clickedAudioUrl && (
-                <div className="border-t bg-purple-50 p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Music className="h-4 w-4 text-purple-600" />
-                    <p className="text-xs font-medium text-purple-700">Now Playing</p>
+              {/* Media Playback Dialog */}
+              <Dialog open={mediaDialogOpen} onOpenChange={(open) => {
+                setMediaDialogOpen(open);
+                if (!open) {
+                  setMediaUrl(null);
+                  setSelectedFile(null);
+                }
+              }}>
+                <DialogContent className="max-w-2xl">
+                  <DialogHeader>
+                    <DialogTitle className="flex items-center justify-between">
+                      <span className="flex items-center gap-2">
+                        {activeTab === "audio" ? <Music className="h-5 w-5 text-purple-600" /> : <Video className="h-5 w-5 text-purple-600" />}
+                        {selectedFile?.name || "Media Player"}
+                      </span>
+                      <Button variant="ghost" size="icon" onClick={() => setMediaDialogOpen(false)}>
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </DialogTitle>
+                  </DialogHeader>
+                  <div className="mt-4">
+                    {activeTab === "audio" && mediaUrl && (
+                      <audio ref={mediaRef} controls src={mediaUrl} className="w-full" autoPlay />
+                    )}
+                    {activeTab === "video" && mediaUrl && (
+                      <video ref={mediaRef} controls src={mediaUrl} className="w-full rounded-lg bg-black" autoPlay />
+                    )}
                   </div>
-                  <AudioPlayer 
-                    audioUrl={clickedAudioUrl} 
-                    autoPlay={playingFileId !== null}
-                    audioRef={audioRef}
-                  />
-                </div>
-              )}
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </div>
@@ -402,15 +359,7 @@ export default function GoogleObjectStorage() {
             </div>
           )}
 
-          {activeTab === "video" && clickedVideoUrl && (
-            <div className="mt-4 pt-4 border-t border-border">
-              <p className="text-xs font-medium text-purple-700 mb-2 flex items-center gap-2">
-                <Video className="h-4 w-4 text-purple-600" />
-                Now Playing
-              </p>
-              <VideoPlayer videoUrl={clickedVideoUrl} />
-            </div>
-          )}
+
 
 
         </div>

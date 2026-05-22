@@ -22,6 +22,17 @@ function formatSize(bytes) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+function AudioPlayer({ audioUrl, autoPlay, audioRef }) {
+  useEffect(() => {
+    if (audioRef.current && autoPlay && audioUrl) {
+      audioRef.current.load();
+      audioRef.current.play().catch(err => console.error("Auto-play failed:", err));
+    }
+  }, [audioUrl, autoPlay]);
+
+  return <audio ref={audioRef} controls src={audioUrl} className="w-full" />;
+}
+
 export default function GoogleObjectStorage() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("images");
@@ -126,15 +137,10 @@ export default function GoogleObjectStorage() {
       const audioBlob = new Blob([res.data], { type: 'audio/mpeg' });
       const audioUrl = URL.createObjectURL(audioBlob);
       console.log("Audio URL created:", audioUrl, "Blob size:", audioBlob.size);
+      
+      // Set the URL first, then play after React renders
       setClickedAudioUrl(audioUrl);
       setPlayingFileId(file.id);
-      
-      // Auto-play the audio
-      setTimeout(() => {
-        if (audioRef.current) {
-          audioRef.current.play().catch(err => console.error("Auto-play failed:", err));
-        }
-      }, 100);
     } catch (err) {
       setError(err.message || "Failed to load audio");
       console.error("Audio load error:", err);
@@ -339,7 +345,11 @@ export default function GoogleObjectStorage() {
                     <Music className="h-4 w-4 text-purple-600" />
                     <p className="text-xs font-medium text-purple-700">Now Playing</p>
                   </div>
-                  <audio ref={audioRef} controls src={clickedAudioUrl} className="w-full" />
+                  <AudioPlayer 
+                    audioUrl={clickedAudioUrl} 
+                    autoPlay={playingFileId !== null}
+                    audioRef={audioRef}
+                  />
                 </div>
               )}
             </div>

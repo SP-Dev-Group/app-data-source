@@ -110,23 +110,24 @@ export default function GoogleObjectStorage() {
     setError("");
     console.log("Clicking audio file:", file.name, file.id);
     try {
-      // Fetch audio directly as blob
-      const response = await fetch(`/api/functions/driveGetAudioStream`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fileId: file.id })
-      });
+      const res = await base44.functions.invoke("driveGetAudioStream", { fileId: file.id });
+      console.log("Response status:", res.status, "Response data type:", typeof res.data);
       
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to load audio');
+      // Check if we got an error response
+      if (res.status >= 400 || res.data?.error) {
+        const errorMsg = typeof res.data === 'string' ? res.data : (res.data?.error || 'Failed to load audio');
+        setError(errorMsg);
+        console.error("Audio load error:", errorMsg);
+        return;
       }
       
-      const audioBlob = await response.blob();
+      // Create blob URL for the audio stream
+      const audioBlob = new Blob([res.data], { type: 'audio/mpeg' });
       const audioUrl = URL.createObjectURL(audioBlob);
-      console.log("Audio URL created:", audioUrl);
+      console.log("Audio URL created:", audioUrl, "Blob size:", audioBlob.size);
       setClickedAudioUrl(audioUrl);
       setPlayingFileId(file.id);
+      
       // Auto-play the audio
       setTimeout(() => {
         if (audioRef.current) {

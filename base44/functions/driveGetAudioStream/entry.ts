@@ -28,7 +28,7 @@ Deno.serve(async (req) => {
     return new Response(audioBuffer, {
       headers: {
         'Content-Type': 'audio/mpeg',
-        'Content-Disposition': `inline; filename="audio.mp3"`,
+        'Content-Disposition': `attachment; filename="audio.mp3"`,
       }
     });
   } catch (error) {

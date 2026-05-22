@@ -239,7 +239,7 @@ export default function GoogleObjectStorage() {
                         className="border-b last:border-0 hover:bg-muted/10 cursor-pointer"
                         onMouseEnter={() => {
                           if (activeTab === "images" && f.thumbnailLink) setHoveredImageUrl(f.thumbnailLink);
-                          if (activeTab === "audio" && f.webViewLink) setHoveredAudioUrl(f.webViewLink);
+                          if (activeTab === "audio" && f.webContentLink) setHoveredAudioUrl(f.webContentLink);
                         }}
                         onMouseLeave={() => {
                           setHoveredImageUrl(null);
@@ -247,7 +247,7 @@ export default function GoogleObjectStorage() {
                         }}
                         onClick={() => {
                           if (activeTab === "images" && f.thumbnailLink) setClickedImageUrl(f.thumbnailLink);
-                          if (activeTab === "audio" && f.webViewLink) setClickedAudioUrl(f.webViewLink);
+                          if (activeTab === "audio" && f.webContentLink) setClickedAudioUrl(f.webContentLink);
                         }}
                       >
                         <td className="px-5 py-3 font-medium truncate max-w-[200px]">{f.name}</td>

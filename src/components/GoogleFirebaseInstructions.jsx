@@ -19,6 +19,11 @@ export default function GoogleFirebaseInstructions() {
           </DialogHeader>
           <div className="space-y-4 text-sm text-muted-foreground">
             
+            <div className="bg-primary/10 p-3 rounded text-xs">
+              <p className="font-medium text-foreground">Why npm?</p>
+              <p>This app uses the Firebase SDK via npm — it's the standard for React/Vite apps and cleaner to manage than script tags.</p>
+            </div>
+
             <div>
               <h3 className="font-semibold text-foreground mb-2">1. Set up a Firebase Project</h3>
               <ol className="list-decimal list-inside space-y-1 ml-2">

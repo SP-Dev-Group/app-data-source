@@ -78,8 +78,8 @@ export default function GoogleSheetsManualSheetId() {
     if (res.data?.error) setError(res.data.error);
     else {
       setHeaders(res.data?.headers || ['Unique ID', 'Name']);
-      // Skip first row (headers) from data rows
-      setRows((res.data?.rows || []).slice(1));
+      // sheetsReadRows already skips the header row, so use rows directly
+      setRows(res.data?.rows || []);
     }
     setLoading(false);
   };
@@ -124,8 +124,10 @@ export default function GoogleSheetsManualSheetId() {
     if (!editName.trim()) return;
     setSaving(true);
     setError("");
-    // rowIndex: +1 for 1-indexed, +1 for header row = i + 2
-    const rowIndex = i + 2;
+    // rowIndex: +1 for 1-indexed (array index 0 = row 1, but row 0 is headers, so array index 0 = row 2... wait, we sliced headers, so array index 0 = row 1)
+    // Actually: rows array is already sliced to skip header, so array index 0 = Google Sheets row 1 (first data row)
+    // Therefore: rowIndex = i + 1 (not +2)
+    const rowIndex = i + 1;
     const nextVer = await getNextVersion(rows[i].unique_id);
     const res = await base44.functions.invoke("sheetsUpdateRow", {
       spreadsheetId: spreadsheetId.trim(), sheetName: sheetName.trim() || "Sheet1",

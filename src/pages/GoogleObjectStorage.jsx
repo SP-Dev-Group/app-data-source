@@ -198,7 +198,7 @@ export default function GoogleObjectStorage() {
                       <tr 
                         key={f.id} 
                         className="border-b last:border-0 hover:bg-muted/10"
-                        onMouseEnter={() => activeTab === "images" && f.iconLink && setHoveredImageUrl(f.iconLink)}
+                        onMouseEnter={() => activeTab === "images" && f.thumbnailLink && setHoveredImageUrl(f.thumbnailLink)}
                         onMouseLeave={() => setHoveredImageUrl(null)}
                       >
                         <td className="px-5 py-3 font-medium truncate max-w-[200px]">{f.name}</td>

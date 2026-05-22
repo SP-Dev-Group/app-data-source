@@ -52,11 +52,25 @@ export default function DataMasterListenerInstructions() {
             </ol>
           </div>
           <div>
+            <h3 className="font-semibold mb-2">Reinstating Deleted Records</h3>
+            <p className="text-sm text-muted-foreground mb-1">
+              If a record is accidentally deleted from the live database, it can be recovered from the Archive:
+            </p>
+            <ol className="text-sm text-muted-foreground space-y-1 list-decimal list-inside">
+              <li>Click the "Archive" button to open the archive viewer</li>
+              <li>Search for the deleted record by name, email, or unique ID</li>
+              <li>Find the entry with event type <strong>deleted</strong> — a <strong>↺ reinstate</strong> button will appear on that row</li>
+              <li>Click the reinstate button, then confirm with ✓ — the record is re-created in the live database with its last known values</li>
+              <li>A new archive entry is written with event type <strong>reinstated</strong> so the recovery is fully audited</li>
+            </ol>
+            <p className="text-sm text-muted-foreground mt-1">Note: Only the most recent "deleted" entry per record shows the reinstate button — earlier versions do not.</p>
+          </div>
+          <div>
             <h3 className="font-semibold mb-2">Actions</h3>
             <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
               <li>Click "Add Record" to manually enter new data</li>
               <li>Click "Generate Sample" to create random test records</li>
-              <li>Click "Archive" to view the full audit history with search</li>
+              <li>Click "Archive" to view the full audit history with search and reinstate deleted records</li>
               <li>View all live records in the table</li>
             </ul>
           </div>

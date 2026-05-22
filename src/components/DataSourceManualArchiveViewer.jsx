@@ -3,12 +3,13 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Archive, Search } from "lucide-react";
+import { Archive, Search, RotateCcw, Check, X } from "lucide-react";
 
 const EVENT_COLORS = {
   created: "bg-green-100 text-green-700",
   updated: "bg-blue-100 text-blue-700",
   deleted: "bg-red-100 text-red-700",
+  reinstated: "bg-purple-100 text-purple-700",
 };
 
 export default function DataSourceManualArchiveViewer() {
@@ -16,6 +17,8 @@ export default function DataSourceManualArchiveViewer() {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
+  const [reinstateConfirmId, setReinstateConfirmId] = useState(null);
+  const [reinstating, setReinstating] = useState(false);
 
   const loadArchive = async () => {
     setLoading(true);
@@ -27,6 +30,47 @@ export default function DataSourceManualArchiveViewer() {
   useEffect(() => {
     if (open) loadArchive();
   }, [open]);
+
+  // Only show the latest archive entry per source_id that is "deleted" — these are reinstateable
+  // Also figure out which source_ids are currently deleted (last event = deleted)
+  const deletedSourceIds = (() => {
+    // Group by source_id, find the latest event per source_id
+    const latestBySource = {};
+    records.forEach((r) => {
+      const existing = latestBySource[r.source_id];
+      if (!existing || new Date(r.created_date) > new Date(existing.created_date)) {
+        latestBySource[r.source_id] = r;
+      }
+    });
+    return new Set(
+      Object.values(latestBySource)
+        .filter((r) => r.event_type === "deleted")
+        .map((r) => r.source_id)
+    );
+  })();
+
+  const reinstate = async (archiveRecord) => {
+    setReinstating(true);
+    // Re-create the record in DataSourceManual
+    const newRecord = await base44.entities.DataSourceManual.create({
+      unique_id: archiveRecord.unique_id,
+      name: archiveRecord.name,
+      email: archiveRecord.email,
+    });
+    // Write a "reinstated" archive entry
+    const existingForSource = records.filter((r) => r.source_id === archiveRecord.source_id);
+    await base44.entities.DataSourceManualArchive.create({
+      source_id: newRecord.id,
+      unique_id: archiveRecord.unique_id,
+      name: archiveRecord.name,
+      email: archiveRecord.email,
+      event_type: "reinstated",
+      version: existingForSource.length + 1,
+    });
+    setReinstateConfirmId(null);
+    setReinstating(false);
+    await loadArchive();
+  };
 
   const filtered = records.filter((r) => {
     const q = search.toLowerCase();
@@ -47,10 +91,14 @@ export default function DataSourceManualArchiveViewer() {
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-3xl max-h-[80vh] flex flex-col">
+        <DialogContent className="max-w-4xl max-h-[80vh] flex flex-col">
           <DialogHeader>
             <DialogTitle>DataSourceManual Archive</DialogTitle>
           </DialogHeader>
+
+          <p className="text-xs text-muted-foreground -mt-1 mb-1">
+            Records with the latest event marked <span className="font-semibold text-red-600">deleted</span> can be reinstated using the <RotateCcw className="inline w-3 h-3" /> button.
+          </p>
 
           <div className="relative mb-3">
             <Search className="absolute left-2.5 top-2 w-4 h-4 text-muted-foreground" />
@@ -79,25 +127,63 @@ export default function DataSourceManualArchiveViewer() {
                     <th className="text-left px-3 py-2 font-medium">Name</th>
                     <th className="text-left px-3 py-2 font-medium">Email</th>
                     <th className="text-left px-3 py-2 font-medium">Date</th>
+                    <th className="px-3 py-2 w-16"></th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border bg-card">
-                  {filtered.map((r) => (
-                    <tr key={r.id} className="hover:bg-muted/30">
-                      <td className="px-3 py-2 font-mono text-muted-foreground">{r.version}</td>
-                      <td className="px-3 py-2">
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${EVENT_COLORS[r.event_type] || ""}`}>
-                          {r.event_type}
-                        </span>
-                      </td>
-                      <td className="px-3 py-2 font-mono text-muted-foreground">{r.unique_id}</td>
-                      <td className="px-3 py-2">{r.name}</td>
-                      <td className="px-3 py-2 text-muted-foreground">{r.email}</td>
-                      <td className="px-3 py-2 text-muted-foreground">
-                        {r.created_date ? new Date(r.created_date).toLocaleString() : "-"}
-                      </td>
-                    </tr>
-                  ))}
+                  {filtered.map((r) => {
+                    const isLatestDeleted = r.event_type === "deleted" && deletedSourceIds.has(r.source_id);
+                    return (
+                      <tr key={r.id} className="hover:bg-muted/30">
+                        <td className="px-3 py-2 font-mono text-muted-foreground">{r.version}</td>
+                        <td className="px-3 py-2">
+                          <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${EVENT_COLORS[r.event_type] || ""}`}>
+                            {r.event_type}
+                          </span>
+                        </td>
+                        <td className="px-3 py-2 font-mono text-muted-foreground">{r.unique_id}</td>
+                        <td className="px-3 py-2">{r.name}</td>
+                        <td className="px-3 py-2 text-muted-foreground">{r.email}</td>
+                        <td className="px-3 py-2 text-muted-foreground">
+                          {r.created_date ? new Date(r.created_date).toLocaleString() : "-"}
+                        </td>
+                        <td className="px-3 py-2">
+                          {isLatestDeleted && reinstateConfirmId !== r.id && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-6 w-6 text-purple-600 hover:text-purple-700"
+                              title="Reinstate record"
+                              onClick={() => setReinstateConfirmId(r.id)}
+                            >
+                              <RotateCcw className="h-3.5 w-3.5" />
+                            </Button>
+                          )}
+                          {reinstateConfirmId === r.id && (
+                            <div className="flex items-center gap-1">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-6 w-6 text-green-600"
+                                disabled={reinstating}
+                                onClick={() => reinstate(r)}
+                              >
+                                <Check className="h-3.5 w-3.5" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-6 w-6"
+                                onClick={() => setReinstateConfirmId(null)}
+                              >
+                                <X className="h-3.5 w-3.5" />
+                              </Button>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             )}

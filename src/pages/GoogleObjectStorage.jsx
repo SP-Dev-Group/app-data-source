@@ -33,8 +33,8 @@ export default function GoogleObjectStorage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [hoveredImageUrl, setHoveredImageUrl] = useState(null);
   const [clickedImageUrl, setClickedImageUrl] = useState(null);
-  const [hoveredAudioUrl, setHoveredAudioUrl] = useState(null);
   const [clickedAudioUrl, setClickedAudioUrl] = useState(null);
+  const [playingFileId, setPlayingFileId] = useState(null);
   const [downloadingSample, setDownloadingSample] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -103,6 +103,24 @@ export default function GoogleObjectStorage() {
       setError(err.message || "Download failed");
     }
     setDownloadingSample(false);
+  };
+
+  const handleAudioClick = async (file) => {
+    setError("");
+    try {
+      const res = await base44.functions.invoke("driveGetAudioStream", { fileId: file.id });
+      if (res.data?.error) {
+        setError(res.data.error);
+        return;
+      }
+      // Create blob URL for the audio stream
+      const blob = new Blob([res.data], { type: 'audio/mpeg' });
+      const audioUrl = URL.createObjectURL(blob);
+      setClickedAudioUrl(audioUrl);
+      setPlayingFileId(file.id);
+    } catch (err) {
+      setError(err.message || "Failed to load audio");
+    }
   };
 
   const filteredFiles = files.filter((f) =>
@@ -229,7 +247,9 @@ export default function GoogleObjectStorage() {
                         onMouseLeave={() => setHoveredImageUrl(null)}
                         onClick={() => {
                           if (activeTab === "images" && f.thumbnailLink) setClickedImageUrl(f.thumbnailLink);
-                          if (activeTab === "audio" && f.webContentLink) setClickedAudioUrl(f.webContentLink);
+                          if (activeTab === "audio" && f.id) {
+                            handleAudioClick(f);
+                          }
                         }}
                       >
                         <td className="px-5 py-3 font-medium truncate max-w-[200px]">{f.name}</td>

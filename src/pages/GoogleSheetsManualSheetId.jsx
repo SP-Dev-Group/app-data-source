@@ -78,7 +78,8 @@ export default function GoogleSheetsManualSheetId() {
     if (res.data?.error) setError(res.data.error);
     else {
       setHeaders(res.data?.headers || ['Unique ID', 'Name']);
-      setRows(res.data?.rows || []);
+      // Skip first row (headers) from data rows
+      setRows((res.data?.rows || []).slice(1));
     }
     setLoading(false);
   };
@@ -123,6 +124,7 @@ export default function GoogleSheetsManualSheetId() {
     if (!editName.trim()) return;
     setSaving(true);
     setError("");
+    // rowIndex: +1 for 1-indexed, +1 for header row = i + 2
     const rowIndex = i + 2;
     const nextVer = await getNextVersion(rows[i].unique_id);
     const res = await base44.functions.invoke("sheetsUpdateRow", {

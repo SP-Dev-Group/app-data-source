@@ -9,17 +9,23 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Sample audio file URL (public domain sample)
-    const sampleAudioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+    // Sample audio file URL (short public domain sample - more reliable)
+    const sampleAudioUrl = "https://www2.cs.uic.edu/~i101/SoundFiles/BabyElephantWalk60.wav";
     
     const response = await fetch(sampleAudioUrl);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch sample audio: ${response.status} ${response.statusText}`);
+    }
+    
     const audioBuffer = await response.arrayBuffer();
     
+    // Return as WAV format (more universally supported)
     return new Response(audioBuffer, {
       status: 200,
       headers: {
-        'Content-Type': 'audio/mpeg',
-        'Content-Disposition': 'attachment; filename="sample-audio.mp3"'
+        'Content-Type': 'audio/wav',
+        'Content-Disposition': 'attachment; filename="sample-audio.wav"'
       }
     });
   } catch (error) {

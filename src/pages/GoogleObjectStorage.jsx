@@ -90,11 +90,11 @@ export default function GoogleObjectStorage() {
       const res = await base44.functions.invoke(functionName);
       
       // Create blob and download
-      const blob = new Blob([res.data], { type: type === "audio" ? "audio/mpeg" : "video/mp4" });
+      const blob = new Blob([res.data], { type: type === "audio" ? "audio/wav" : "video/mp4" });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = type === "audio" ? "sample-audio.mp3" : "sample-video.mp4";
+      a.download = type === "audio" ? "sample-audio.wav" : "sample-video.mp4";
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
@@ -113,8 +113,8 @@ export default function GoogleObjectStorage() {
       const res = await base44.functions.invoke(functionName);
       
       // Create blob and upload to Base44 storage
-      const blob = new Blob([res.data], { type: type === "audio" ? "audio/mpeg" : "video/mp4" });
-      const file = new File([blob], type === "audio" ? "sample-audio.mp3" : "sample-video.mp4", { type: type === "audio" ? "audio/mpeg" : "video/mp4" });
+      const blob = new Blob([res.data], { type: type === "audio" ? "audio/wav" : "video/mp4" });
+      const file = new File([blob], type === "audio" ? "sample-audio.wav" : "sample-video.mp4", { type: type === "audio" ? "audio/wav" : "video/mp4" });
       
       const uploadRes = await base44.integrations.Core.UploadFile({ file });
       const fileUrl = uploadRes.file_url;
@@ -123,8 +123,8 @@ export default function GoogleObjectStorage() {
       const folderId = localStorage.getItem("gs_driveFolderId") || "";
       const driveRes = await base44.functions.invoke("driveUploadFile", { 
         fileUrl, 
-        fileName: type === "audio" ? "sample-audio.mp3" : "sample-video.mp4", 
-        fileType: type === "audio" ? "audio/mpeg" : "video/mp4", 
+        fileName: type === "audio" ? "sample-audio.wav" : "sample-video.mp4", 
+        fileType: type === "audio" ? "audio/wav" : "video/mp4", 
         folderId 
       });
       
@@ -224,7 +224,7 @@ export default function GoogleObjectStorage() {
                         className="flex items-center gap-2"
                       >
                         <Upload className="h-4 w-4" />
-                        {uploading ? "Uploading..." : `Upload Sample ${activeTab === "audio" ? "Audio" : "Video"}`}
+                        {uploading ? "Uploading..." : `Upload Sample ${activeTab === "audio" ? "WAV" : "Video"}`}
                       </Button>
                       <Button
                         size="sm"
@@ -234,7 +234,7 @@ export default function GoogleObjectStorage() {
                         className="flex items-center gap-2"
                       >
                         <Download className="h-4 w-4" />
-                        {downloadingSample ? "Downloading..." : `Download Sample ${activeTab === "audio" ? "Audio" : "Video"}`}
+                        {downloadingSample ? "Downloading..." : `Download Sample ${activeTab === "audio" ? "WAV" : "Video"}`}
                       </Button>
                     </>
                   )}

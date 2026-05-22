@@ -3,8 +3,9 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ArchiveRestore } from "lucide-react";
+import { ArchiveRestore, HelpCircle } from "lucide-react";
 import { toast } from "sonner";
+import GoogleSheetsManualArchiveInstructions from "./GoogleSheetsManualArchiveInstructions";
 
 // Archive sheet for Manual Sheet ID page
 const ARCHIVE_SPREADSHEET_ID = "1PtjThbFY89u7_z7fowTsfm-xDV03I4IqFuTN_h_G18w";
@@ -79,7 +80,10 @@ export default function GoogleSheetsManualArchiveViewer({ open, onOpenChange }) 
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl max-h-[85vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle>Archive — Google Sheets Manual</DialogTitle>
+          <DialogTitle className="flex items-center justify-between">
+            <span>Archive — Google Sheets Manual</span>
+            <GoogleSheetsManualArchiveInstructions />
+          </DialogTitle>
         </DialogHeader>
         <Input
           placeholder="Search by name, ID or event…"

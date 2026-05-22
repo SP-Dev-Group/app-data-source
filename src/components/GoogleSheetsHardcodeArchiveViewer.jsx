@@ -3,6 +3,8 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { HelpCircle } from "lucide-react";
+import GoogleSheetsHardcodeArchiveInstructions from "./GoogleSheetsHardcodeArchiveInstructions";
 
 // Archive sheet for Hardcode page
 const ARCHIVE_SPREADSHEET_ID = "1Gxc4hxadg7XYfMv_NvD9O-rsfLx7kc-8a04YjXbsNdY";
@@ -50,7 +52,10 @@ export default function GoogleSheetsHardcodeArchiveViewer({ open, onOpenChange }
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl max-h-[85vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle>Archive — Google Sheets Hard-coded</DialogTitle>
+          <DialogTitle className="flex items-center justify-between">
+            <span>Archive — Google Sheets Hard-coded</span>
+            <GoogleSheetsHardcodeArchiveInstructions />
+          </DialogTitle>
         </DialogHeader>
         <Input
           placeholder="Search by name, ID or event…"

@@ -22,6 +22,8 @@ export default function GoogleSheetsManualSheetIdInstructions() {
           <div>
             <h3 className="font-semibold mb-2">How to Use</h3>
             <ol className="list-decimal ml-5 space-y-2">
+              <li>Create a new Google Sheet with headers in the first row (e.g., "Unique ID", "Name")</li>
+              <li>Base44 will use the top row as headers and skip it when loading data</li>
               <li>Get your Google Sheets Spreadsheet ID from the URL</li>
               <li>Paste it in the "Spreadsheet ID" field</li>
               <li>Enter the sheet name (default: Sheet1)</li>

@@ -22,6 +22,8 @@ export default function GoogleSheetsHardcodeIdInstructions() {
           <div>
             <h3 className="font-semibold mb-2">How to Use</h3>
             <ol className="list-decimal ml-5 space-y-2">
+              <li>Create a new Google Sheet with headers in the first row (e.g., "Unique ID", "Name")</li>
+              <li>Base44 will use the top row as headers and skip it when loading data</li>
               <li>This page is pre-configured with a fixed spreadsheet ID</li>
               <li>Data automatically loads when you open the page</li>
               <li>Add records manually or click "Add Sample" for test data</li>

@@ -11,7 +11,7 @@ export default function GoogleSheetsSecurity() {
 
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/googlesheetshardcodeid")}>
+          <Button variant="ghost" size="icon" onClick={() => navigate("/googlesheetsMenu")}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="flex items-center gap-2">

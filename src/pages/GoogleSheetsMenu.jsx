@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Shield } from "lucide-react";
 
 export default function GoogleSheetsMenu() {
   const navigate = useNavigate();
@@ -33,6 +33,10 @@ export default function GoogleSheetsMenu() {
         </Button>
         <Button className="w-full bg-green-700 hover:bg-green-800 text-white" onClick={() => navigate("/googlesheetshardcodeid")}>
           Hard-coded Sheet ID
+        </Button>
+        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" onClick={() => navigate("/googlesheetssecurity")}>
+          <Shield className="h-4 w-4 mr-2" />
+          Security: Protect Sheets
         </Button>
       </motion.div>
     </div>

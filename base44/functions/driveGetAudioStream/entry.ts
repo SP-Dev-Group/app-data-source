@@ -35,14 +35,13 @@ Deno.serve(async (req) => {
       return Response.json({ error: error.error?.message || 'Drive API error' }, { status: res.status });
     }
 
-    // Return the file with proper headers
+    // Return the file as base64 encoded JSON response
     const fileBuffer = await res.arrayBuffer();
-    return new Response(fileBuffer, {
-      headers: {
-        'Content-Type': mimeType,
-        'Access-Control-Allow-Origin': '*',
-        'Content-Disposition': 'inline',
-      }
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(fileBuffer)));
+    
+    return Response.json({ 
+      data: base64,
+      mimeType: mimeType
     });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

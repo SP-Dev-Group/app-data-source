@@ -124,34 +124,29 @@ export default function GoogleObjectStorage() {
         return;
       }
       
-      // Determine correct MIME type from file metadata or tab
-      let mimeType = file.mimeType;
-      if (!mimeType) {
-        mimeType = activeTab === "audio" ? 'audio/mpeg' : 'video/mp4';
-      }
+      // Get MIME type from response or fallback
+      const mimeType = res.data?.mimeType || file.mimeType || (activeTab === "audio" ? 'audio/mpeg' : 'video/mp4');
       
-      console.log("Creating blob with MIME type:", mimeType, "Response data type:", typeof res.data, res.data);
+      console.log("Creating blob with MIME type:", mimeType);
       
-      // Handle different response types
-      let blob;
-      if (res.data instanceof Blob) {
-        blob = res.data;
-      } else if (res.data instanceof ArrayBuffer) {
-        blob = new Blob([res.data], { type: mimeType });
-      } else if (typeof res.data === 'string') {
-        // If it's a base64 string or similar, we need to handle it differently
-        setError('Invalid response format from server');
+      // Convert base64 to blob
+      const base64 = res.data?.data;
+      if (!base64) {
+        setError('No data received from server');
         return;
-      } else {
-        // Try to create blob from whatever we have
-        blob = new Blob([res.data], { type: mimeType });
       }
       
+      const binaryString = atob(base64);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      
+      const blob = new Blob([bytes], { type: mimeType });
       const url = URL.createObjectURL(blob);
       console.log("Media URL created:", url, "Blob size:", blob.size);
       
       setMediaUrl(url);
-      // Force dialog to re-render by closing and reopening
       setMediaDialogOpen(true);
     } catch (err) {
       setError(err.message || "Failed to load media");

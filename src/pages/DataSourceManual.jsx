@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import DataMasterListenerInstructions from "@/components/DataMasterListenerInstructions";
 import DataMasterListenerForm from "@/components/DataMasterListenerForm";
+import DataSourceManualArchiveViewer from "@/components/DataSourceManualArchiveViewer";
 import { Copy, RotateCcw, Plus, Pencil, Trash2, Check, X } from "lucide-react";
 import PageMeta from "@/components/PageMeta";
 
@@ -204,7 +205,8 @@ export default function DataSourceManual() {
             functions={[]}
             automations={[]}
             entities={[
-              { name: "DataSourceManual", type: "base44" }
+              { name: "DataSourceManual", type: "base44" },
+              { name: "DataSourceManualArchive", type: "base44" }
             ]}
           />
           <Button variant="outline" size="sm" onClick={() => navigate("/menu")}>← Menu</Button>
@@ -221,6 +223,7 @@ export default function DataSourceManual() {
           <Button variant="outline" size="sm" onClick={createSample} disabled={generating}>
             {generating ? "Generating..." : "Generate Sample"}
           </Button>
+          <DataSourceManualArchiveViewer />
         </div>
       </div>
     </div>

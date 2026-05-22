@@ -125,7 +125,10 @@ export default function GoogleObjectStorage() {
       }
       
       // Get MIME type from response or fallback
-      const mimeType = res.data?.mimeType || file.mimeType || (activeTab === "audio" ? 'audio/mpeg' : 'video/mp4');
+      let mimeType = res.data?.mimeType || file.mimeType;
+      if (!mimeType) {
+        mimeType = activeTab === "audio" ? 'audio/mpeg' : 'video/mp4';
+      }
       
       console.log("Creating blob with MIME type:", mimeType);
       
@@ -144,10 +147,17 @@ export default function GoogleObjectStorage() {
       
       const blob = new Blob([bytes], { type: mimeType });
       const url = URL.createObjectURL(blob);
-      console.log("Media URL created:", url, "Blob size:", blob.size);
+      console.log("Media URL created:", url, "Blob size:", blob.size, "MIME:", mimeType);
       
       setMediaUrl(url);
       setMediaDialogOpen(true);
+      
+      // Log when media is loaded
+      setTimeout(() => {
+        if (mediaRef.current) {
+          console.log("Media element loaded:", mediaRef.current.readyState, mediaRef.current.error);
+        }
+      }, 1000);
     } catch (err) {
       setError(err.message || "Failed to load media");
       console.error("Media load error:", err);
@@ -344,7 +354,17 @@ export default function GoogleObjectStorage() {
                       <audio ref={mediaRef} controls src={mediaUrl} className="w-full" autoPlay />
                     )}
                     {activeTab === "video" && mediaUrl && (
-                      <video ref={mediaRef} controls src={mediaUrl} className="w-full rounded-lg bg-black" autoPlay />
+                      <video 
+                        ref={mediaRef} 
+                        controls 
+                        src={mediaUrl} 
+                        className="w-full rounded-lg bg-black" 
+                        autoPlay
+                        onError={(e) => {
+                          console.error("Video playback error:", e);
+                          setError("This video format may not be supported in browsers. Try MP4 format.");
+                        }}
+                      />
                     )}
                   </div>
                 </DialogContent>

@@ -337,7 +337,7 @@ export default function GoogleObjectStorage() {
                   setSelectedFile(null);
                 }
               }}>
-                <DialogContent className="max-w-xl">
+                <DialogContent className="max-w-md">
                   <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                       {activeTab === "audio" ? <Music className="h-5 w-5 text-purple-600" /> : <Video className="h-5 w-5 text-purple-600" />}

@@ -3,6 +3,8 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ArchiveRestore } from "lucide-react";
+import { toast } from "sonner";
 
 // Archive sheet for Manual Sheet ID page
 const ARCHIVE_SPREADSHEET_ID = "1PtjThbFY89u7_z7fowTsfm-xDV03I4IqFuTN_h_G18w";
@@ -20,6 +22,7 @@ export default function GoogleSheetsManualArchiveViewer({ open, onOpenChange }) 
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [error, setError] = useState("");
+  const [reinstating, setReinstating] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -45,6 +48,32 @@ export default function GoogleSheetsManualArchiveViewer({ open, onOpenChange }) 
       r.event?.toLowerCase().includes(q)
     );
   });
+
+  const handleReinstate = async (row) => {
+    if (!confirm(`Reinstate "${row.name}" to the active sheet?`)) return;
+    setReinstating(true);
+    const res = await base44.functions.invoke("sheetsReinstateRow", {
+      spreadsheetId: localStorage.getItem("gs_spreadsheetId") || "",
+      sheetName: localStorage.getItem("gs_sheetName") || "Sheet1",
+      archiveSpreadsheetId: ARCHIVE_SPREADSHEET_ID,
+      archiveSheetName: ARCHIVE_SHEET_NAME,
+      uniqueId: row.unique_id,
+      name: row.name,
+      version: row.ver,
+    });
+    if (res.data?.error) {
+      toast.error(res.data.error);
+    } else {
+      toast.success("Record reinstated successfully");
+      // Refresh the archive to show the reinstated entry
+      const archiveRes = await base44.functions.invoke("sheetsReadArchive", {
+        spreadsheetId: ARCHIVE_SPREADSHEET_ID,
+        sheetName: ARCHIVE_SHEET_NAME,
+      });
+      if (archiveRes.data?.rows) setRows(archiveRes.data.rows);
+    }
+    setReinstating(false);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -73,6 +102,7 @@ export default function GoogleSheetsManualArchiveViewer({ open, onOpenChange }) 
                   <th className="text-left px-3 py-2 font-medium">Ver</th>
                   <th className="text-left px-3 py-2 font-medium">Event</th>
                   <th className="text-left px-3 py-2 font-medium">Date</th>
+                  <th className="text-left px-3 py-2 font-medium">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border bg-card">
@@ -87,11 +117,25 @@ export default function GoogleSheetsManualArchiveViewer({ open, onOpenChange }) 
                       </span>
                     </td>
                     <td className="px-3 py-2 text-muted-foreground">{r.date ? new Date(r.date).toLocaleDateString() : ""}</td>
+                    <td className="px-3 py-2">
+                      {r.event?.toLowerCase() === 'deleted' && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 text-xs"
+                          onClick={() => handleReinstate(r)}
+                          disabled={reinstating}
+                        >
+                          <ArchiveRestore className="h-3 w-3 mr-1" />
+                          Reinstate
+                        </Button>
+                      )}
+                    </td>
                   </tr>
                 ))}
                 {filtered.length === 0 && !loading && (
                   <tr>
-                    <td colSpan={5} className="px-3 py-8 text-center text-muted-foreground">No archive records found.</td>
+                    <td colSpan={6} className="px-3 py-8 text-center text-muted-foreground">No archive records found.</td>
                   </tr>
                 )}
               </tbody>

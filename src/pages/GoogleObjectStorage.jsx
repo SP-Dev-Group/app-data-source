@@ -48,11 +48,18 @@ export default function GoogleObjectStorage() {
     if (!file) return;
     setUploading(true);
     setError("");
-    const formData = new FormData();
-    formData.append("file", file);
-    const res = await base44.functions.invoke("driveUploadFile", formData);
-    if (res.data?.error) setError(res.data.error);
-    else await loadFiles();
+    try {
+      // Upload file to Base44 storage first
+      const uploadRes = await base44.integrations.Core.UploadFile({ file });
+      const fileUrl = uploadRes.file_url;
+      
+      // Then upload to Google Drive using the backend function
+      const res = await base44.functions.invoke("driveUploadFile", { fileUrl, fileName: file.name, fileType: file.type });
+      if (res.data?.error) setError(res.data.error);
+      else await loadFiles();
+    } catch (err) {
+      setError(err.message || "Upload failed");
+    }
     setUploading(false);
     e.target.value = "";
   };

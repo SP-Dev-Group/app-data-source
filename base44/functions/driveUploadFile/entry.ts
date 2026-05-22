@@ -8,22 +8,24 @@ Deno.serve(async (req) => {
 
     const { accessToken } = await base44.asServiceRole.connectors.getConnection('googledrive');
 
-    const formData = await req.formData();
-    const file = formData.get('file');
-    if (!file) return Response.json({ error: 'No file provided' }, { status: 400 });
+    const { fileUrl, fileName, fileType } = await req.json();
+    if (!fileUrl || !fileName) return Response.json({ error: 'Missing fileUrl or fileName' }, { status: 400 });
 
-    const fileBuffer = await file.arrayBuffer();
+    // Download the file from Base44 storage
+    const fileRes = await fetch(fileUrl);
+    if (!fileRes.ok) return Response.json({ error: 'Failed to download file' }, { status: 500 });
+    const fileBuffer = await fileRes.arrayBuffer();
 
     // Create file metadata
-    const metadata = { name: file.name, mimeType: file.type };
+    const metadata = { name: fileName, mimeType: fileType || 'application/octet-stream' };
 
-    // Multipart upload
+    // Multipart upload to Google Drive
     const boundary = '-------314159265358979323846';
     const delimiter = `\r\n--${boundary}\r\n`;
     const closeDelimiter = `\r\n--${boundary}--`;
 
     const metaPart = `Content-Type: application/json\r\n\r\n${JSON.stringify(metadata)}`;
-    const filePart = `Content-Type: ${file.type}\r\n\r\n`;
+    const filePart = `Content-Type: ${metadata.mimeType}\r\n\r\n`;
 
     const encoder = new TextEncoder();
     const parts = [

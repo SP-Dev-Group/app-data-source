@@ -20,6 +20,7 @@ import GoogleSheetsHardcodeId from './pages/GoogleSheetsHardcodeId';
 import GoogleSheetsSecurity from './pages/GoogleSheetsSecurity';
 import GoogleFirebase from './pages/GoogleFirebase';
 import GoogleSQL from './pages/GoogleSQL';
+import GoogleObjectStorage from './pages/GoogleObjectStorage';
 
 
 const AuthenticatedApp = () => {
@@ -62,6 +63,7 @@ const AuthenticatedApp = () => {
       <Route path="/googlesheetssecurity" element={<GoogleSheetsSecurity />} />
       <Route path="/googlefirebase" element={<GoogleFirebase />} />
       <Route path="/googlesql" element={<GoogleSQL />} />
+      <Route path="/googleobjectstorage" element={<GoogleObjectStorage />} />
 
       <Route path="*" element={<PageNotFound />} />
     </Routes>

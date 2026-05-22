@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Info } from 'lucide-react';
+import { HelpCircle } from 'lucide-react';
 
 export default function GoogleSheetsManualSheetIdInstructions() {
   const [open, setOpen] = useState(false);
@@ -9,8 +9,9 @@ export default function GoogleSheetsManualSheetIdInstructions() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="icon" className="fixed bottom-6 right-6">
-          <Info className="h-4 w-4" />
+        <Button variant="outline" className="fixed top-6 right-6">
+          <HelpCircle className="h-4 w-4 mr-2" />
+          Information
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-lg">

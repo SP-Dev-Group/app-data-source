@@ -9,7 +9,7 @@ export default function GoogleSheetsManualSheetIdInstructions() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="fixed top-6 right-6">
+        <Button variant="outline" className="w-full">
           <HelpCircle className="h-4 w-4 mr-2" />
           Information
         </Button>

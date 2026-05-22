@@ -80,7 +80,7 @@ export default function GoogleSheetsManualSheetId() {
 
   return (
     <div className="min-h-screen bg-background p-6">
-      <div className="fixed top-6 right-6 flex flex-col gap-2 z-50">
+      <div className="fixed top-6 right-6 flex flex-col gap-2 z-50 w-40">
         <GoogleSheetsManualSheetIdInstructions />
         <Button onClick={handleAddSample} disabled={addingSample || !spreadsheetId.trim()} variant="outline" className="flex items-center gap-2">
           <Wand2 className="h-4 w-4" />

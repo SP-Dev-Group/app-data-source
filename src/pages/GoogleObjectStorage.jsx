@@ -34,6 +34,7 @@ export default function GoogleObjectStorage() {
   const [hoveredImageUrl, setHoveredImageUrl] = useState(null);
   const [clickedImageUrl, setClickedImageUrl] = useState(null);
   const [clickedAudioUrl, setClickedAudioUrl] = useState(null);
+  const [clickedVideoUrl, setClickedVideoUrl] = useState(null);
   const [playingFileId, setPlayingFileId] = useState(null);
   const audioRef = useRef(null);
   const [downloadingSample, setDownloadingSample] = useState(false);
@@ -137,6 +138,29 @@ export default function GoogleObjectStorage() {
     } catch (err) {
       setError(err.message || "Failed to load audio");
       console.error("Audio load error:", err);
+    }
+  };
+
+  const handleVideoClick = async (file) => {
+    setError("");
+    console.log("Clicking video file:", file.name, file.id);
+    try {
+      const res = await base44.functions.invoke("driveGetAudioStream", { fileId: file.id });
+      
+      if (res.status >= 400 || res.data?.error) {
+        const errorMsg = typeof res.data === 'string' ? res.data : (res.data?.error || 'Failed to load video');
+        setError(errorMsg);
+        console.error("Video load error:", errorMsg);
+        return;
+      }
+      
+      const videoBlob = new Blob([res.data], { type: 'video/mp4' });
+      const videoUrl = URL.createObjectURL(videoBlob);
+      console.log("Video URL created:", videoUrl);
+      setClickedVideoUrl(videoUrl);
+    } catch (err) {
+      setError(err.message || "Failed to load video");
+      console.error("Video load error:", err);
     }
   };
 
@@ -272,6 +296,9 @@ export default function GoogleObjectStorage() {
                           if (activeTab === "audio" && f.id) {
                             handleAudioClick(f);
                           }
+                          if (activeTab === "video" && f.id) {
+                            handleVideoClick(f);
+                          }
                         }}
                       >
                         <td className="px-5 py-3 font-medium truncate max-w-[200px]">{f.name}</td>
@@ -339,6 +366,16 @@ export default function GoogleObjectStorage() {
               <div className="aspect-square bg-card rounded-lg overflow-hidden flex items-center justify-center">
                 <img src={hoveredImageUrl || clickedImageUrl} alt="Preview" className="max-w-full max-h-full object-contain" />
               </div>
+            </div>
+          )}
+
+          {activeTab === "video" && clickedVideoUrl && (
+            <div className="mt-4 pt-4 border-t border-border">
+              <p className="text-xs font-medium text-purple-700 mb-2 flex items-center gap-2">
+                <Video className="h-4 w-4 text-purple-600" />
+                Now Playing
+              </p>
+              <video controls src={clickedVideoUrl} className="w-full rounded-lg bg-black" />
             </div>
           )}
 

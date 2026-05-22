@@ -24,13 +24,15 @@ function formatSize(bytes) {
 
 function AudioPlayer({ audioUrl, autoPlay, audioRef }) {
   useEffect(() => {
-    if (audioRef.current && autoPlay && audioUrl) {
+    if (audioRef.current && audioUrl) {
       audioRef.current.load();
-      audioRef.current.play().catch(err => console.error("Auto-play failed:", err));
+      if (autoPlay) {
+        audioRef.current.play().catch(err => console.error("Auto-play failed:", err));
+      }
     }
   }, [audioUrl, autoPlay]);
 
-  return <audio ref={audioRef} controls src={audioUrl} className="w-full" />;
+  return <audio ref={audioRef} controls src={audioUrl} className="w-full" key={audioUrl} />;
 }
 
 function VideoPlayer({ videoUrl }) {
@@ -43,7 +45,7 @@ function VideoPlayer({ videoUrl }) {
     }
   }, [videoUrl]);
 
-  return <video ref={videoRef} controls src={videoUrl} className="w-full rounded-lg bg-black" />;
+  return <video ref={videoRef} controls src={videoUrl} className="w-full rounded-lg bg-black" key={videoUrl} />;
 }
 
 export default function GoogleObjectStorage() {
@@ -395,7 +397,7 @@ export default function GoogleObjectStorage() {
             <div className="mt-4 pt-4 border-t border-border">
               <p className="text-xs text-muted-foreground mb-2">Preview</p>
               <div className="aspect-square bg-card rounded-lg overflow-hidden flex items-center justify-center">
-                <img src={hoveredImageUrl || clickedImageUrl} alt="Preview" className="max-w-full max-h-full object-contain" />
+                <img src={hoveredImageUrl || clickedImageUrl} alt="Preview" className="max-w-full max-h-full object-contain" key={hoveredImageUrl || clickedImageUrl} />
               </div>
             </div>
           )}

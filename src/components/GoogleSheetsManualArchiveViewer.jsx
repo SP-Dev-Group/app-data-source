@@ -33,7 +33,7 @@ export default function GoogleSheetsManualArchiveViewer({ open, onOpenChange }) 
         sheetName: ARCHIVE_SHEET_NAME,
       }).then((res) => {
         if (res.data?.error) setError(res.data.error);
-        else setRows(res.data?.rows || []);
+        else setRows((res.data?.rows || []).slice(1));
         setLoading(false);
       });
     }

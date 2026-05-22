@@ -50,7 +50,8 @@ export default function GoogleSheetsHardcodeId() {
     if (res.data?.error) setError(res.data.error);
     else {
       setHeaders(res.data?.headers || ['Unique ID', 'Name']);
-      setRows(res.data?.rows || []);
+      // Skip first row (headers) from data rows
+      setRows((res.data?.rows || []).slice(1));
     }
     setLoading(false);
   };

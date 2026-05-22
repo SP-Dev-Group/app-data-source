@@ -34,6 +34,28 @@ export default function GoogleSheetsManualSheetId() {
   const [deleting, setDeleting] = useState(false);
   const [archiveOpen, setArchiveOpen] = useState(false);
 
+  const getNextVersion = async (uniqueId) => {
+    // Read archive to find max version for this uniqueId
+    try {
+      const res = await base44.functions.invoke("sheetsReadArchive", {
+        spreadsheetId: ARCHIVE_SPREADSHEET_ID,
+        sheetName: ARCHIVE_SHEET_NAME,
+      });
+      if (res.data?.rows) {
+        let maxVer = 0;
+        for (const row of res.data.rows) {
+          if (row.unique_id === uniqueId && row.ver) {
+            if (row.ver > maxVer) maxVer = row.ver;
+          }
+        }
+        return maxVer + 1;
+      }
+    } catch (e) {
+      // fallback
+    }
+    return 1;
+  };
+
   const archiveRow = async (uniqueId, name, event, ver) => {
     await base44.functions.invoke("sheetsArchiveRow", {
       spreadsheetId: ARCHIVE_SPREADSHEET_ID,
@@ -102,12 +124,13 @@ export default function GoogleSheetsManualSheetId() {
     setSaving(true);
     setError("");
     const rowIndex = i + 2;
+    const nextVer = await getNextVersion(rows[i].unique_id);
     const res = await base44.functions.invoke("sheetsUpdateRow", {
       spreadsheetId: spreadsheetId.trim(), sheetName: sheetName.trim() || "Sheet1",
       rowIndex, uniqueId: rows[i].unique_id, name: editName.trim(),
     });
     if (res.data?.error) setError(res.data.error);
-    else { await archiveRow(rows[i].unique_id, editName.trim(), "updated", i + 2); cancelEdit(); await loadRows(); }
+    else { await archiveRow(rows[i].unique_id, editName.trim(), "updated", nextVer); cancelEdit(); await loadRows(); }
     setSaving(false);
   };
 
@@ -118,11 +141,12 @@ export default function GoogleSheetsManualSheetId() {
     setDeleting(true);
     setError("");
     const rowIndex = i + 1;
+    const nextVer = await getNextVersion(rows[i].unique_id);
     const res = await base44.functions.invoke("sheetsDeleteRow", {
       spreadsheetId: spreadsheetId.trim(), sheetName: sheetName.trim() || "Sheet1", rowIndex,
     });
     if (res.data?.error) setError(res.data.error);
-    else { await archiveRow(rows[i].unique_id, rows[i].name, "deleted", i + 2); setDeleteConfirmIdx(null); await loadRows(); }
+    else { await archiveRow(rows[i].unique_id, rows[i].name, "deleted", nextVer); setDeleteConfirmIdx(null); await loadRows(); }
     setDeleting(false);
   };
 

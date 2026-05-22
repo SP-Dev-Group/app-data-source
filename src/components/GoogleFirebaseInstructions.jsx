@@ -45,6 +45,25 @@ export default function GoogleFirebaseInstructions() {
                   </ul>
                 </li>
               </ol>
+              <p className="mt-2 text-xs">Your config will look like:</p>
+              <pre className="bg-muted rounded p-2 text-xs overflow-x-auto whitespace-pre-wrap break-words mt-1">
+{`// Import the functions you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC6...",
+  authDomain: "your-project.firebaseapp.com",
+  projectId: "your-project",
+  storageBucket: "your-project.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abc123...",
+  measurementId: "G-XXXXXXXXXX"
+};
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);`}
+              </pre>
             </div>
 
             <div>

@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Copy, RotateCcw, Pencil, Trash2, Check, X } from "lucide-react";
+import { Copy, RotateCcw, Pencil, Trash2, Check, X, Archive } from "lucide-react";
 import DataSourceDailyInstructions from "@/components/DataSourceDailyInstructions";
+import DataSource2amArchiveViewer from "@/components/DataSource2amArchiveViewer";
 import PageMeta from "@/components/PageMeta";
 
 export default function DataSourceDaily() {
@@ -18,6 +19,7 @@ export default function DataSourceDaily() {
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [archiveOpen, setArchiveOpen] = useState(false);
 
   const generateSample = async () => {
     setGenerating(true);
@@ -80,6 +82,8 @@ export default function DataSourceDaily() {
   }, []);
 
   return (
+    <>
+    <DataSource2amArchiveViewer open={archiveOpen} onOpenChange={setArchiveOpen} />
     <div className="min-h-screen bg-background flex flex-col relative">
       <div className="absolute top-0 left-0 right-0 h-[15px] bg-black flex items-center">
         <div className="h-full w-full bg-blue-600"></div>
@@ -235,6 +239,10 @@ export default function DataSourceDaily() {
           </button>
           <Button variant="outline" size="sm" onClick={() => navigate("/menu")}>← Menu</Button>
           <DataSourceDailyInstructions />
+          <Button variant="outline" size="sm" onClick={() => setArchiveOpen(true)} className="flex items-center gap-2">
+            <Archive className="w-4 h-4" />
+            Archive
+          </Button>
           <Button variant="outline" size="sm" onClick={generateSample} disabled={generating}>
             {generating ? "Generating..." : "Generate Sample"}
           </Button>
@@ -244,5 +252,6 @@ export default function DataSourceDaily() {
         </div>
       </div>
     </div>
+    </>
   );
 }

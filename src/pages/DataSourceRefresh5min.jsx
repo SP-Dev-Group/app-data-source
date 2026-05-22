@@ -4,8 +4,9 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { Plus, Copy, Pencil, Trash2, Check, X } from "lucide-react";
+import { Plus, Copy, Pencil, Trash2, Check, X, Archive } from "lucide-react";
 import DataSourceListener2Instructions from "@/components/DataSourceListener2Instructions";
+import DataSourceRefresh5minsArchiveViewer from "@/components/DataSourceRefresh5minsArchiveViewer";
 import PageMeta from "@/components/PageMeta";
 
 export default function DataSourceRefresh5min() {
@@ -18,6 +19,7 @@ export default function DataSourceRefresh5min() {
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [archiveOpen, setArchiveOpen] = useState(false);
 
   const createSample = async () => {
     setCreating(true);
@@ -77,6 +79,8 @@ export default function DataSourceRefresh5min() {
   }, []);
 
   return (
+    <>
+    <DataSourceRefresh5minsArchiveViewer open={archiveOpen} onOpenChange={setArchiveOpen} />
     <div className="min-h-screen bg-background flex flex-col relative">
       <div className="absolute top-0 left-0 right-0 h-[15px] bg-black flex items-center">
         <div className="h-full w-full bg-blue-400"></div>
@@ -201,6 +205,10 @@ export default function DataSourceRefresh5min() {
           />
           <Button variant="outline" size="sm" onClick={() => navigate("/menu")}>← Menu</Button>
           <DataSourceListener2Instructions />
+          <Button variant="outline" size="sm" onClick={() => setArchiveOpen(true)} className="flex items-center gap-2">
+            <Archive className="w-4 h-4" />
+            Archive
+          </Button>
           <Button
             variant="outline"
             size="sm"
@@ -214,5 +222,6 @@ export default function DataSourceRefresh5min() {
         </div>
       </div>
     </div>
+    </>
   );
 }

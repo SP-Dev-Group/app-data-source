@@ -1,0 +1,43 @@
+{
+  "name": "DataSource2amArchive",
+  "type": "object",
+  "properties": {
+    "source_id": {
+      "type": "string",
+      "description": "The ID of the original DataSource2am record"
+    },
+    "unique_id": {
+      "type": "string",
+      "description": "The unique_id field from the original record"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name at the time of this archive entry"
+    },
+    "email": {
+      "type": "string",
+      "description": "Email at the time of this archive entry"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "created",
+        "updated",
+        "deleted",
+        "reinstated"
+      ],
+      "description": "What action triggered this archive entry"
+    },
+    "version": {
+      "type": "number",
+      "description": "Version number (1 = first created, 2+ = edits, or deleted marker)"
+    }
+  },
+  "required": [
+    "source_id",
+    "unique_id",
+    "name",
+    "event_type",
+    "version"
+  ]
+}

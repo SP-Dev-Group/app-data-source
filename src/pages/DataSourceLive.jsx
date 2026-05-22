@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import DataSourceLiveInstructions from "@/components/DataSourceLiveInstructions";
 import ReplicaInstructions from "@/components/ReplicaInstructions";
 import DataSourceLiveErrorLogs from "@/components/DataSourceLiveErrorLogs";
-import { Copy, Plus, ScrollText, Pencil, Trash2, Check, X } from "lucide-react";
+import { Copy, Plus, ScrollText, Pencil, Trash2, Check, X, Archive } from "lucide-react";
+import DataSourceLiveArchiveViewer from "@/components/DataSourceLiveArchiveViewer";
 import PageMeta from "@/components/PageMeta";
 
 const logError = (source, error) => {
@@ -29,6 +30,7 @@ export default function DataSourceLive() {
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [archiveOpen, setArchiveOpen] = useState(false);
 
   const createSample = async () => {
     setCreating(true);
@@ -98,6 +100,8 @@ export default function DataSourceLive() {
   }, []);
 
   return (
+    <>
+    <DataSourceLiveArchiveViewer open={archiveOpen} onOpenChange={setArchiveOpen} />
     <div className="min-h-screen bg-background flex flex-col relative">
       <div className="absolute top-0 left-0 right-0 h-[15px] bg-black flex items-center">
         <div className="h-full w-full bg-blue-400"></div>
@@ -214,6 +218,10 @@ export default function DataSourceLive() {
           />
           <Button variant="outline" size="sm" onClick={() => navigate("/menu")}>← Menu</Button>
           <DataSourceLiveInstructions />
+          <Button variant="outline" size="sm" onClick={() => setArchiveOpen(true)} className="flex items-center gap-2">
+            <Archive className="w-4 h-4" />
+            Archive
+          </Button>
           <ReplicaInstructions />
           <Button variant="outline" size="sm" onClick={() => setLogsOpen(true)} className="flex items-center gap-2">
             <ScrollText className="w-4 h-4" />
@@ -232,5 +240,6 @@ export default function DataSourceLive() {
         </div>
       </div>
     </div>
+    </>
   );
 }

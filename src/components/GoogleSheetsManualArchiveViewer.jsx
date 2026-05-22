@@ -34,7 +34,7 @@ export default function GoogleSheetsManualArchiveViewer({ open, onOpenChange }) 
         sheetName: ARCHIVE_SHEET_NAME,
       }).then((res) => {
         if (res.data?.error) setError(res.data.error);
-        else setRows((res.data?.rows || []).slice(1));
+        else setRows(res.data?.rows || []);
         setLoading(false);
       });
     }
@@ -72,6 +72,8 @@ export default function GoogleSheetsManualArchiveViewer({ open, onOpenChange }) 
         sheetName: ARCHIVE_SHEET_NAME,
       });
       if (archiveRes.data?.rows) setRows(archiveRes.data.rows);
+      // Notify parent to refresh the main sheet data
+      onOpenChange?.(false);
     }
     setReinstating(false);
   };

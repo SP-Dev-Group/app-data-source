@@ -156,7 +156,10 @@ export default function GoogleSheetsManualSheetId() {
 
   return (
     <>
-    <GoogleSheetsManualArchiveViewer open={archiveOpen} onOpenChange={setArchiveOpen} />
+    <GoogleSheetsManualArchiveViewer open={archiveOpen} onOpenChange={(open) => {
+      setArchiveOpen(open);
+      if (!open && spreadsheetId) loadRows();
+    }} />
     <div className="min-h-screen bg-background flex flex-col">
       <div className="flex flex-1 overflow-hidden">
         <div className="flex-1 p-6 overflow-y-auto">

@@ -95,6 +95,8 @@ export default function GoogleFirebase() {
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="fixed top-6 right-6 flex flex-col gap-2 z-50 w-40">
+        <Button variant="outline" size="sm" onClick={() => navigate("/googlemenu")}>← Menu</Button>
+        <GoogleFirebaseInstructions />
         <PageMeta
           page="GoogleFirebase.jsx"
           functions={[]}
@@ -104,7 +106,6 @@ export default function GoogleFirebase() {
             { name: "records", type: "external", db: "Firebase Firestore", project: "sample-sp-2026", collection: "records" }
           ]}
         />
-        <GoogleFirebaseInstructions />
         <GoogleFirebaseSecurity />
         <IAMSecurity service="Firebase" />
         <Button onClick={handleAddSample} disabled={addingSample} variant="outline" className="flex items-center gap-2">

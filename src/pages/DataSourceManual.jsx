@@ -200,6 +200,8 @@ export default function DataSourceManual() {
           </div>
         </div>
         <div className="w-56 border-l border-border bg-muted/20 p-4 flex flex-col gap-2 overflow-y-auto">
+          <Button variant="outline" size="sm" onClick={() => navigate("/menu")}>← Menu</Button>
+          <DataMasterListenerInstructions />
           <PageMeta
             page="DataSourceManual.jsx"
             functions={[]}
@@ -209,8 +211,9 @@ export default function DataSourceManual() {
               { name: "DataSourceManualArchive", type: "base44" }
             ]}
           />
-          <Button variant="outline" size="sm" onClick={() => navigate("/menu")}>← Menu</Button>
-          <DataMasterListenerInstructions />
+          <Button variant="outline" size="sm" onClick={createSample} disabled={generating}>
+            {generating ? "Generating..." : "Generate Sample"}
+          </Button>
           <Button
             variant="outline"
             size="sm"
@@ -219,9 +222,6 @@ export default function DataSourceManual() {
           >
             <Plus className="w-4 h-4" />
             {showForm ? "Cancel" : "Add Record"}
-          </Button>
-          <Button variant="outline" size="sm" onClick={createSample} disabled={generating}>
-            {generating ? "Generating..." : "Generate Sample"}
           </Button>
           <DataSourceManualArchiveViewer />
         </div>

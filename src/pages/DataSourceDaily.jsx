@@ -222,6 +222,8 @@ export default function DataSourceDaily() {
           </div>
         </div>
         <div className="w-56 border-l border-border bg-muted/20 p-4 flex flex-col gap-2 overflow-y-auto">
+          <Button variant="outline" size="sm" onClick={() => navigate("/menu")}>← Menu</Button>
+          <DataSourceDailyInstructions />
           <PageMeta
             page="DataSourceDaily.jsx"
             functions={[]}
@@ -230,24 +232,15 @@ export default function DataSourceDaily() {
               { name: "DataSource2am", type: "base44" }
             ]}
           />
-          <button
-            onClick={() => navigator.clipboard.writeText("6a0a3a832f954c38e4a31c7b")}
-            className="text-xs text-muted-foreground font-mono hover:text-foreground cursor-pointer transition-colors flex items-center gap-1"
-            title="Copy ID only"
-          >
-            <Copy className="w-3 h-3" />
-          </button>
-          <Button variant="outline" size="sm" onClick={() => navigate("/menu")}>← Menu</Button>
-          <DataSourceDailyInstructions />
-          <Button variant="outline" size="sm" onClick={() => setArchiveOpen(true)} className="flex items-center gap-2">
-            <Archive className="w-4 h-4" />
-            Archive
-          </Button>
           <Button variant="outline" size="sm" onClick={generateSample} disabled={generating}>
             {generating ? "Generating..." : "Generate Sample"}
           </Button>
           <Button variant="outline" size="sm" onClick={loadRecords} disabled={loading}>
             {loading ? "Refreshing..." : "Refresh"}
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => setArchiveOpen(true)} className="flex items-center gap-2">
+            <Archive className="w-4 h-4" />
+            Archive
           </Button>
         </div>
       </div>

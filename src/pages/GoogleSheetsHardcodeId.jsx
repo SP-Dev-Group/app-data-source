@@ -235,6 +235,8 @@ export default function GoogleSheetsHardcodeId() {
 
         </div>
         <div className="w-56 border-l border-border bg-muted/20 p-4 flex flex-col gap-2 overflow-y-auto">
+          <Button variant="outline" size="sm" onClick={() => navigate("/googlesheetsMenu")}>← Menu</Button>
+          <GoogleSheetsHardcodeIdInstructions />
           <PageMeta
             page="GoogleSheetsHardcodeId.jsx"
             functions={["sheetsReadRows", "sheetsAppendRow", "sheetsUpdateRow", "sheetsDeleteRow"]}
@@ -243,18 +245,17 @@ export default function GoogleSheetsHardcodeId() {
               { name: "Sheet1", type: "external", db: "Google Sheets", spreadsheetId: "1oY8jrQvKDNlntcBpqQ0sk9fjotkeSDby8k3z1HsOUmg", sheet: "Sheet1" }
             ]}
           />
-          <GoogleSheetsHardcodeIdInstructions />
-          <Button onClick={() => setArchiveOpen(true)} variant="outline" size="sm" className="flex items-center gap-2">
-            <Archive className="h-4 w-4" />
-            Archive
+          <Button onClick={() => navigate("/googlesheetssecurity")} variant="outline" size="sm" className="flex items-center gap-2">
+            <Shield className="h-4 w-4" />
+            Security
           </Button>
           <Button onClick={handleAddSample} disabled={addingSample} variant="outline" size="sm" className="flex items-center gap-2">
             <Wand2 className="h-4 w-4" />
             {addingSample ? "Adding..." : "Add Sample"}
           </Button>
-          <Button onClick={() => navigate("/googlesheetssecurity")} variant="outline" size="sm" className="flex items-center gap-2">
-            <Shield className="h-4 w-4" />
-            Security
+          <Button onClick={() => setArchiveOpen(true)} variant="outline" size="sm" className="flex items-center gap-2">
+            <Archive className="h-4 w-4" />
+            Archive
           </Button>
         </div>
       </div>

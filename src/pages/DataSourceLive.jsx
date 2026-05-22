@@ -204,6 +204,8 @@ export default function DataSourceLive() {
           </div>
         </div>
         <div className="w-56 border-l border-border bg-muted/20 p-4 flex flex-col gap-2 overflow-y-auto">
+          <Button variant="outline" size="sm" onClick={() => navigate("/menu")}>← Menu</Button>
+          <DataSourceLiveInstructions />
           <PageMeta
             page="DataSourceLive.jsx"
             functions={[]}
@@ -216,17 +218,6 @@ export default function DataSourceLive() {
               { name: "DataSourceLiveErrorLog", type: "base44" }
             ]}
           />
-          <Button variant="outline" size="sm" onClick={() => navigate("/menu")}>← Menu</Button>
-          <DataSourceLiveInstructions />
-          <Button variant="outline" size="sm" onClick={() => setArchiveOpen(true)} className="flex items-center gap-2">
-            <Archive className="w-4 h-4" />
-            Archive
-          </Button>
-          <ReplicaInstructions />
-          <Button variant="outline" size="sm" onClick={() => setLogsOpen(true)} className="flex items-center gap-2">
-            <ScrollText className="w-4 h-4" />
-            Error Logs
-          </Button>
           <Button
             variant="outline"
             size="sm"
@@ -236,6 +227,10 @@ export default function DataSourceLive() {
           >
             <Plus className="w-4 h-4" />
             {creating ? "Creating..." : "Create Sample"}
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => setArchiveOpen(true)} className="flex items-center gap-2">
+            <Archive className="w-4 h-4" />
+            Archive
           </Button>
         </div>
       </div>

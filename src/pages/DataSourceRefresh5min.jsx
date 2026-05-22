@@ -195,6 +195,8 @@ export default function DataSourceRefresh5min() {
           </div>
         </div>
         <div className="w-56 border-l border-border bg-muted/20 p-4 flex flex-col gap-2 overflow-y-auto">
+          <Button variant="outline" size="sm" onClick={() => navigate("/menu")}>← Menu</Button>
+          <DataSourceListener2Instructions />
           <PageMeta
             page="DataSourceRefresh5min.jsx"
             functions={[]}
@@ -203,12 +205,6 @@ export default function DataSourceRefresh5min() {
               { name: "DataSourceRefresh5mins", type: "base44" }
             ]}
           />
-          <Button variant="outline" size="sm" onClick={() => navigate("/menu")}>← Menu</Button>
-          <DataSourceListener2Instructions />
-          <Button variant="outline" size="sm" onClick={() => setArchiveOpen(true)} className="flex items-center gap-2">
-            <Archive className="w-4 h-4" />
-            Archive
-          </Button>
           <Button
             variant="outline"
             size="sm"
@@ -218,6 +214,10 @@ export default function DataSourceRefresh5min() {
           >
             <Plus className="w-4 h-4" />
             {creating ? "Creating..." : "Create Sample"}
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => setArchiveOpen(true)} className="flex items-center gap-2">
+            <Archive className="w-4 h-4" />
+            Archive
           </Button>
         </div>
       </div>

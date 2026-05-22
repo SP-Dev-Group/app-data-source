@@ -339,14 +339,9 @@ export default function GoogleObjectStorage() {
               }}>
                 <DialogContent className="max-w-2xl">
                   <DialogHeader>
-                    <DialogTitle className="flex items-center justify-between">
-                      <span className="flex items-center gap-2">
-                        {activeTab === "audio" ? <Music className="h-5 w-5 text-purple-600" /> : <Video className="h-5 w-5 text-purple-600" />}
-                        {selectedFile?.name || "Media Player"}
-                      </span>
-                      <Button variant="ghost" size="icon" onClick={() => setMediaDialogOpen(false)}>
-                        <X className="h-4 w-4" />
-                      </Button>
+                    <DialogTitle className="flex items-center gap-2">
+                      {activeTab === "audio" ? <Music className="h-5 w-5 text-purple-600" /> : <Video className="h-5 w-5 text-purple-600" />}
+                      {selectedFile?.name || "Media Player"}
                     </DialogTitle>
                   </DialogHeader>
                   <div className="mt-4">

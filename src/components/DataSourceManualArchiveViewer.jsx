@@ -150,33 +150,35 @@ export default function DataSourceManualArchiveViewer() {
                         <td className="px-3 py-2">
                           {isLatestDeleted && reinstateConfirmId !== r.id && (
                             <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-6 w-6 text-purple-600 hover:text-purple-700"
-                              title="Reinstate record"
+                              variant="outline"
+                              size="sm"
+                              className="h-7 text-xs px-2 text-purple-600 hover:text-purple-700"
                               onClick={() => setReinstateConfirmId(r.id)}
                             >
-                              <RotateCcw className="h-3.5 w-3.5" />
+                              <RotateCcw className="h-3 w-3 mr-1" />
+                              Reinstate
                             </Button>
                           )}
                           {reinstateConfirmId === r.id && (
                             <div className="flex items-center gap-1">
                               <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-6 w-6 text-green-600"
+                                variant="outline"
+                                size="sm"
+                                className="h-7 text-xs px-2 text-green-600 hover:text-green-700"
                                 disabled={reinstating}
                                 onClick={() => reinstate(r)}
                               >
-                                <Check className="h-3.5 w-3.5" />
+                                <Check className="h-3 w-3 mr-1" />
+                                Confirm
                               </Button>
                               <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-6 w-6"
+                                variant="outline"
+                                size="sm"
+                                className="h-7 text-xs px-2"
                                 onClick={() => setReinstateConfirmId(null)}
                               >
-                                <X className="h-3.5 w-3.5" />
+                                <X className="h-3 w-3 mr-1" />
+                                Cancel
                               </Button>
                             </div>
                           )}

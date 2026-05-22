@@ -105,6 +105,37 @@ export default function GoogleObjectStorage() {
     setDownloadingSample(false);
   };
 
+  const handleUploadSample = async (type) => {
+    setUploading(true);
+    setError("");
+    try {
+      const functionName = type === "audio" ? "downloadSampleAudio" : "downloadSampleVideo";
+      const res = await base44.functions.invoke(functionName);
+      
+      // Create blob and upload to Base44 storage
+      const blob = new Blob([res.data], { type: type === "audio" ? "audio/mpeg" : "video/mp4" });
+      const file = new File([blob], type === "audio" ? "sample-audio.mp3" : "sample-video.mp4", { type: type === "audio" ? "audio/mpeg" : "video/mp4" });
+      
+      const uploadRes = await base44.integrations.Core.UploadFile({ file });
+      const fileUrl = uploadRes.file_url;
+      
+      // Upload to Google Drive
+      const folderId = localStorage.getItem("gs_driveFolderId") || "";
+      const driveRes = await base44.functions.invoke("driveUploadFile", { 
+        fileUrl, 
+        fileName: type === "audio" ? "sample-audio.mp3" : "sample-video.mp4", 
+        fileType: type === "audio" ? "audio/mpeg" : "video/mp4", 
+        folderId 
+      });
+      
+      if (driveRes.data?.error) setError(driveRes.data.error);
+      else await loadFiles();
+    } catch (err) {
+      setError(err.message || "Upload failed");
+    }
+    setUploading(false);
+  };
+
   const filteredFiles = files.filter((f) =>
     !searchQuery || f.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -184,16 +215,28 @@ export default function GoogleObjectStorage() {
                     <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
                   </Button>
                   {(activeTab === "audio" || activeTab === "video") && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleDownloadSample(activeTab)}
-                      disabled={downloadingSample}
-                      className="flex items-center gap-2"
-                    >
-                      <Download className="h-4 w-4" />
-                      {downloadingSample ? "Downloading..." : `Sample ${activeTab === "audio" ? "Audio" : "Video"}`}
-                    </Button>
+                    <>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleUploadSample(activeTab)}
+                        disabled={uploading}
+                        className="flex items-center gap-2"
+                      >
+                        <Upload className="h-4 w-4" />
+                        {uploading ? "Uploading..." : `Upload Sample ${activeTab === "audio" ? "Audio" : "Video"}`}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleDownloadSample(activeTab)}
+                        disabled={downloadingSample}
+                        className="flex items-center gap-2"
+                      >
+                        <Download className="h-4 w-4" />
+                        {downloadingSample ? "Downloading..." : `Download Sample ${activeTab === "audio" ? "Audio" : "Video"}`}
+                      </Button>
+                    </>
                   )}
                   <Button
                     size="sm"

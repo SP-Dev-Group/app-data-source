@@ -87,7 +87,7 @@ export default function GoogleSheetsManualSheetId() {
           {addingSample ? "Adding..." : "Add Sample"}
         </Button>
       </div>
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-3xl mx-auto mr-48">
 
         {/* Header */}
         <div className="flex items-center mb-8">

@@ -107,19 +107,24 @@ export default function GoogleObjectStorage() {
 
   const handleAudioClick = async (file) => {
     setError("");
+    console.log("Clicking audio file:", file.name, file.id);
     try {
       const res = await base44.functions.invoke("driveGetAudioStream", { fileId: file.id });
+      console.log("Response:", res);
       if (res.data?.error) {
         setError(res.data.error);
+        console.error("Audio load error:", res.data.error);
         return;
       }
       // Create blob URL for the audio stream
       const blob = new Blob([res.data], { type: 'audio/mpeg' });
       const audioUrl = URL.createObjectURL(blob);
+      console.log("Audio URL created:", audioUrl);
       setClickedAudioUrl(audioUrl);
       setPlayingFileId(file.id);
     } catch (err) {
       setError(err.message || "Failed to load audio");
+      console.error("Audio load error:", err);
     }
   };
 
@@ -245,8 +250,13 @@ export default function GoogleObjectStorage() {
                         className="border-b last:border-0 hover:bg-muted/10 cursor-pointer"
                         onMouseEnter={() => activeTab === "images" && f.thumbnailLink && setHoveredImageUrl(f.thumbnailLink)}
                         onMouseLeave={() => setHoveredImageUrl(null)}
-                        onClick={() => {
-                          if (activeTab === "images" && f.thumbnailLink) setClickedImageUrl(f.thumbnailLink);
+                        onClick={(e) => {
+                          // Prevent triggering when clicking buttons
+                          if (e.target.closest('button') || e.target.closest('a')) return;
+                          console.log("Row clicked:", f.name, f.id, "Tab:", activeTab);
+                          if (activeTab === "images" && f.thumbnailLink) {
+                            setClickedImageUrl(f.thumbnailLink);
+                          }
                           if (activeTab === "audio" && f.id) {
                             handleAudioClick(f);
                           }
@@ -268,7 +278,10 @@ export default function GoogleObjectStorage() {
                               variant="ghost"
                               size="icon"
                               className="h-7 w-7 text-destructive hover:text-destructive"
-                              onClick={() => handleDelete(f.id)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDelete(f.id);
+                              }}
                             >
                               <Trash2 className="h-3.5 w-3.5" />
                             </Button>

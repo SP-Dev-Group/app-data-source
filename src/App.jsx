@@ -23,6 +23,7 @@ import GoogleSQL from './pages/GoogleSQL';
 import GoogleObjectStorage from './pages/GoogleObjectStorage';
 import AzureMenu from './pages/AzureMenu';
 import Base44Menu from './pages/Base44Menu';
+import ContractorsReplica from './pages/ContractorsReplica';
 
 
 const AuthenticatedApp = () => {
@@ -68,6 +69,7 @@ const AuthenticatedApp = () => {
       <Route path="/googleobjectstorage" element={<GoogleObjectStorage />} />
       <Route path="/azuremenu" element={<AzureMenu />} />
       <Route path="/base44menu" element={<Base44Menu />} />
+      <Route path="/contractorsreplica" element={<ContractorsReplica />} />
 
       <Route path="*" element={<PageNotFound />} />
     </Routes>

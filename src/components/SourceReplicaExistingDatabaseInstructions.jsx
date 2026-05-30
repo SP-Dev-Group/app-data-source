@@ -140,75 +140,8 @@ export default function SourceReplicaExistingDatabaseInstructions() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-base">Instructions for Creating Source-Replica with Existing Databases</DialogTitle>
+            <DialogTitle className="text-base">Source-Replica: Existing Databases</DialogTitle>
           </DialogHeader>
-
-          <div className="space-y-5 text-sm mt-2">
-            <p className="text-xs text-muted-foreground italic">
-              In this setup, the source app pushes data directly to the replica app's entity using the Base44 SDK whenever a record changes.
-            </p>
-
-            {/* Source App */}
-            <Section title="SOURCE APP INSTRUCTIONS">
-              <div className="grid grid-cols-3 gap-2 text-xs bg-muted/40 rounded p-2 mb-1">
-                <div><span className="text-muted-foreground">Entity:</span> <code className="font-mono">DataReplicaLive</code></div>
-                <div><span className="text-muted-foreground">Function:</span> <code className="font-mono">syncToSourceListener</code></div>
-                <div><span className="text-muted-foreground">Automation:</span> none</div>
-              </div>
-              <div className="space-y-2">
-                <Step num="1">
-                  In this, the source app, use the <strong>existing</strong> entity named {<Blank />} with fields: <code className="font-mono bg-muted px-1 rounded">unique_id</code> (string, required) and all other existing fields.
-                </Step>
-                <Step num="2">
-                  In this, the source app, create a backend function named <code className="font-mono bg-muted px-1 rounded">pushToReplica</code> using the code snippet below. Update <code className="font-mono bg-muted px-1 rounded">REPLICA_APP_ID</code> to match your replica app's ID.
-                </Step>
-                <CopyBlock code={SOURCE_FUNCTION_CODE} />
-                <Step num="3">
-                  In this app, the source app, create an Entity Automation — Entity: <Blank /> | Events: create, update | Function: <code className="font-mono bg-muted px-1 rounded">pushToReplica</code>
-                </Step>
-                <Step num="4">
-                  No setup needed on the replica app beyond having the <code className="font-mono bg-muted px-1 rounded">DataReplicaLive</code> entity and <code className="font-mono bg-muted px-1 rounded">syncToSourceListener</code> function ready (see Replica Instructions below).
-                </Step>
-                <Step num="5">
-                  No secrets needed — the Base44 SDK handles cross-app authentication via service role.
-                </Step>
-                <div className="bg-amber-50 border border-amber-200 rounded p-2 text-xs text-amber-800 font-mono">
-                  🔑 REPLICA APP ID: <span className="inline-block w-40 border-b border-amber-400 align-bottom"></span>
-                  <p className="text-amber-600 font-sans mt-1">(Reference this ID in communications about this sync)</p>
-                </div>
-              </div>
-            </Section>
-
-            {/* Replica App */}
-            <Section title="REPLICA APP INSTRUCTIONS">
-              <p className="text-xs text-muted-foreground">This replica app receives live pushes directly from the source app. Follow these steps to replicate this setup in a new app.</p>
-              <div className="space-y-2">
-                <Step num="1">
-                  Create a backend function named <code className="font-mono bg-muted px-1 rounded">syncToSourceListener</code> — use the code snippet below.
-                </Step>
-                <div className="text-xs text-muted-foreground px-7 italic">Replace <code className="font-mono bg-muted px-1 rounded">{"{ db }"}</code> with your existing entity name.</div>
-                <CopyBlock code={REPLICA_FUNCTION_CODE} />
-                <Step num="2">
-                  Use the <strong>existing</strong> entity named <Blank /> with fields: <code className="font-mono bg-muted px-1 rounded">unique_id</code> (string, required) and all other fields.
-                </Step>
-                <Step num="3">
-                  No automation needed on the replica side — the source app calls <code className="font-mono bg-muted px-1 rounded">syncToSourceListener</code> directly via the Base44 SDK.
-                </Step>
-                <Step num="4">
-                  In the source app, set up the <code className="font-mono bg-muted px-1 rounded">pushToReplica</code> function and entity automation pointing to this replica app (see Source Instructions above).
-                </Step>
-                <Step num="5">
-                  In the page that displays the table, add the frontend subscription snippet below — this makes the table auto-refresh live whenever the entity changes.
-                </Step>
-                <div className="text-xs text-muted-foreground px-7 italic">Replace <code className="font-mono bg-muted px-1 rounded">{"{ db }"}</code> with your existing entity name.</div>
-                <CopyBlock code={FRONTEND_SUBSCRIPTION_CODE} />
-                <div className="bg-amber-50 border border-amber-200 rounded p-2 text-xs text-amber-800 font-mono">
-                  🔑🔑 REPLICA APP ID: <span className="inline-block w-40 border-b border-amber-400 align-bottom"></span>
-                  <p className="text-amber-600 font-sans mt-1">(This is the ID referenced in source code communications)</p>
-                </div>
-              </div>
-            </Section>
-          </div>
         </DialogContent>
       </Dialog>
     </>

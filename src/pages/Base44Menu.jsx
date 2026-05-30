@@ -65,9 +65,6 @@ export default function Base44Menu() {
         <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white" onClick={() => navigate("/base44agents")}>
           AI Agents
         </Button>
-        <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white" onClick={() => navigate("/contractorsreplica")}>
-          Contractors Replica
-        </Button>
       </motion.div>
     </div>
   );

@@ -1,26 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useState } from "react";
-import { DatabaseZap } from "lucide-react";
+import { DatabaseZap, Copy, Check } from "lucide-react";
 
-export default function SourceReplicaExistingDatabaseInstructions() {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <>
-      <Button variant="outline" size="sm" onClick={() => setOpen(true)} className="flex items-center gap-2 text-xs h-8 justify-start">
-        <DatabaseZap className="h-3 w-3" />
-        Source-Replica: Existing Databases
-      </Button>
-
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-lg font-bold">Source-Replica: Existing Databases</DialogTitle>
-          </DialogHeader>
-
-          <div className="space-y-4 text-xs mt-4 whitespace-pre-wrap font-mono leading-relaxed text-foreground">
-{`INSTRUCTIONS FOR CREATING SOURCE REPLICA WITH 
+const instructionContent = `INSTRUCTIONS FOR CREATING SOURCE REPLICA WITH 
 EXISTING DATABASES
 
 SOURCE APP INSTRUCTIONS
@@ -155,7 +138,40 @@ useEffect(() => {
   });
 
   return () => unsubscribe();
-}, [refetch]);`}
+}, [refetch]);`;
+
+export default function SourceReplicaExistingDatabaseInstructions() {
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(instructionContent);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+
+  return (
+    <>
+      <Button variant="outline" size="sm" onClick={() => setOpen(true)} className="flex items-center gap-2 text-xs h-8 justify-start">
+        <DatabaseZap className="h-3 w-3" />
+        Source-Replica: Existing Databases
+      </Button>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="flex flex-row items-center justify-between">
+            <DialogTitle className="text-lg font-bold">Source-Replica: Existing Databases</DialogTitle>
+            <button
+              onClick={handleCopy}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              title="Copy all"
+            >
+              {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+            </button>
+          </DialogHeader>
+
+          <div className="space-y-4 text-xs mt-4 whitespace-pre-wrap font-mono leading-relaxed text-foreground">
+            {instructionContent}
           </div>
         </DialogContent>
       </Dialog>

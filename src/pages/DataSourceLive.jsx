@@ -9,6 +9,7 @@ import DataSourceLiveErrorLogs from "@/components/DataSourceLiveErrorLogs";
 import { Copy, Plus, ScrollText, Pencil, Trash2, Check, X, Archive } from "lucide-react";
 import DataSourceLiveArchiveViewer from "@/components/DataSourceLiveArchiveViewer";
 import PageMeta from "@/components/PageMeta";
+import SourceReplicaNewDatabaseInstructions from "@/components/SourceReplicaNewDatabaseInstructions";
 
 const logError = (source, error) => {
   base44.entities.DataSourceLiveErrorLog.create({
@@ -232,6 +233,7 @@ export default function DataSourceLive() {
             <Archive className="w-4 h-4" />
             Archive
           </Button>
+          <SourceReplicaNewDatabaseInstructions />
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ SOURCE APP INSTRUCTIONS
 
 In this app, the source app, data is pushed directly to the replica app's entity using the Base44 SDK whenever a record changes.
 
-Entity: DataReplica"  "Live
+Entity: {DataReplica"  "Live}
 Function: sync"   "ToSourceListener
 Automation: none
 Menu: Source Instructions
@@ -58,16 +58,16 @@ Deno.serve(async (req) => {
       serviceRole: true 
     });
 
-    const existing = await replicaClient.entities.DataReplica"  "Live.filter({ 
+    const existing = await replicaClient.entities.{DataReplica"  "Live}.filter({ 
       unique_id: record.unique_id || record.id 
     });
 
     if (existing && existing.length > 0) {
-      await replicaClient.entities.DataReplica"  "Live.update(existing[0].id, {
+      await replicaClient.entities.{DataReplica"  "Live}.update(existing[0].id, {
         name: record.name,
       });
     } else {
-      await replicaClient.entities.DataReplica"  "Live.create({
+      await replicaClient.entities.{DataReplica"  "Live}.create({
         unique_id: record.unique_id || record.id,
         name: record.name,
       });
@@ -171,7 +171,11 @@ export default function SourceReplicaExistingDatabaseInstructions() {
           </DialogHeader>
 
           <div className="space-y-4 text-xs mt-4 whitespace-pre-wrap font-mono leading-relaxed text-foreground">
-            {instructionContent}
+            {instructionContent.split(/(\{DataReplica"  "Live\})/g).map((part, idx) => 
+              part === '{DataReplica"  "Live}' ? 
+                <span key={idx} className="text-green-600 font-semibold">{part}</span> : 
+                <span key={idx}>{part}</span>
+            )}
           </div>
         </DialogContent>
       </Dialog>

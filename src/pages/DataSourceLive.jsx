@@ -10,6 +10,7 @@ import { Copy, Plus, ScrollText, Pencil, Trash2, Check, X, Archive } from "lucid
 import DataSourceLiveArchiveViewer from "@/components/DataSourceLiveArchiveViewer";
 import PageMeta from "@/components/PageMeta";
 import SourceReplicaNewDatabaseInstructions from "@/components/SourceReplicaNewDatabaseInstructions";
+import SourceReplicaExistingDatabaseInstructions from "@/components/SourceReplicaExistingDatabaseInstructions";
 
 const logError = (source, error) => {
   base44.entities.DataSourceLiveErrorLog.create({
@@ -234,6 +235,7 @@ export default function DataSourceLive() {
             Archive
           </Button>
           <SourceReplicaNewDatabaseInstructions />
+          <SourceReplicaExistingDatabaseInstructions />
         </div>
       </div>
     </div>

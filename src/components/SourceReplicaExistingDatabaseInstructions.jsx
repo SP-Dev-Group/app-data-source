@@ -1,12 +1,62 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useState } from "react";
-import { DatabaseZap, Copy, Check } from "lucide-react";
+import { DatabaseZap } from "lucide-react";
 
-const SOURCE_FUNCTION_CODE = `import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+export default function SourceReplicaExistingDatabaseInstructions() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button variant="outline" size="sm" onClick={() => setOpen(true)} className="flex items-center gap-2 text-xs h-8 justify-start">
+        <DatabaseZap className="h-3 w-3" />
+        Source-Replica: Existing Databases
+      </Button>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-bold">Source-Replica: Existing Databases</DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4 text-xs mt-4 whitespace-pre-wrap font-mono leading-relaxed text-foreground">
+{`INSTRUCTIONS FOR CREATING SOURCE REPLICA WITH 
+EXISTING DATABASES
+
+SOURCE APP INSTRUCTIONS
+
+In this app, the source app, data is pushed directly to the replica app's entity using the Base44 SDK whenever a record changes.
+
+Entity: DataReplica"  "Live
+Function: sync"   "ToSourceListener
+Automation: none
+Menu: Source Instructions
+
+• Step 1: 
+In this, the source app, use the existing entity named {  }  with fields: unique_id (string, required) and all other existing fields..
+• Step 2: In this, the source app, create a backend function named {push"  "ToReplica} using the code snippet below. In this app, source app, update {REPLICA_"  "_APP_ID} to match your replica app's ID.
+
+
+• Step 3: Strike out whichever is not appropriate:In this app, the source app, create an Entity Automation — Entity: {   } | Events: create, update | Function: {push"  "ToReplica}
+
+
+• Step 4: No setup needed on replica app  beyond having the {DataReplica"  "Live } entity and {sync"  "ToSourceListener} function ready (see Replica Instructions).
+
+
+.
+• Step 5: No secrets needed — the Base44 SDK handles cross-app authentication via service role.
+🔑 REPLICA APP ID: {                    }
+(Reference this ID in communications about this sync)
+
+
+
+
+THIS SCRIPT IS FOR "EXISTING" ENTITY / DATABASE
+
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 import { createClient } from 'npm:@base44/sdk@0.8.25';
 
-const REPLICA_APP_ID = "";
+const REPLICA_"  "_APP_ID = "";
 
 Deno.serve(async (req) => {
   try {
@@ -21,20 +71,20 @@ Deno.serve(async (req) => {
     const record = payload.data || payload;
 
     const replicaClient = createClient({ 
-      appId: REPLICA_APP_ID, 
+      appId: REPLICA_"  "_APP_ID, 
       serviceRole: true 
     });
 
-    const existing = await replicaClient.entities.DataReplicaLive.filter({ 
+    const existing = await replicaClient.entities.DataReplica"  "Live.filter({ 
       unique_id: record.unique_id || record.id 
     });
 
     if (existing && existing.length > 0) {
-      await replicaClient.entities.DataReplicaLive.update(existing[0].id, {
+      await replicaClient.entities.DataReplica"  "Live.update(existing[0].id, {
         name: record.name,
       });
     } else {
-      await replicaClient.entities.DataReplicaLive.create({
+      await replicaClient.entities.DataReplica"  "Live.create({
         unique_id: record.unique_id || record.id,
         name: record.name,
       });
@@ -44,9 +94,28 @@ Deno.serve(async (req) => {
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }
-});`;
+});
 
-const REPLICA_FUNCTION_CODE = `import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+
+REPLICA APP INSTRUCTIONS
+
+Replica App Setup - Live
+This replica app receives live pushes directly from the source app. Follow these steps to replicate this setup in a new app.
+•Step 1: - Create a backend function named {sync"  "ToSourceListener} — use the code    snippet below.
+•Step 2: - Use the existing entity named {     } with fields: unique_id (string, required) and all other fields.
+•Step 3: 
+- No automation needed on the replica side — the source app calls the function {sync"   "ToSourceListener} directly via the Base44 SDK.
+•Step 4: In the source app, set up the pushToReplica function and entity automation pointing to this replica app (see Source Instructions).
+•Step 5: In the page that displays the table, add the frontend subscription snippet below — this makes the table auto-refresh live whenever the entity changes.
+🔑🔑 REPLICA APP ID: {                             }
+       (This is the ID referenced in source code communications)
+
+
+Step 1: Backend Function (syncToSourceListener)
+
+"EXISTING" Entities
+
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 Deno.serve(async (req) => {
   try {
@@ -54,16 +123,16 @@ Deno.serve(async (req) => {
     const payload = await req.json();
     const record = payload.data || payload;
 
-    const existing = await base44.entities.{ db }.filter({ 
+    const existing = await base44.entities.{"  db   "}.filter({ 
       unique_id: record.unique_id 
     });
 
     if (existing && existing.length > 0) {
-      await base44.entities.{ db }.update(existing[0].id, {
+      await base44.entities.{"  db   "}.update(existing[0].id, {
         name: record.name,
       });
     } else {
-      await base44.entities.{ db }.create({
+      await base44.entities.{"  db   "}.create({
         unique_id: record.unique_id,
         name: record.name,
       });
@@ -73,75 +142,21 @@ Deno.serve(async (req) => {
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }
-});`;
+});
 
-const FRONTEND_SUBSCRIPTION_CODE = `useEffect(() => {
-  const unsubscribe = base44.entities.{ db }.subscribe((event) => {
-    console.log(\`{ db } \${event.type}:\`, event.data);
+
+Step 5: Live Table Updates (Frontend Subscription)
+Add this code to the page component that displays the table:
+
+useEffect(() => {
+  const unsubscribe = base44.entities.{"  db   "}.subscribe((event) => {
+    console.log(\`{"  db   "} \${event.type}:\`, event.data);
     refetch();
   });
 
   return () => unsubscribe();
-}, [refetch]);`;
-
-function CopyBlock({ code }) {
-  const [copied, setCopied] = useState(false);
-  const handleCopy = () => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
-  };
-  return (
-    <div className="relative bg-slate-900 rounded-lg p-3 text-xs font-mono text-slate-200 overflow-x-auto">
-      <button
-        onClick={handleCopy}
-        className="absolute top-2 right-2 text-slate-400 hover:text-white transition-colors"
-        title="Copy"
-      >
-        {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
-      </button>
-      <pre className="whitespace-pre-wrap pr-6">{code}</pre>
-    </div>
-  );
-}
-
-function Section({ title, children }) {
-  return (
-    <div className="border border-border rounded-lg p-4 space-y-3">
-      <h3 className="font-semibold text-sm text-foreground">{title}</h3>
-      {children}
-    </div>
-  );
-}
-
-function Step({ num, children }) {
-  return (
-    <div className="flex gap-2 text-sm">
-      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold flex items-center justify-center mt-0.5">{num}</span>
-      <div className="text-muted-foreground">{children}</div>
-    </div>
-  );
-}
-
-function Blank() {
-  return <span className="inline-block w-24 border-b border-foreground align-bottom mx-1" />;
-}
-
-export default function SourceReplicaExistingDatabaseInstructions() {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <>
-      <Button variant="outline" size="sm" onClick={() => setOpen(true)} className="flex items-center gap-2 text-xs h-8 justify-start">
-        <DatabaseZap className="h-3 w-3" />
-        Source-Replica: Existing Databases
-      </Button>
-
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-base">Source-Replica: Existing Databases</DialogTitle>
-          </DialogHeader>
+}, [refetch]);`}
+          </div>
         </DialogContent>
       </Dialog>
     </>

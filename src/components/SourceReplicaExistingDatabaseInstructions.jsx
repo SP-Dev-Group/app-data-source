@@ -184,7 +184,9 @@ export default function SourceReplicaExistingDatabaseInstructions() {
                 <span key={idx} className="text-pink-600 font-semibold">{part}</span> :
               part === 'value here' ?
                 <span key={idx} className="text-red-600 font-semibold">{part}</span> :
-              (part === 'SourceEntityName' || part === 'REPLICA_"  "_APP_ID' || part === 'unique_id') ? 
+              part === 'REPLICA_"  "_APP_ID' ?
+                <span key={idx} className="text-red-600 font-semibold">{part}</span> :
+              (part === 'SourceEntityName' || part === 'unique_id') ? 
                 <span key={idx} className="text-green-600 font-semibold">{part}</span> : 
                 <span key={idx}>{part}</span>
             )}

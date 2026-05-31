@@ -488,7 +488,35 @@ ${columnFields}      });
             <Dialog open={replicaPopupOpen} onOpenChange={setReplicaPopupOpen}>
               <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle className="text-blue-600">REPLICA</DialogTitle>
+                  <div className="flex items-center justify-between">
+                    <DialogTitle className="text-blue-600">REPLICA</DialogTitle>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        const replicaContent = `REPLICA APP INSTRUCTIONS
+========================
+Step 1: Create backend function ${form.sync_function_name}
+Step 2: Use entity ${form.replica_entity_name} with fields: unique_id (string, required), column1, column2, column3, column4, column5
+Step 3: No automation needed on replica side
+Step 4: In source app, set up ${form.push_function_name} function and entity automation
+Step 5: Add frontend subscription to table page
+
+Step 1: Backend Function (${form.sync_function_name})
+${generateReplicaCode(form.replica_entity_name)}
+
+Step 5: Live Table Updates (Frontend Subscription)
+${generateSubscriptionCode(form.replica_entity_name)}`;
+                        navigator.clipboard.writeText(replicaContent);
+                        setCopiedAll(true);
+                        setTimeout(() => setCopiedAll(false), 2000);
+                      }}
+                      className="h-7 text-xs px-2"
+                    >
+                      <ClipboardCopy className="w-3 h-3 mr-1" />
+                      {copiedAll ? "Copied!" : "Copy All"}
+                    </Button>
+                  </div>
                 </DialogHeader>
                 <div className="space-y-4">
                   {/* Source Entity Schema */}

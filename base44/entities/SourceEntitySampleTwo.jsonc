@@ -1,0 +1,45 @@
+{
+  "name": "SourceEntitySampleTwo",
+  "type": "object",
+  "properties": {
+    "unique_id": {
+      "type": "string",
+      "description": "Unique identifier for the record"
+    },
+    "column1": {
+      "type": "string",
+      "description": "Column 1"
+    },
+    "column2": {
+      "type": "string",
+      "description": "Column 2"
+    },
+    "column3": {
+      "type": "string",
+      "description": "Column 3"
+    },
+    "column4": {
+      "type": "string",
+      "description": "Column 4"
+    },
+    "column5": {
+      "type": "string",
+      "description": "Column 5"
+    },
+    "column6": {
+      "type": "string",
+      "description": "Column 6"
+    },
+    "column7": {
+      "type": "string",
+      "description": "Column 7"
+    },
+    "column8": {
+      "type": "string",
+      "description": "Column 8"
+    }
+  },
+  "required": [
+    "unique_id"
+  ]
+}

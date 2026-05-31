@@ -458,13 +458,13 @@ ${columnFields}      });
                       size="sm"
                       variant="outline"
                       onClick={() => {
-                        const sourceContent = `SOURCE
+                        const sourceContent = `For this current page, use the following code to set up this app and page to receive data from a source app.
+
+SOURCE
 =====
 SOURCE APP FUNCTION: ${form.push_function_name}
 
 ${generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}
-
-For this current page, use the following code to set up this app and page to receive data from a source app.
 
 Source App Instructions
 

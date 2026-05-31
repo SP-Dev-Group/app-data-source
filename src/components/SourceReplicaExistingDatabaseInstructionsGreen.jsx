@@ -438,20 +438,7 @@ ${columnFields}      });
           {/* Form */}
           <div className="border rounded-lg p-3 space-y-3">
             <div className="flex items-center justify-between mb-2">
-              <div className="flex gap-8">
-                <button
-                  onClick={() => setSourcePopupOpen(true)}
-                  className="text-sm font-bold text-green-600 uppercase tracking-wide px-3 py-1 rounded border border-green-600 hover:bg-green-50 transition-colors cursor-pointer"
-                >
-                  SOURCE
-                </button>
-                <button
-                  onClick={() => setReplicaPopupOpen(true)}
-                  className="text-sm font-bold text-blue-600 uppercase tracking-wide px-3 py-1 rounded border border-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
-                >
-                  REPLICA
-                </button>
-              </div>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Config Fields</p>
               <Button
                 size="sm"
                 variant="outline"
@@ -626,6 +613,25 @@ ${columnFields}      });
             >
               {saved ? <><Check className="w-3 h-3 mr-1 text-green-300" /> Saved!</> : saving ? "Saving..." : <><Save className="w-3 h-3 mr-1" /> Save Config</>}
             </Button>
+
+            {/* Popup Buttons Box */}
+            <div className="border rounded-lg p-3 bg-muted/20">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">View Instructions</p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setSourcePopupOpen(true)}
+                  className="flex-1 text-sm font-bold text-green-600 uppercase tracking-wide px-3 py-2 rounded border border-green-600 hover:bg-green-50 transition-colors cursor-pointer"
+                >
+                  SOURCE
+                </button>
+                <button
+                  onClick={() => setReplicaPopupOpen(true)}
+                  className="flex-1 text-sm font-bold text-blue-600 uppercase tracking-wide px-3 py-2 rounded border border-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
+                >
+                  REPLICA
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* Copy Reference Panel */}

@@ -33,7 +33,7 @@ No setup needed on replica app  beyond having the ReplicaEntityName entity and s
 
 • Step 5:
 No secrets needed — the Base44 SDK handles cross-app authentication via service role.
-🔑 REPLICA APP ID: {                    }
+🔑 REPLICA APP ID: { value-here                   }
 (Reference this ID in communications about this sync)
 
 

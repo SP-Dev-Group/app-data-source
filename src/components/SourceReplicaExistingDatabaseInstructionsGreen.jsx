@@ -619,15 +619,52 @@ ${columnFields}      });
             <CopyField label="Replica App ID" value={form.replica_app_id} />
           </div>
 
-          {/* Source Entity Schema */}
-          <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
-            <p className="text-xs font-bold text-blue-600 tracking-wide mb-2">REPLICA</p>
-            <p className="text-xs font-semibold text-muted-foreground tracking-wide">Source Entity Schema: {form.source_entity_name}</p>
-            <div className="text-[10px] text-muted-foreground">Required fields for entity: {form.source_entity_name}</div>
-            <p className="text-xs bg-blue-50 border border-blue-200 rounded p-2 text-blue-800 whitespace-normal break-words">
-              <strong>Instruction:</strong> In this Replica app, create entity using the provided schema from Source App and name it <code className="bg-blue-100 px-1 rounded">{form.replica_entity_name}</code>
-            </p>
-            <pre className="bg-black text-blue-400 p-3 rounded text-[10px] overflow-x-auto">
+          {/* SOURCE Section */}
+          <div className="space-y-3">
+            <p className="text-xs font-bold text-green-600 tracking-wide">SOURCE</p>
+            
+            {/* Source App Code */}
+            <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
+              <p className="text-xs font-semibold text-muted-foreground tracking-wide">SOURCE APP FUNCTION: {form.push_function_name}</p>
+              <div className="text-[10px] text-muted-foreground">Code generated from your config: {form.project_name}</div>
+              <pre className="bg-black text-green-400 p-3 rounded text-[10px] overflow-x-auto max-h-96 overflow-y-auto">
+                {generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}
+              </pre>
+            </div>
+
+            {/* Source App Instructions */}
+            <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source App Instructions</p>
+              <div className="text-xs space-y-2">
+                <p><strong>Step 1:</strong> Create backend function <code className="bg-black text-green-400 px-1 rounded">{form.sync_function_name}</code></p>
+                <p><strong>Step 2:</strong> Use entity <code className="bg-black text-green-400 px-1 rounded">{form.replica_entity_name}</code> with fields: unique_id (string, required), column1, column2, column3, column4, column5</p>
+                <p><strong>Step 3:</strong> No automation needed on replica side</p>
+                <p><strong>Step 4:</strong> In source app, set up {form.push_function_name} function and entity automation</p>
+                <p><strong>Step 5:</strong> Add frontend subscription to table page</p>
+                <p className="text-red-500 font-semibold">🔑🔑 REPLICA APP ID: {form.replica_app_id}</p>
+              </div>
+              
+              <div className="mt-3">
+                <p className="text-xs font-semibold text-muted-foreground mb-2">Step 1: Backend Function ({form.sync_function_name})</p>
+                <pre className="bg-black text-green-400 p-3 rounded text-[10px] overflow-x-auto max-h-96 overflow-y-auto">
+                  {generateReplicaCode(form.replica_entity_name)}
+                </pre>
+              </div>
+            </div>
+          </div>
+
+          {/* REPLICA Section */}
+          <div className="space-y-3 mt-4">
+            <p className="text-xs font-bold text-blue-600 tracking-wide">REPLICA</p>
+            
+            {/* Source Entity Schema */}
+            <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
+              <p className="text-xs font-semibold text-muted-foreground tracking-wide">Source Entity Schema: {form.source_entity_name}</p>
+              <div className="text-[10px] text-muted-foreground">Required fields for entity: {form.source_entity_name}</div>
+              <p className="text-xs bg-blue-50 border border-blue-200 rounded p-2 text-blue-800 whitespace-normal break-words">
+                <strong>Instruction:</strong> In this Replica app, create entity using the provided schema from Source App and name it <code className="bg-blue-100 px-1 rounded">{form.replica_entity_name}</code>
+              </p>
+              <pre className="bg-black text-blue-400 p-3 rounded text-[10px] overflow-x-auto">
 {`{
   "unique_id": "string (required)",
   "column1": "string",
@@ -639,41 +676,11 @@ ${columnFields}      });
   "column7": "string",
   "column8": "string",` : ""}
 }`}
-            </pre>
-          </div>
-
-          {/* Source App Code */}
-          <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
-            <p className="text-xs font-bold text-green-600 tracking-wide mb-2">SOURCE</p>
-            <p className="text-xs font-semibold text-muted-foreground tracking-wide">SOURCE APP FUNCTION: {form.push_function_name}</p>
-            <div className="text-[10px] text-muted-foreground">Code generated from your config: {form.project_name}</div>
-            <pre className="bg-black text-green-400 p-3 rounded text-[10px] overflow-x-auto max-h-96 overflow-y-auto">
-              {generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}
-            </pre>
-          </div>
-
-          {/* Source App Instructions */}
-          <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
-            <p className="text-xs font-bold text-green-600 tracking-wide mb-2">SOURCE</p>
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source App Instructions</p>
-            <div className="text-xs space-y-2">
-              <p><strong>Step 1:</strong> Create backend function <code className="bg-black text-green-400 px-1 rounded">{form.sync_function_name}</code></p>
-              <p><strong>Step 2:</strong> Use entity <code className="bg-black text-green-400 px-1 rounded">{form.replica_entity_name}</code> with fields: unique_id (string, required), column1, column2, column3, column4, column5</p>
-              <p><strong>Step 3:</strong> No automation needed on replica side</p>
-              <p><strong>Step 4:</strong> In source app, set up {form.push_function_name} function and entity automation</p>
-              <p><strong>Step 5:</strong> Add frontend subscription to table page</p>
-              <p className="text-red-500 font-semibold">🔑🔑 REPLICA APP ID: {form.replica_app_id}</p>
-            </div>
-            
-            <div className="mt-3">
-              <p className="text-xs font-semibold text-muted-foreground mb-2">Step 1: Backend Function ({form.sync_function_name})</p>
-              <pre className="bg-black text-green-400 p-3 rounded text-[10px] overflow-x-auto max-h-96 overflow-y-auto">
-                {generateReplicaCode(form.replica_entity_name)}
               </pre>
             </div>
 
-            <div className="mt-3">
-              <p className="text-xs font-bold text-blue-600 tracking-wide mb-2">REPLICA</p>
+            {/* REPLICA APP INSTRUCTION Step 5 */}
+            <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
               <p className="text-xs font-semibold text-muted-foreground mb-2">REPLICA APP INSTRUCTION Step 5: Live Table Updates (Frontend Subscription)</p>
               <p className="text-xs bg-blue-50 border border-blue-200 rounded p-2 text-blue-800">
                 <strong>Instruction:</strong> For any page which uses this entity (<code className="bg-blue-100 px-1 rounded">{form.replica_entity_name}</code>), add this frontend subscription code to the page containing the table / data for the {form.replica_entity_name}.

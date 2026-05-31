@@ -418,7 +418,40 @@ ${columnFields}      });
               </Button>
             </div>
 
-            {fields.map(({ label, key, editable }) => (
+            {fields.slice(0, 5).map(({ label, key, editable }) => (
+              <div key={key} className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground w-40 shrink-0">{label}</span>
+                <Input
+                  value={form[key]}
+                  onChange={(e) => set(key, e.target.value)}
+                  className="h-7 text-xs font-mono flex-1"
+                  disabled={editable === false || editingField !== key}
+                />
+                {editable !== false && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setEditingField(editingField === key ? null : key)}
+                    className="h-7 text-xs px-2 shrink-0"
+                  >
+                    <Pencil className="w-3 h-3" />
+                  </Button>
+                )}
+              </div>
+            ))}
+
+            {/* Replica App Configuration Section */}
+            <div className="border rounded-lg p-3 bg-blue-50 border-blue-200 space-y-3 mt-3">
+              <p className="text-xs font-semibold text-blue-800 uppercase tracking-wide">Replica App Configuration</p>
+              <ul className="text-[10px] text-blue-700 space-y-1 ml-4 list-disc">
+                <li>In Replica App, Dashboard / Secret create <strong>Replica Secret Name</strong></li>
+                <li>In Replica App, Dashboard / API copy the appID from the code snippet</li>
+                <li>Use the appID string for the <strong>Replica App ID</strong></li>
+                <li>Paste the appID here in the <strong>Replica App ID</strong> form</li>
+              </ul>
+            </div>
+
+            {fields.slice(5).map(({ label, key, editable }) => (
               <div key={key} className="flex items-center gap-2">
                 <span className="text-xs text-muted-foreground w-40 shrink-0">{label}</span>
                 <Input

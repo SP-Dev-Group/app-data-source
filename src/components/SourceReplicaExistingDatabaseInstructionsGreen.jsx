@@ -36,6 +36,7 @@ function CopyField({ label, value }) {
 export default function SourceReplicaExistingDatabaseInstructionsGreen() {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(DEFAULTS);
+  const [loadedRecordId, setLoadedRecordId] = useState(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -48,7 +49,11 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
   const handleSave = async () => {
     if (!form.project_name.trim()) return;
     setSaving(true);
-    await base44.entities.SourceReplicaConfig.create({ ...form });
+    if (loadedRecordId) {
+      await base44.entities.SourceReplicaConfig.update(loadedRecordId, { ...form });
+    } else {
+      await base44.entities.SourceReplicaConfig.create({ ...form });
+    }
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
@@ -77,6 +82,7 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
       secret_name: record.secret_name || DEFAULTS.secret_name,
       replica_app_id: record.replica_app_id || DEFAULTS.replica_app_id,
     });
+    setLoadedRecordId(record.id);
     setShowResults(false);
     setSearchTerm("");
   };

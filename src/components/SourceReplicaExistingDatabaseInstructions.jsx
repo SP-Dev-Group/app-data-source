@@ -187,7 +187,7 @@ export default function SourceReplicaExistingDatabaseInstructions() {
               part === 'REPLICA_"  "_APP_ID' ?
                 <span key={idx} className="text-red-600 font-semibold">{part}</span> :
               (part === 'SourceEntityName' || part === 'unique_id') ? 
-                <span key={idx} className="text-green-600 font-semibold">{part}</span> : 
+                <span key={idx} className="text-green-400 font-semibold">{part}</span> : 
                 <span key={idx}>{part}</span>
             )}
           </div>

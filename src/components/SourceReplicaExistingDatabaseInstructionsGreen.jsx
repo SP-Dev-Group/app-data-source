@@ -664,9 +664,9 @@ ${columnFields}      });
             </pre>
           </div>
 
-          {/* Replica App Instructions */}
+          {/* Source App Instructions */}
           <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Replica App Instructions</p>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source App Instructions</p>
             <div className="text-xs space-y-2">
               <p><strong>Step 1:</strong> Create backend function <code className="bg-black text-green-400 px-1 rounded">{form.sync_function_name}</code></p>
               <p><strong>Step 2:</strong> Use entity <code className="bg-black text-green-400 px-1 rounded">{form.replica_entity_name}</code> with fields: unique_id (string, required), column1, column2, column3, column4, column5</p>

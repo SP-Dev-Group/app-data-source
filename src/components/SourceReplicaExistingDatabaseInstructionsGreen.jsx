@@ -391,7 +391,7 @@ ${columnFields}      });
             <div className="flex items-center justify-between mb-2">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Search Saved Configs</p>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-white bg-red-500 px-3 py-1 rounded">Step 1</span>
+                <span className="text-xs font-bold text-white bg-red-500 px-3 py-1 rounded">Step 1: Create New</span>
                 <Button size="sm" variant="outline" onClick={handleAdd} className="h-7 text-xs px-2">
                   <Save className="w-3 h-3 mr-1" /> Add New
                 </Button>

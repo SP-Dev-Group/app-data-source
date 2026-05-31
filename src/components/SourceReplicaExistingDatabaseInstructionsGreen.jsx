@@ -124,7 +124,33 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
     { label: "Replica App ID", key: "replica_app_id" },
   ];
 
-  const generateSourceCode = (entityName, secretName, appId) => `import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+  // Map entity names to their column count
+  const getEntityColumns = (entityName) => {
+    const entityColumnMap = {
+      "ReplicaEntitySample": 5,
+      "ReplicaEntitySampleTwo": 8,
+      "SourceEntitySample": 5,
+      "SourceEntitySampleTwo": 8,
+    };
+    // Default to 8 if not found, or try to detect from entity name
+    if (entityName.includes("Two")) return 8;
+    if (entityName.includes("One") || (entityName.includes("Sample") && !entityName.includes("Two"))) return 5;
+    return entityColumnMap[entityName] || 8;
+  };
+
+  const generateColumnFields = (entityName, indent = 8) => {
+    const columnCount = getEntityColumns(entityName);
+    const indentStr = " ".repeat(indent);
+    let fields = "";
+    for (let i = 1; i <= columnCount; i++) {
+      fields += `${indentStr}column${i}: record.column${i},\n`;
+    }
+    return fields;
+  };
+
+  const generateSourceCode = (entityName, secretName, appId) => {
+    const columnFields = generateColumnFields(entityName, 8);
+    return `import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 import { createClient } from 'npm:@base44/sdk@0.8.25';
 
 const ${secretName} = "${appId || ''}";
@@ -153,27 +179,11 @@ Deno.serve(async (req) => {
     if (existing && existing.length > 0) {
       await replicaClient.entities.${entityName}.update(existing[0].id, {
         unique_id: record.unique_id,
-        column1: record.column1,
-        column2: record.column2,
-        column3: record.column3,
-        column4: record.column4,
-        column5: record.column5,
-        column6: record.column6,
-        column7: record.column7,
-        column8: record.column8,
-      });
+${columnFields}      });
     } else {
       await replicaClient.entities.${entityName}.create({
         unique_id: record.unique_id,
-        column1: record.column1,
-        column2: record.column2,
-        column3: record.column3,
-        column4: record.column4,
-        column5: record.column5,
-        column6: record.column6,
-        column7: record.column7,
-        column8: record.column8,
-      });
+${columnFields}      });
     }
 
     return Response.json({ success: true });
@@ -181,8 +191,11 @@ Deno.serve(async (req) => {
     return Response.json({ error: error.message }, { status: 500 });
   }
 });`;
+  };
 
-  const generateReplicaCode = (entityName) => `import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+  const generateReplicaCode = (entityName) => {
+    const columnFields = generateColumnFields(entityName, 8);
+    return `import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 Deno.serve(async (req) => {
   try {
@@ -197,27 +210,11 @@ Deno.serve(async (req) => {
     if (existing && existing.length > 0) {
       await base44.entities.${entityName}.update(existing[0].id, {
         unique_id: record.unique_id,
-        column1: record.column1,
-        column2: record.column2,
-        column3: record.column3,
-        column4: record.column4,
-        column5: record.column5,
-        column6: record.column6,
-        column7: record.column7,
-        column8: record.column8,
-      });
+${columnFields}      });
     } else {
       await base44.entities.${entityName}.create({
         unique_id: record.unique_id,
-        column1: record.column1,
-        column2: record.column2,
-        column3: record.column3,
-        column4: record.column4,
-        column5: record.column5,
-        column6: record.column6,
-        column7: record.column7,
-        column8: record.column8,
-      });
+${columnFields}      });
     }
 
     return Response.json({ success: true });
@@ -225,6 +222,7 @@ Deno.serve(async (req) => {
     return Response.json({ error: error.message }, { status: 500 });
   }
 });`;
+  };
 
   const generateSubscriptionCode = (entityName) => `useEffect(() => {
   const unsubscribe = base44.entities.${entityName}.subscribe((event) => {

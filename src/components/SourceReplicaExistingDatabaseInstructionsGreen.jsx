@@ -47,6 +47,22 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
 
   const set = (field, value) => setForm((f) => ({ ...f, [field]: value }));
 
+  const handleAdd = () => {
+    setForm({
+      project_name: "",
+      replica_entity_name: "ReplicaEntityName",
+      source_entity_name: "SourceEntityName",
+      sync_function_name: "syncSourceEntityToSourceListener",
+      push_function_name: "pushtoReplicaEntityName",
+      secret_name: 'REPLICA_"  "_APP_ID',
+      replica_app_id: "value-here",
+    });
+    setLoadedRecordId(null);
+    setEditingField("project_name");
+    setShowResults(false);
+    setSearchTerm("");
+  };
+
   const handleSave = async () => {
     if (!form.project_name.trim()) return;
     setSaving(true);
@@ -128,7 +144,12 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
 
           {/* Search / Recall */}
           <div className="border rounded-lg p-3 bg-muted/30 space-y-2">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Search Saved Configs</p>
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Search Saved Configs</p>
+              <Button size="sm" variant="outline" onClick={handleAdd} className="h-7 text-xs px-2">
+                <Save className="w-3 h-3 mr-1" /> Add New
+              </Button>
+            </div>
             <div className="flex gap-2">
               <Input
                 placeholder="Search by config name..."

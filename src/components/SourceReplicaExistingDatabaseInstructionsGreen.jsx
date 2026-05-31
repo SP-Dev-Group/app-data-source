@@ -691,7 +691,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
               
               {/* Step 4 Sub-steps */}
               <div className="mb-3 text-[10px] text-muted-foreground space-y-1">
-                <p><strong>Step 1:</strong> Click and open <button onClick={() => setReplicaPopupOpen(true)} className="text-xs font-bold text-white uppercase tracking-wide px-2 py-0.5 rounded bg-blue-600 border border-blue-600 hover:bg-blue-700 transition-colors cursor-pointer">REPLICA</button></p>
+                <p><strong>Step 1:</strong> Click and open <button onClick={(e) => { e.stopPropagation(); setReplicaPopupOpen(true); }} className="text-xs font-bold text-white uppercase tracking-wide px-2 py-0.5 rounded bg-blue-600 border border-blue-600 hover:bg-blue-700 transition-colors cursor-pointer">REPLICA</button></p>
                 <p><strong>Step 2:</strong> Click copy the body</p>
                 <p><strong>Step 3:</strong> Open the Replica App on the page which will display the table with the data from the database entity</p>
                 <p><strong>Step 4:</strong> Paste the click copy into the chat message for the Base44 AI to do the build</p>

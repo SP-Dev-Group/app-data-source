@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState, useEffect } from "react";
-import { DatabaseZap, Copy, Check, Save, Search, X, Pencil, ClipboardCopy } from "lucide-react";
+import { DatabaseZap, Copy, Check, Save, Search, X, Pencil, ClipboardCopy, Info } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const DEFAULTS = {
@@ -86,6 +86,8 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
   const [showResults, setShowResults] = useState(true);
   const [editingField, setEditingField] = useState(null);
   const [copiedAll, setCopiedAll] = useState(false);
+  const [sourcePopupOpen, setSourcePopupOpen] = useState(false);
+  const [replicaPopupOpen, setReplicaPopupOpen] = useState(false);
 
   const set = (field, value) => {
     if (field === "database_root_name") {
@@ -434,26 +436,20 @@ ${columnFields}      });
           {/* Form */}
           <div className="border rounded-lg p-3 space-y-3">
             <div className="flex items-center justify-between mb-2">
-              <TooltipProvider>
-                <div className="flex gap-8">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <p className="text-sm font-bold text-green-600 uppercase tracking-wide px-3 py-1 rounded border border-green-600 cursor-help">SOURCE</p>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="text-xs">&nbsp;</p>
-                    </TooltipContent>
-                  </Tooltip>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <p className="text-sm font-bold text-blue-600 uppercase tracking-wide px-3 py-1 rounded border border-blue-600 cursor-help">REPLICA</p>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="text-xs">&nbsp;</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
-              </TooltipProvider>
+              <div className="flex gap-8">
+                <button
+                  onClick={() => setSourcePopupOpen(true)}
+                  className="text-sm font-bold text-green-600 uppercase tracking-wide px-3 py-1 rounded border border-green-600 hover:bg-green-50 transition-colors cursor-pointer"
+                >
+                  SOURCE
+                </button>
+                <button
+                  onClick={() => setReplicaPopupOpen(true)}
+                  className="text-sm font-bold text-blue-600 uppercase tracking-wide px-3 py-1 rounded border border-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
+                >
+                  REPLICA
+                </button>
+              </div>
               <Button
                 size="sm"
                 variant="outline"
@@ -465,6 +461,24 @@ ${columnFields}      });
                 {copiedAll ? "Copied!" : "Copy All"}
               </Button>
             </div>
+
+            {/* Source Popup Dialog */}
+            <Dialog open={sourcePopupOpen} onOpenChange={setSourcePopupOpen}>
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="text-green-600">SOURCE</DialogTitle>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
+
+            {/* Replica Popup Dialog */}
+            <Dialog open={replicaPopupOpen} onOpenChange={setReplicaPopupOpen}>
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="text-blue-600">REPLICA</DialogTitle>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
             <div className="flex items-center justify-between">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Config Fields</p>
             </div>

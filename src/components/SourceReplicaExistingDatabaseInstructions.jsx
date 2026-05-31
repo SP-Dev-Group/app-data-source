@@ -19,10 +19,10 @@ Menu: Source Instructions
 
 • Step 1: 
 In this, the source app, use the existing entity named SourceEntityName with fields: unique_id (string, required) and all other existing fields..
-• Step 2: In this, the source app, create a backend function named push"  "ToReplica using the code snippet below. In this app, source app, update REPLICA_"  "_APP_ID to match your replica app's ID.
+• Step 2: In this, the source app, create a backend function named pushtoReplicaEntityName using the code snippet below. In this app, source app, update REPLICA_"  "_APP_ID to match your replica app's ID.
 
 
-• Step 3: Strike out whichever is not appropriate:In this app, the source app, create an Entity Automation — Entity: {   } | Events: create, update | Function: push"  "ToReplica
+• Step 3: Strike out whichever is not appropriate:In this app, the source app, create an Entity Automation — Entity: {   } | Events: create, update | Function: pushtoReplicaEntityName
 
 
 • Step 4: No setup needed on replica app  beyond having the ReplicaEntityName entity and syncSourceEntityToSourceListener function ready (see Replica Instructions).
@@ -90,7 +90,7 @@ This replica app receives live pushes directly from the source app. Follow these
 •Step 2: - Use the existing entity named ReplicaEntityName with fields: unique_id (string, required) and all other fields.
 •Step 3: 
 - No automation needed on the replica side — the source app calls the function syncSourceEntityToSourceListener directly via the Base44 SDK.
-•Step 4: In the source app, set up the pushToReplica function and entity automation pointing to this replica app (see Source Instructions).
+•Step 4: In the source app, set up the pushtoReplicaEntityName function and entity automation pointing to this replica app (see Source Instructions).
 •Step 5: In the page that displays the table, add the frontend subscription snippet below — this makes the table auto-refresh live whenever the entity changes.
 🔑🔑 REPLICA APP ID: {                             }
        (This is the ID referenced in source code communications)
@@ -173,8 +173,8 @@ export default function SourceReplicaExistingDatabaseInstructions() {
           </DialogHeader>
 
           <div className="space-y-4 text-xs mt-4 whitespace-pre-wrap font-mono leading-relaxed text-foreground">
-            {instructionContent.split(/(SourceEntityName|ReplicaEntityName|syncSourceEntityToSourceListener|pushtoReplicaEntityName|REPLICA_"  "_APP_ID|push"  "ToReplica|unique_id)/g).map((part, idx) => 
-              (part === 'SourceEntityName' || part === 'ReplicaEntityName' || part === 'syncSourceEntityToSourceListener' || part === 'pushtoReplicaEntityName' || part === 'REPLICA_"  "_APP_ID' || part === 'push"  "ToReplica' || part === 'unique_id') ? 
+            {instructionContent.split(/(SourceEntityName|ReplicaEntityName|syncSourceEntityToSourceListener|pushtoReplicaEntityName|REPLICA_"  "_APP_ID|unique_id)/g).map((part, idx) => 
+              (part === 'SourceEntityName' || part === 'ReplicaEntityName' || part === 'syncSourceEntityToSourceListener' || part === 'pushtoReplicaEntityName' || part === 'REPLICA_"  "_APP_ID' || part === 'unique_id') ? 
                 <span key={idx} className="text-green-600 font-semibold">{part}</span> : 
                 <span key={idx}>{part}</span>
             )}

@@ -434,8 +434,8 @@ ${columnFields}      });
           <div className="border rounded-lg p-3 space-y-3">
             <div className="flex items-center justify-between mb-2">
               <div className="flex gap-8">
-                <p className="text-sm font-bold text-green-600 uppercase tracking-wide">SOURCE</p>
-                <p className="text-sm font-bold text-blue-600 uppercase tracking-wide">REPLICA</p>
+                <p className="text-sm font-bold text-green-600 uppercase tracking-wide px-3 py-1 rounded border border-green-600">SOURCE</p>
+                <p className="text-sm font-bold text-blue-600 uppercase tracking-wide px-3 py-1 rounded border border-blue-600">REPLICA</p>
               </div>
               <Button
                 size="sm"

@@ -206,7 +206,7 @@ export default function DataSourceLive() {
         )}
           </div>
         </div>
-        <div className="w-56 border-l border-border bg-muted/20 p-4 flex flex-col gap-2 overflow-y-auto">
+        <div className="w-64 border-l border-border bg-muted/20 p-4 flex flex-col gap-2 overflow-y-auto">
           <Button variant="outline" size="sm" onClick={() => navigate("/base44menu")}>← Base44 Menu</Button>
           <DataSourceLiveInstructions />
           <PageMeta

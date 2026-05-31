@@ -589,7 +589,43 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                         {copiedAll ? "Copied!" : "Copy All"}
                       </Button>
                     </div>
-                    <p className="text-xs text-blue-700">Paste this message to the chat for the page that will host the table of data. "Use the following to create entity and page code to host the table displaying the entity".</p>
+                    <p className="text-xs text-blue-700">"Use the following to create entity and page code to host the table displaying the entity".</p>
+                  </div>
+
+                  {/* Source Entity Schema */}
+                  <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
+                    <p className="text-xs font-bold text-blue-600 tracking-wide mb-2">REPLICA</p>
+                    <p className="text-xs font-semibold text-muted-foreground tracking-wide">Source Entity Schema: {form.source_entity_name}</p>
+                    <div className="text-[10px] text-muted-foreground">Required fields for entity: {form.source_entity_name}</div>
+                    <div className="text-xs bg-blue-50 border border-blue-200 rounded p-2 text-blue-800 leading-relaxed">
+                      <strong>Instruction:</strong> In this Replica app, create entity using the provided schema from Source App and name it{' '}
+                      <span className="bg-blue-100 px-1 rounded break-words font-mono text-[10px] w-full inline-block">{form.replica_entity_name}</span>
+                    </div>
+                    <pre className="bg-black text-blue-400 p-3 rounded text-[10px] overflow-x-auto">
+{`{
+  "unique_id": "string (required)",
+  "column1": "string",
+  "column2": "string",
+  "column3": "string",
+  "column4": "string",
+  "column5": "string",${form.source_entity_name.includes("Two") ? `
+  "column6": "string",
+  "column7": "string",
+  "column8": "string",` : ""}
+}`}
+                    </pre>
+                  </div>
+
+                  {/* REPLICA APP INSTRUCTION Step 5 */}
+                  <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
+                    <p className="text-xs font-bold text-blue-600 tracking-wide mb-2">REPLICA</p>
+                    <p className="text-xs font-semibold text-muted-foreground mb-2">REPLICA APP INSTRUCTION: Live Table Updates (Frontend Subscription)</p>
+                    <p className="text-xs bg-blue-50 border border-blue-200 rounded p-2 text-blue-800">
+                      <strong>Instruction:</strong> For any page which uses this entity (<code className="bg-blue-100 px-1 rounded">{form.replica_entity_name}</code>), add this frontend subscription code to the page containing the table / data for the {form.replica_entity_name}.
+                    </p>
+                    <pre className="bg-black text-blue-400 p-3 rounded text-[10px] overflow-x-auto">
+                      {generateSubscriptionCode(form.replica_entity_name)}
+                    </pre>
                   </div>
                 </div>
               </DialogContent>

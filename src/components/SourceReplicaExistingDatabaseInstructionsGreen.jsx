@@ -536,9 +536,10 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                     <p className="text-xs font-bold text-blue-600 tracking-wide mb-2">REPLICA</p>
                     <p className="text-xs font-semibold text-muted-foreground tracking-wide">Source Entity Schema: {form.source_entity_name}</p>
                     <div className="text-[10px] text-muted-foreground">Required fields for entity: {form.source_entity_name}</div>
-                    <p className="text-xs bg-blue-50 border border-blue-200 rounded p-2 text-blue-800 whitespace-normal break-words">
-                      <strong>Instruction:</strong> In this Replica app, create entity using the provided schema from Source App and name it <code className="bg-blue-100 px-1 rounded">{form.replica_entity_name}</code>
-                    </p>
+                    <div className="text-xs bg-blue-50 border border-blue-200 rounded p-2 text-blue-800 leading-relaxed">
+                      <strong>Instruction:</strong> In this Replica app, create entity using the provided schema from Source App and name it{' '}
+                      <span className="bg-blue-100 px-1 rounded break-words font-mono text-[10px]">{form.replica_entity_name}</span>
+                    </div>
                     <pre className="bg-black text-blue-400 p-3 rounded text-[10px] overflow-x-auto">
 {`{
   "unique_id": "string (required)",
@@ -709,7 +710,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
               <div className="text-[10px] text-muted-foreground">Required fields for entity: {form.source_entity_name}</div>
               <div className="text-xs bg-blue-50 border border-blue-200 rounded p-2 text-blue-800 leading-relaxed">
                 <strong>Instruction:</strong> In this Replica app, create entity using the provided schema from Source App and name it{' '}
-                <span className="bg-blue-100 px-1 rounded break-words font-mono text-[10px]">{form.replica_entity_name}</span>
+                <span className="bg-blue-100 px-1 rounded break-words font-mono text-[10px] w-full inline-block">{form.replica_entity_name}</span>
               </div>
               <pre className="bg-black text-blue-400 p-3 rounded text-[10px] overflow-x-auto">
 {`{

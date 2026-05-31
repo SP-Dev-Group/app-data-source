@@ -733,52 +733,6 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                 <p><strong>Step 4:</strong> Paste the click copy into the chat message for the Base44 AI to do the build</p>
               </div>
               
-              {/* SOURCE Copy Instruction Box */}
-              <div className="border rounded-lg p-3 bg-green-50 border-green-200 flex items-center justify-between mb-3">
-                <p className="text-xs text-green-800 font-medium">Click and Copy this message and paste to the chat message Base44 in the Replica App</p>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => {
-                    const sourceContent = `Click and Copy this message and paste to the chat message Base44 in the Replica App
-
-For this current page, use the following code to set up this app and page to receive data from a source app.
-
-SOURCE
-=====
-SOURCE APP FUNCTION: ${form.push_function_name}
-
-${generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}
-
-Source App Instructions
-
-Step 1: Create backend function ${form.sync_function_name}
-Step 2: Use entity ${form.replica_entity_name} with fields: unique_id (string, required), column1, column2, column3, column4, column5
-Step 3: No automation needed on replica side
-Step 4: In source app, set up ${form.push_function_name} function and entity automation
-Step 5: Add frontend subscription to table page
-🔑🔑 REPLICA APP ID: ${form.replica_app_id}
-
-Step 1: Backend Function (${form.sync_function_name})
-
-${generateReplicaCode(form.replica_entity_name)}
-
-SOURCE APP INSTRUCTION: Live Table Updates (Frontend Subscription)
-
-Instruction: For any page which uses this entity (${form.replica_entity_name}), add this frontend subscription code to the page containing the table / data for the ${form.replica_entity_name}.
-
-${generateSubscriptionCode(form.replica_entity_name)}`;
-                    navigator.clipboard.writeText(sourceContent);
-                    setCopiedAll(true);
-                    setTimeout(() => setCopiedAll(false), 2000);
-                  }}
-                  className="h-7 text-xs px-2 shrink-0"
-                >
-                  <ClipboardCopy className="w-3 h-3 mr-1" />
-                  {copiedAll ? "Copied!" : "Copy"}
-                </Button>
-              </div>
-              
               <div className="flex gap-2">
                 <button
                   onClick={() => setSourcePopupOpen(true)}

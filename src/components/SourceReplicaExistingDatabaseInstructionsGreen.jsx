@@ -616,7 +616,7 @@ ${columnFields}      });
 
             {/* Popup Buttons Box */}
             <div className="border rounded-lg p-3 bg-muted/20">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">View Instructions</p>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">View and Copy Instructions</p>
               <div className="flex gap-2">
                 <button
                   onClick={() => setSourcePopupOpen(true)}

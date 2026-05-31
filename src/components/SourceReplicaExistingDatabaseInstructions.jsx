@@ -11,7 +11,7 @@ SOURCE APP INSTRUCTIONS
 In this app, the source app, data is pushed directly to the replica app's entity using the Base44 SDK whenever a record changes.
 
 Source Entity: SourceEntityName
-Entity: ReplicaEntityName
+Replica Entity: ReplicaEntityName
 Function: syncSourceEntityToSourceListener
 Function: pushtoReplicaEntityName
 Automation: none

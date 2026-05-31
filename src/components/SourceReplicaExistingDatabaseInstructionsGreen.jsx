@@ -491,7 +491,7 @@ ${columnFields}      });
                 <div className="space-y-4">
                   {/* Source Entity Schema */}
                   <div className="border rounded-lg p-3 space-y-3">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source Entity Schema: {form.source_entity_name}</p>
+                    <p className="text-xs font-semibold text-muted-foreground tracking-wide">Source Entity Schema: {form.source_entity_name}</p>
                     <div className="text-[10px] text-muted-foreground">Required fields for entity: {form.source_entity_name}</div>
                     <p className="text-xs bg-blue-50 border border-blue-200 rounded p-2 text-blue-800 whitespace-normal break-words">
                       <strong>Instruction:</strong> In this Replica app, create entity using the provided schema from Source App and name it <code className="bg-blue-100 px-1 rounded">{form.replica_entity_name}</code>
@@ -618,7 +618,7 @@ ${columnFields}      });
 
           {/* Source Entity Schema */}
           <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source Entity Schema: {form.source_entity_name}</p>
+            <p className="text-xs font-semibold text-muted-foreground tracking-wide">Source Entity Schema: {form.source_entity_name}</p>
             <div className="text-[10px] text-muted-foreground">Required fields for entity: {form.source_entity_name}</div>
             <p className="text-xs bg-blue-50 border border-blue-200 rounded p-2 text-blue-800 whitespace-normal break-words">
               <strong>Instruction:</strong> In this Replica app, create entity using the provided schema from Source App and name it <code className="bg-blue-100 px-1 rounded">{form.replica_entity_name}</code>

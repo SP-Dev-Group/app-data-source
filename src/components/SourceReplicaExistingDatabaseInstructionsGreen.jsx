@@ -722,7 +722,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
             {/* Popup Buttons Box */}
             <div className="border rounded-lg p-3 bg-muted/20">
               <div className="flex items-center justify-between mb-2">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">View and Copy Instructions</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">View and Copy REPLICA Instructions</p>
               </div>
               
               {/* Step 4 Sub-steps */}

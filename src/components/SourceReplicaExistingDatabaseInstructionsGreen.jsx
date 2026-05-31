@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
-import { DatabaseZap, Copy, Check, Save, Search, X } from "lucide-react";
+import { DatabaseZap, Copy, Check, Save, Search, X, Pencil } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const DEFAULTS = {
@@ -43,6 +43,7 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
   const [showResults, setShowResults] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
 
   const set = (field, value) => setForm((f) => ({ ...f, [field]: value }));
 
@@ -91,6 +92,7 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
     setLoadedRecordId(record.id);
     setShowResults(false);
     setSearchTerm("");
+    setIsEditing(false);
   };
 
   const fields = [
@@ -166,7 +168,19 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
 
           {/* Form */}
           <div className="border rounded-lg p-3 space-y-3">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Config Fields</p>
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Config Fields</p>
+              {!isEditing && loadedRecordId && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setIsEditing(true)}
+                  className="h-6 text-xs px-2"
+                >
+                  <Pencil className="w-3 h-3 mr-1" /> Edit
+                </Button>
+              )}
+            </div>
 
             <div className="flex items-center gap-2">
               <span className="text-xs text-muted-foreground w-40 shrink-0">Project Name <span className="text-red-500">*</span></span>
@@ -175,6 +189,7 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
                 onChange={(e) => set("project_name", e.target.value)}
                 placeholder="e.g. DataSync Project"
                 className="h-7 text-xs"
+                disabled={!isEditing}
               />
             </div>
 
@@ -185,18 +200,33 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
                   value={form[key]}
                   onChange={(e) => set(key, e.target.value)}
                   className="h-7 text-xs font-mono"
+                  disabled={!isEditing}
                 />
               </div>
             ))}
 
-            <Button
-              size="sm"
-              onClick={handleSave}
-              disabled={saving || !form.project_name.trim()}
-              className="w-full h-7 text-xs mt-2"
-            >
-              {saved ? <><Check className="w-3 h-3 mr-1 text-green-300" /> Saved!</> : saving ? "Saving..." : <><Save className="w-3 h-3 mr-1" /> Save Config</>}
-            </Button>
+            <div className="flex gap-2">
+              {isEditing && (
+                <>
+                  <Button
+                    size="sm"
+                    onClick={() => setIsEditing(false)}
+                    variant="outline"
+                    className="flex-1 h-7 text-xs"
+                  >
+                    <X className="w-3 h-3 mr-1" /> Cancel
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={handleSave}
+                    disabled={saving || !form.project_name.trim()}
+                    className="flex-1 h-7 text-xs"
+                  >
+                    {saved ? <><Check className="w-3 h-3 mr-1 text-green-300" /> Saved!</> : saving ? "Saving..." : <><Save className="w-3 h-3 mr-1" /> Save</>}
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
 
           {/* Copy Reference Panel */}

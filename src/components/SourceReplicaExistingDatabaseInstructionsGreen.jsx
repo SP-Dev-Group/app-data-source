@@ -483,7 +483,9 @@ ${columnFields}      });
             <div className="border rounded-lg p-3 bg-blue-50 border-blue-200 space-y-3 mt-3">
               <p className="text-xs font-semibold text-blue-800 uppercase tracking-wide">Replica App Configuration</p>
               <ul className="text-[10px] text-blue-700 space-y-1 ml-4 list-disc">
-                <li>In Replica App, Dashboard / Secret create <strong>Replica Secret Name</strong></li>
+                <li>Click <strong>Copy</strong> the Replica Secret Name from here</li>
+                <li>Go to the Replica App, Dashboard / Secret / Add Secret</li>
+                <li>Paste value in the <strong>Secret Name</strong> box</li>
                 <li>In Replica App, Dashboard / API copy the appID from the code snippet</li>
                 <li>Use the appID string for the <strong>Replica App ID</strong></li>
                 <li>Paste the appID here in the <strong>Replica App ID</strong> form</li>

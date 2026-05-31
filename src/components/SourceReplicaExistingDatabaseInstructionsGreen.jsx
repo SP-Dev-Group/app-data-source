@@ -13,6 +13,7 @@ const DEFAULTS = {
   push_function_name: "pushtoReplicaEntityName",
   secret_name: 'REPLICA_"  "_APP_ID',
   replica_app_id: "value-here",
+  database_root_name: "people",
 };
 
 function CopyField({ label, value }) {
@@ -57,6 +58,7 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
     const allContent = `CONFIG FIELDS
 ===============
 Project Name: ${form.project_name}
+Database Root Name: ${form.database_root_name}
 Replica Entity: ${form.replica_entity_name}
 Source Entity: ${form.source_entity_name}
 Sync Function: ${form.sync_function_name}
@@ -114,6 +116,7 @@ ${subscriptionCode}`;
       push_function_name: "pushtoReplicaEntityName",
       secret_name: 'REPLICA_"  "_APP_ID',
       replica_app_id: "value-here",
+      database_root_name: "people",
     });
     setLoadedRecordId(null);
     setEditingField("project_name");
@@ -166,6 +169,7 @@ ${subscriptionCode}`;
       push_function_name: record.push_function_name || DEFAULTS.push_function_name,
       secret_name: record.secret_name || DEFAULTS.secret_name,
       replica_app_id: record.replica_app_id || DEFAULTS.replica_app_id,
+      database_root_name: record.database_root_name || DEFAULTS.database_root_name,
     });
     setLoadedRecordId(record.id);
     setShowResults(false);
@@ -174,6 +178,7 @@ ${subscriptionCode}`;
   };
 
   const fields = [
+    { label: "Database Root Name", key: "database_root_name" },
     { label: "Replica Entity", key: "replica_entity_name" },
     { label: "Source Entity", key: "source_entity_name" },
     { label: "Sync Function", key: "sync_function_name" },
@@ -426,6 +431,7 @@ ${columnFields}      });
           {/* Copy Reference Panel */}
           <div className="border rounded-lg p-3 space-y-2 bg-muted/20">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Copy Reference Values</p>
+            <CopyField label="Database Root Name" value={form.database_root_name} />
             <CopyField label="Replica Entity" value={form.replica_entity_name} />
             <CopyField label="Source Entity" value={form.source_entity_name} />
             <CopyField label="Sync Function" value={form.sync_function_name} />

@@ -6,6 +6,10 @@
       "type": "string",
       "description": "Project name (required)"
     },
+    "database_root_name": {
+      "type": "string",
+      "description": "Database Root Name"
+    },
     "replica_entity_name": {
       "type": "string",
       "description": "Replica entity name"

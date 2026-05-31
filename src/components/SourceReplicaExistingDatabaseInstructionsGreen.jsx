@@ -553,7 +553,9 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                         size="sm"
                         variant="outline"
                         onClick={() => {
-                          const replicaContent = `REPLICA APP INSTRUCTIONS
+                          const replicaContent = `Click and Copy this message and paste to the chat message Base44 in the Replica App
+
+REPLICA APP INSTRUCTIONS
 ========================
 Paste this message to the chat for the page that will host the table of data. "Use the following to create entity and page code to host the table displaying the entity".
 

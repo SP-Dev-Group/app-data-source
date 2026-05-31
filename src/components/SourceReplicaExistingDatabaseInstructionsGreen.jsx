@@ -124,6 +124,117 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
     { label: "Replica App ID", key: "replica_app_id" },
   ];
 
+  const generateSourceCode = () => `import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+import { createClient } from 'npm:@base44/sdk@0.8.25';
+
+const ${form.secret_name} = "${form.replica_app_id || ''}";
+
+Deno.serve(async (req) => {
+  try {
+    const base44 = createClientFromRequest(req);
+    const user = await base44.auth.me();
+    
+    if (!user || user.role !== 'admin') {
+      return Response.json({ error: 'Unauthorized' }, { status: 403 });
+    }
+
+    const payload = await req.json();
+    const record = payload.data || payload;
+
+    const replicaClient = createClient({ 
+      appId: ${form.secret_name}, 
+      serviceRole: true 
+    });
+
+    const existing = await replicaClient.entities.${form.replica_entity_name}.filter({ 
+      unique_id: record.unique_id || record.id 
+    });
+
+    if (existing && existing.length > 0) {
+      await replicaClient.entities.${form.replica_entity_name}.update(existing[0].id, {
+        unique_id: record.unique_id,
+        column1: record.column1,
+        column2: record.column2,
+        column3: record.column3,
+        column4: record.column4,
+        column5: record.column5,
+        column6: record.column6,
+        column7: record.column7,
+        column8: record.column8,
+      });
+    } else {
+      await replicaClient.entities.${form.replica_entity_name}.create({
+        unique_id: record.unique_id,
+        column1: record.column1,
+        column2: record.column2,
+        column3: record.column3,
+        column4: record.column4,
+        column5: record.column5,
+        column6: record.column6,
+        column7: record.column7,
+        column8: record.column8,
+      });
+    }
+
+    return Response.json({ success: true });
+  } catch (error) {
+    return Response.json({ error: error.message }, { status: 500 });
+  }
+});`;
+
+  const generateReplicaCode = () => `import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+
+Deno.serve(async (req) => {
+  try {
+    const base44 = createClientFromRequest(req);
+    const payload = await req.json();
+    const record = payload.data || payload;
+
+    const existing = await base44.entities.${form.replica_entity_name}.filter({ 
+      unique_id: record.unique_id 
+    });
+
+    if (existing && existing.length > 0) {
+      await base44.entities.${form.replica_entity_name}.update(existing[0].id, {
+        unique_id: record.unique_id,
+        column1: record.column1,
+        column2: record.column2,
+        column3: record.column3,
+        column4: record.column4,
+        column5: record.column5,
+        column6: record.column6,
+        column7: record.column7,
+        column8: record.column8,
+      });
+    } else {
+      await base44.entities.${form.replica_entity_name}.create({
+        unique_id: record.unique_id,
+        column1: record.column1,
+        column2: record.column2,
+        column3: record.column3,
+        column4: record.column4,
+        column5: record.column5,
+        column6: record.column6,
+        column7: record.column7,
+        column8: record.column8,
+      });
+    }
+
+    return Response.json({ success: true });
+  } catch (error) {
+    return Response.json({ error: error.message }, { status: 500 });
+  }
+});`;
+
+  const generateSubscriptionCode = () => `useEffect(() => {
+  const unsubscribe = base44.entities.${form.replica_entity_name}.subscribe((event) => {
+    console.log(\`${form.replica_entity_name} \${event.type}:\`, event.data);
+    refetch();
+  });
+
+  return () => unsubscribe();
+}, [refetch]);`;
+
   return (
     <>
       <Button
@@ -260,57 +371,7 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source App: {form.push_function_name} Function</p>
             <div className="text-[10px] text-muted-foreground">Code generated from your config: {form.project_name}</div>
             <pre className="bg-black text-green-400 p-3 rounded text-[10px] overflow-x-auto max-h-96 overflow-y-auto">
-{`import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
-import { createClient } from 'npm:@base44/sdk@0.8.25';
-
-const ${form.secret_name} = "${form.replica_app_id || ''}";
-
-Deno.serve(async (req) => {
-  try {
-    const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    
-    if (!user || user.role !== 'admin') {
-      return Response.json({ error: 'Unauthorized' }, { status: 403 });
-    }
-
-    const payload = await req.json();
-    const record = payload.data || payload;
-
-    const replicaClient = createClient({ 
-      appId: ${form.secret_name}, 
-      serviceRole: true 
-    });
-
-    const existing = await replicaClient.entities.${form.replica_entity_name}.filter({ 
-      unique_id: record.unique_id || record.id 
-    });
-
-    if (existing && existing.length > 0) {
-      await replicaClient.entities.${form.replica_entity_name}.update(existing[0].id, {
-        unique_id: record.unique_id,
-        column1: record.column1,
-        column2: record.column2,
-        column3: record.column3,
-        column4: record.column4,
-        column5: record.column5,
-      });
-    } else {
-      await replicaClient.entities.${form.replica_entity_name}.create({
-        unique_id: record.unique_id,
-        column1: record.column1,
-        column2: record.column2,
-        column3: record.column3,
-        column4: record.column4,
-        column5: record.column5,
-      });
-    }
-
-    return Response.json({ success: true });
-  } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
-  }
-});`}
+              {generateSourceCode()}
             </pre>
           </div>
 
@@ -329,57 +390,14 @@ Deno.serve(async (req) => {
             <div className="mt-3">
               <p className="text-xs font-semibold text-muted-foreground mb-2">Step 1: Backend Function ({form.sync_function_name})</p>
               <pre className="bg-black text-green-400 p-3 rounded text-[10px] overflow-x-auto max-h-96 overflow-y-auto">
-{`import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
-
-Deno.serve(async (req) => {
-  try {
-    const base44 = createClientFromRequest(req);
-    const payload = await req.json();
-    const record = payload.data || payload;
-
-    const existing = await base44.entities.${form.replica_entity_name}.filter({ 
-      unique_id: record.unique_id 
-    });
-
-    if (existing && existing.length > 0) {
-      await base44.entities.${form.replica_entity_name}.update(existing[0].id, {
-        unique_id: record.unique_id,
-        column1: record.column1,
-        column2: record.column2,
-        column3: record.column3,
-        column4: record.column4,
-        column5: record.column5,
-      });
-    } else {
-      await base44.entities.${form.replica_entity_name}.create({
-        unique_id: record.unique_id,
-        column1: record.column1,
-        column2: record.column2,
-        column3: record.column3,
-        column4: record.column4,
-        column5: record.column5,
-      });
-    }
-
-    return Response.json({ success: true });
-  } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
-  }
-});`}
+                {generateReplicaCode()}
               </pre>
             </div>
 
             <div className="mt-3">
               <p className="text-xs font-semibold text-muted-foreground mb-2">Step 5: Live Table Updates (Frontend Subscription)</p>
               <pre className="bg-black text-blue-400 p-3 rounded text-[10px] overflow-x-auto">
-{`useEffect(() => {
-  const unsubscribe = base44.entities.${form.replica_entity_name}.subscribe((event) => {
-    console.log(\`${form.replica_entity_name} \${event.type}:\`, event.data);
-    refetch();
-  });
-
-  return () => unsubscribe();
-}, [refetch]);`}
+                {generateSubscriptionCode()}
               </pre>
             </div>
           </div>

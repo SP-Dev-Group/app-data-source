@@ -7,6 +7,7 @@ import { base44 } from "@/api/base44Client";
 
 const DEFAULTS = {
   config_name: "",
+  project_name: "",
   replica_entity_name: "ReplicaEntityName",
   source_entity_name: "SourceEntityName",
   sync_function_name: "syncSourceEntityToSourceListener",
@@ -70,6 +71,7 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
   const loadConfig = (record) => {
     setForm({
       config_name: record.config_name || "",
+      project_name: record.project_name || "",
       replica_entity_name: record.replica_entity_name || DEFAULTS.replica_entity_name,
       source_entity_name: record.source_entity_name || DEFAULTS.source_entity_name,
       sync_function_name: record.sync_function_name || DEFAULTS.sync_function_name,
@@ -161,6 +163,16 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
                 value={form.config_name}
                 onChange={(e) => set("config_name", e.target.value)}
                 placeholder="e.g. UserSync v1"
+                className="h-7 text-xs"
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground w-40 shrink-0">Project Name</span>
+              <Input
+                value={form.project_name}
+                onChange={(e) => set("project_name", e.target.value)}
+                placeholder="e.g. DataSync Project"
                 className="h-7 text-xs"
               />
             </div>

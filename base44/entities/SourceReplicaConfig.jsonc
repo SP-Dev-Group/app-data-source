@@ -6,6 +6,10 @@
       "type": "string",
       "description": "A label to identify this config"
     },
+    "project_name": {
+      "type": "string",
+      "description": "Project name"
+    },
     "replica_entity_name": {
       "type": "string",
       "description": "Replica entity name"

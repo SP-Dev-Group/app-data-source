@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
-import { DatabaseZap, Copy, Check, Save, Search, X, Pencil } from "lucide-react";
+import { DatabaseZap, Copy, Check, Save, Search, X, Pencil, ClipboardCopy } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const DEFAULTS = {
@@ -44,8 +44,66 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
   const [searching, setSearching] = useState(false);
   const [showResults, setShowResults] = useState(true);
   const [editingField, setEditingField] = useState(null);
+  const [copiedAll, setCopiedAll] = useState(false);
 
   const set = (field, value) => setForm((f) => ({ ...f, [field]: value }));
+
+  const handleCopyAll = () => {
+    const columnFields = generateColumnFields(form.replica_entity_name, 8);
+    const sourceCode = generateSourceCode(form.replica_entity_name, form.secret_name, form.replica_app_id);
+    const replicaCode = generateReplicaCode(form.replica_entity_name);
+    const subscriptionCode = generateSubscriptionCode(form.replica_entity_name);
+
+    const allContent = `CONFIG FIELDS
+===============
+Project Name: ${form.project_name}
+Replica Entity: ${form.replica_entity_name}
+Source Entity: ${form.source_entity_name}
+Sync Function: ${form.sync_function_name}
+Push Function: ${form.push_function_name}
+Secret Name: ${form.secret_name}
+Replica App ID: ${form.replica_app_id}
+
+SOURCE ENTITY SCHEMA
+====================
+Instruction: In this Replica app, create entity using the provided schema from Source App and name it ${form.replica_entity_name}
+
+Schema:
+{
+  "unique_id": "string (required)",
+  "column1": "string",
+  "column2": "string",
+  "column3": "string",
+  "column4": "string",
+  "column5": "string",${form.source_entity_name.includes("Two") ? `
+  "column6": "string",
+  "column7": "string",
+  "column8": "string",` : ""}
+}
+
+SOURCE APP: ${form.push_function_name} FUNCTION
+========================================
+${sourceCode}
+
+REPLICA APP INSTRUCTIONS
+========================
+Step 1: Create backend function ${form.sync_function_name}
+Step 2: Use entity ${form.replica_entity_name} with fields: unique_id (string, required), column1, column2, column3, column4, column5
+Step 3: No automation needed on replica side
+Step 4: In source app, set up ${form.push_function_name} function and entity automation
+Step 5: Add frontend subscription to table page
+🔑🔑 REPLICA APP ID: ${form.replica_app_id}
+
+Step 1: Backend Function (${form.sync_function_name})
+${replicaCode}
+
+Step 5: Live Table Updates (Frontend Subscription)
+${subscriptionCode}`;
+
+    navigator.clipboard.writeText(allContent);
+    setCopiedAll(true);
+    setTimeout(() => setCopiedAll(false), 2000);
+  };
 
   const handleAdd = () => {
     setForm({
@@ -302,7 +360,19 @@ ${columnFields}      });
 
           {/* Form */}
           <div className="border rounded-lg p-3 space-y-3">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Config Fields</p>
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Config Fields</p>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleCopyAll}
+                className="h-6 text-xs px-2"
+                title="Copy all content from Config Fields to bottom"
+              >
+                {copiedAll ? <Check className="w-3 h-3 mr-1 text-green-500" /> : <ClipboardCopy className="w-3 h-3 mr-1" />}
+                {copiedAll ? "Copied!" : "Copy All"}
+              </Button>
+            </div>
 
             <div className="flex items-center gap-2">
               <span className="text-xs text-muted-foreground w-40 shrink-0">Project Name <span className="text-red-500">*</span></span>

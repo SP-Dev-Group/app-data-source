@@ -10,7 +10,7 @@ SOURCE APP INSTRUCTIONS
 
 In this app, the source app, data is pushed directly to the replica app's entity using the Base44 SDK whenever a record changes.
 
-Entity: {EntityNameReplica}
+Entity: EntityNameReplica
 Function: sync"   "ToSourceListener
 Automation: none
 Menu: Source Instructions
@@ -23,7 +23,7 @@ In this, the source app, use the existing entity named {  }  with fields: unique
 • Step 3: Strike out whichever is not appropriate:In this app, the source app, create an Entity Automation — Entity: {   } | Events: create, update | Function: {push"  "ToReplica}
 
 
-• Step 4: No setup needed on replica app  beyond having the {EntityNameReplica} entity and {sync"  "ToSourceListener} function ready (see Replica Instructions).
+• Step 4: No setup needed on replica app  beyond having the EntityNameReplica entity and {sync"  "ToSourceListener} function ready (see Replica Instructions).
 
 
 .
@@ -58,16 +58,16 @@ Deno.serve(async (req) => {
       serviceRole: true 
     });
 
-    const existing = await replicaClient.entities.{EntityNameReplica}.filter({ 
+    const existing = await replicaClient.entities.EntityNameReplica.filter({ 
       unique_id: record.unique_id || record.id 
     });
 
     if (existing && existing.length > 0) {
-      await replicaClient.entities.{EntityNameReplica}.update(existing[0].id, {
+      await replicaClient.entities.EntityNameReplica.update(existing[0].id, {
         name: record.name,
       });
     } else {
-      await replicaClient.entities.{EntityNameReplica}.create({
+      await replicaClient.entities.EntityNameReplica.create({
         unique_id: record.unique_id || record.id,
         name: record.name,
       });
@@ -171,8 +171,8 @@ export default function SourceReplicaExistingDatabaseInstructions() {
           </DialogHeader>
 
           <div className="space-y-4 text-xs mt-4 whitespace-pre-wrap font-mono leading-relaxed text-foreground">
-            {instructionContent.split(/(\{EntityNameReplica\})/g).map((part, idx) => 
-              part === '{EntityNameReplica}' ? 
+            {instructionContent.split(/(EntityNameReplica)/g).map((part, idx) => 
+              part === 'EntityNameReplica' ? 
                 <span key={idx} className="text-green-600 font-semibold">{part}</span> : 
                 <span key={idx}>{part}</span>
             )}

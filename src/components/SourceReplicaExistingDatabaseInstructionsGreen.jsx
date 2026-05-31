@@ -620,13 +620,13 @@ ${columnFields}      });
               <div className="flex gap-2">
                 <button
                   onClick={() => setSourcePopupOpen(true)}
-                  className="flex-1 text-sm font-bold text-green-600 uppercase tracking-wide px-3 py-2 rounded border border-green-600 hover:bg-green-50 transition-colors cursor-pointer"
+                  className="flex-1 text-sm font-bold text-white uppercase tracking-wide px-3 py-2 rounded bg-green-600 border border-green-600 hover:bg-green-700 transition-colors cursor-pointer"
                 >
                   SOURCE
                 </button>
                 <button
                   onClick={() => setReplicaPopupOpen(true)}
-                  className="flex-1 text-sm font-bold text-blue-600 uppercase tracking-wide px-3 py-2 rounded border border-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
+                  className="flex-1 text-sm font-bold text-white uppercase tracking-wide px-3 py-2 rounded bg-blue-600 border border-blue-600 hover:bg-blue-700 transition-colors cursor-pointer"
                 >
                   REPLICA
                 </button>

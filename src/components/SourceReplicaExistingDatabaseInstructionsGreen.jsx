@@ -6,7 +6,6 @@ import { DatabaseZap, Copy, Check, Save, Search, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const DEFAULTS = {
-  config_name: "",
   project_name: "",
   replica_entity_name: "ReplicaEntityName",
   source_entity_name: "SourceEntityName",
@@ -47,7 +46,7 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
   const set = (field, value) => setForm((f) => ({ ...f, [field]: value }));
 
   const handleSave = async () => {
-    if (!form.config_name.trim()) return;
+    if (!form.project_name.trim()) return;
     setSaving(true);
     await base44.entities.SourceReplicaConfig.create({ ...form });
     setSaving(false);
@@ -62,7 +61,7 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
     const term = searchTerm.toLowerCase();
     setSearchResults(
       term
-        ? all.filter((r) => r.config_name?.toLowerCase().includes(term))
+        ? all.filter((r) => r.project_name?.toLowerCase().includes(term))
         : all
     );
     setSearching(false);
@@ -70,7 +69,6 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
 
   const loadConfig = (record) => {
     setForm({
-      config_name: record.config_name || "",
       project_name: record.project_name || "",
       replica_entity_name: record.replica_entity_name || DEFAULTS.replica_entity_name,
       source_entity_name: record.source_entity_name || DEFAULTS.source_entity_name,
@@ -138,7 +136,7 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
                       className="flex items-center justify-between px-3 py-1.5 hover:bg-muted cursor-pointer border-b last:border-0"
                       onClick={() => loadConfig(r)}
                     >
-                      <span className="font-medium">{r.config_name}</span>
+                      <span className="font-medium">{r.project_name}</span>
                       <span className="text-muted-foreground text-[10px]">{r.replica_entity_name}</span>
                     </div>
                   ))
@@ -158,17 +156,7 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Config Fields</p>
 
             <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground w-40 shrink-0">Config Name <span className="text-red-500">*</span></span>
-              <Input
-                value={form.config_name}
-                onChange={(e) => set("config_name", e.target.value)}
-                placeholder="e.g. UserSync v1"
-                className="h-7 text-xs"
-              />
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground w-40 shrink-0">Project Name</span>
+              <span className="text-xs text-muted-foreground w-40 shrink-0">Project Name <span className="text-red-500">*</span></span>
               <Input
                 value={form.project_name}
                 onChange={(e) => set("project_name", e.target.value)}
@@ -191,7 +179,7 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
             <Button
               size="sm"
               onClick={handleSave}
-              disabled={saving || !form.config_name.trim()}
+              disabled={saving || !form.project_name.trim()}
               className="w-full h-7 text-xs mt-2"
             >
               {saved ? <><Check className="w-3 h-3 mr-1 text-green-300" /> Saved!</> : saving ? "Saving..." : <><Save className="w-3 h-3 mr-1" /> Save Config</>}

@@ -2,13 +2,9 @@
   "name": "SourceReplicaConfig",
   "type": "object",
   "properties": {
-    "config_name": {
-      "type": "string",
-      "description": "A label to identify this config"
-    },
     "project_name": {
       "type": "string",
-      "description": "Project name"
+      "description": "Project name (required)"
     },
     "replica_entity_name": {
       "type": "string",
@@ -36,6 +32,6 @@
     }
   },
   "required": [
-    "config_name"
+    "project_name"
   ]
 }

@@ -573,6 +573,11 @@ ${columnFields}      });
               </div>
             ))}
 
+            {/* Step 3 Label */}
+            <div className="mb-2">
+              <span className="text-xs font-bold text-white bg-red-500 px-3 py-1 rounded">Step 3: Complete these with Replica App</span>
+            </div>
+
             {/* Replica App Configuration Section */}
             <div className="border rounded-lg p-3 bg-blue-50 border-blue-200 space-y-3 mt-3">
               <p className="text-xs font-semibold text-blue-800 uppercase tracking-wide">Replica App Configuration</p>

@@ -725,12 +725,22 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">View and Copy REPLICA Instructions</p>
               </div>
               
-              {/* Step 4 Sub-steps */}
+              {/* REPLICA Instructions */}
               <div className="mb-3 text-[10px] text-muted-foreground space-y-1">
+                <p className="font-semibold text-blue-800 mb-1">VIEW AND COPY REPLICA INSTRUCTIONS</p>
                 <p><strong>Step 1:</strong> Click and open <button onClick={(e) => { e.stopPropagation(); setReplicaPopupOpen(true); }} className="text-xs font-bold text-white uppercase tracking-wide px-2 py-0.5 rounded bg-blue-600 border border-blue-600 hover:bg-blue-700 transition-colors cursor-pointer">REPLICA</button></p>
                 <p><strong>Step 2:</strong> Click copy the body</p>
                 <p><strong>Step 3:</strong> Open the Replica App on the page which will display the table with the data from the database entity</p>
                 <p><strong>Step 4:</strong> Paste the click copy into the chat message for the Base44 AI to do the build</p>
+              </div>
+
+              {/* SOURCE Instructions */}
+              <div className="mb-3 text-[10px] text-muted-foreground space-y-1 border-t pt-3">
+                <p className="font-semibold text-green-800 mb-1">VIEW AND COPY SOURCE INSTRUCTIONS</p>
+                <p><strong>Step 1:</strong> Click and open <button onClick={(e) => { e.stopPropagation(); setSourcePopupOpen(true); }} className="text-xs font-bold text-white uppercase tracking-wide px-2 py-0.5 rounded bg-green-600 border border-green-600 hover:bg-green-700 transition-colors cursor-pointer">SOURCE</button></p>
+                <p><strong>Step 2:</strong> Click copy the body</p>
+                <p><strong>Step 3:</strong> In this Source App open the page which will host the data table display from the source database entity</p>
+                <p><strong>Step 4:</strong> Paste the ClickCopy into the Base44 chat message for the Base44 AI to do the build</p>
               </div>
               
               <div className="flex gap-2">

@@ -34,6 +34,45 @@ function CopyField({ label, value }) {
   );
 }
 
+function CopyInputField({ label, value, onChange, disabled, onEdit, showCopy }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(value);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-xs text-muted-foreground w-40 shrink-0">{label}</span>
+      <Input
+        value={value}
+        onChange={onChange}
+        className="h-7 text-xs font-mono flex-1"
+        disabled={disabled}
+      />
+      {showCopy && (
+        <button
+          onClick={handleCopy}
+          className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
+          title="Copy to clipboard"
+        >
+          {copied ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
+        </button>
+      )}
+      {onEdit && (
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={onEdit}
+          className="h-7 text-xs px-2 shrink-0"
+        >
+          <Pencil className="w-3 h-3" />
+        </Button>
+      )}
+    </div>
+  );
+}
+
 export default function SourceReplicaExistingDatabaseInstructionsGreen() {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(DEFAULTS);
@@ -452,25 +491,15 @@ ${columnFields}      });
             </div>
 
             {fields.slice(5).map(({ label, key, editable }) => (
-              <div key={key} className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground w-40 shrink-0">{label}</span>
-                <Input
-                  value={form[key]}
-                  onChange={(e) => set(key, e.target.value)}
-                  className="h-7 text-xs font-mono flex-1"
-                  disabled={editable === false || editingField !== key}
-                />
-                {editable !== false && (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => setEditingField(editingField === key ? null : key)}
-                    className="h-7 text-xs px-2 shrink-0"
-                  >
-                    <Pencil className="w-3 h-3" />
-                  </Button>
-                )}
-              </div>
+              <CopyInputField
+                key={key}
+                label={label}
+                value={form[key]}
+                onChange={(e) => set(key, e.target.value)}
+                disabled={editable === false || editingField !== key}
+                onEdit={editable !== false ? () => setEditingField(editingField === key ? null : key) : null}
+                showCopy={key === "secret_name"}
+              />
             ))}
 
             <Button

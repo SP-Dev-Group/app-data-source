@@ -615,7 +615,7 @@ ${columnFields}      });
             {/* Popup Buttons Box */}
             <div className="border rounded-lg p-3 bg-muted/20">
               <div className="mb-2">
-                <span className="text-xs font-bold text-white bg-red-500 px-3 py-1 rounded">Step 4</span>
+                <span className="text-xs font-bold text-white bg-red-500 px-3 py-1 rounded">Step 4: Click and Open REPLICA. Then click copy the body. Open the Replica App on the page which will display the table with the data from the database entity, paste the click copy into the chat message for the Base44 AI to do the build.</span>
               </div>
               <div className="flex items-center justify-between mb-2">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">View and Copy Instructions</p>

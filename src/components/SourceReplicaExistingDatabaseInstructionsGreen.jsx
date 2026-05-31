@@ -506,6 +506,13 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                       <p><strong>Step 5:</strong> Add frontend subscription to table page</p>
                       <p className="text-red-500 font-semibold">🔑🔑 REPLICA APP ID: {form.replica_app_id}</p>
                     </div>
+                    
+                    <div className="mt-3">
+                      <p className="text-xs font-semibold text-muted-foreground mb-2">Step 1: Backend Function ({form.sync_function_name})</p>
+                      <pre className="bg-black text-green-400 p-3 rounded text-[10px] overflow-x-auto max-h-96 overflow-y-auto">
+                        {generateReplicaCode(form.replica_entity_name)}
+                      </pre>
+                    </div>
                   </div>
                   {/* Source App Code */}
                   <div className="border rounded-lg p-3 space-y-3">
@@ -513,15 +520,6 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                     <p className="text-xs font-semibold text-muted-foreground tracking-wide">SOURCE APP FUNCTION: {form.push_function_name}</p>
                     <pre className="bg-black text-green-400 p-3 rounded text-[10px] overflow-x-auto max-h-96 overflow-y-auto">
                       {generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}
-                    </pre>
-                  </div>
-
-                  {/* Step 1: Backend Function */}
-                  <div className="border rounded-lg p-3 space-y-3">
-                    <p className="text-xs font-bold text-green-600 tracking-wide mb-2">SOURCE</p>
-                    <p className="text-xs font-semibold text-muted-foreground mb-2">Step 1: Backend Function ({form.sync_function_name})</p>
-                    <pre className="bg-black text-green-400 p-3 rounded text-[10px] overflow-x-auto max-h-96 overflow-y-auto">
-                      {generateReplicaCode(form.replica_entity_name)}
                     </pre>
                   </div>
 

@@ -432,8 +432,11 @@ ${columnFields}      });
 
           {/* Form */}
           <div className="border rounded-lg p-3 space-y-3">
-            <div className="flex items-center justify-between">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Config Fields</p>
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex gap-8">
+                <p className="text-sm font-bold text-green-600 uppercase tracking-wide">SOURCE</p>
+                <p className="text-sm font-bold text-blue-600 uppercase tracking-wide">REPLICA</p>
+              </div>
               <Button
                 size="sm"
                 variant="outline"
@@ -444,6 +447,9 @@ ${columnFields}      });
                 {copiedAll ? <Check className="w-3 h-3 mr-1 text-green-500" /> : <ClipboardCopy className="w-3 h-3 mr-1" />}
                 {copiedAll ? "Copied!" : "Copy All"}
               </Button>
+            </div>
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Config Fields</p>
             </div>
 
             <div className="flex items-center gap-2">

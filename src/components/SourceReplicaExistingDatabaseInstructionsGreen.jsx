@@ -582,7 +582,7 @@ ${columnFields}      });
                 <li>Paste value in the <strong>Secret Name</strong> box</li>
                 <li>In Replica App, Dashboard / API copy the appID from the code snippet</li>
                 <li>Replica App, Dashboard / Secret / Secret Value, paste in the <strong>appID string</strong></li>
-                <li>Paste the appID here in the <strong>Replica App ID</strong> form</li>
+                <li>Paste the appID here in the <strong>Replica App ID</strong> form here below</li>
               </ul>
             </div>
 

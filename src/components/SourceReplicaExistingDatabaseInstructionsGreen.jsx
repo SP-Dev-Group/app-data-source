@@ -281,9 +281,11 @@ ${subscriptionCode}`;
     return fields;
   };
 
-  const generateSourceCode = (entityName, secretName, appId) => {
+  const generateSourceCode = (functionName, entityName, secretName, appId) => {
     const columnFields = generateColumnFields(entityName, 8);
-    return `import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+    return `// Function Name: ${functionName}
+
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 import { createClient } from 'npm:@base44/sdk@0.8.25';
 
 const ${secretName} = "${appId || ''}";
@@ -473,7 +475,7 @@ ${columnFields}      });
                   <div className="border rounded-lg p-3 space-y-3">
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source App: {form.push_function_name} Function</p>
                     <pre className="bg-black text-green-400 p-3 rounded text-[10px] overflow-x-auto max-h-96 overflow-y-auto">
-                      {generateSourceCode(form.replica_entity_name, form.secret_name, form.replica_app_id)}
+                      {generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}
                     </pre>
                   </div>
                 </div>
@@ -641,7 +643,7 @@ ${columnFields}      });
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source App: {form.push_function_name} Function</p>
             <div className="text-[10px] text-muted-foreground">Code generated from your config: {form.project_name}</div>
             <pre className="bg-black text-green-400 p-3 rounded text-[10px] overflow-x-auto max-h-96 overflow-y-auto">
-              {generateSourceCode(form.replica_entity_name, form.secret_name, form.replica_app_id)}
+              {generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}
             </pre>
           </div>
 

@@ -540,7 +540,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
 
             {/* Replica Popup Dialog */}
             <Dialog open={replicaPopupOpen} onOpenChange={setReplicaPopupOpen}>
-              <DialogContent className="max-w-2xl">
+              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle className="text-blue-600">REPLICA</DialogTitle>
                 </DialogHeader>

@@ -28,10 +28,9 @@ In this, the source app, create a backend function named pushtoReplicaEntityName
 • Step 3:
 In this app, the source app, create an Entity Automation — Entity: {   } | Events: create, update | Function: pushtoReplicaEntityName
 
-• Step 4: No setup needed on replica app  beyond having the ReplicaEntityName entity and syncSourceEntityToSourceListener function ready (see Replica Instructions).
+• Step 4:
+No setup needed on replica app  beyond having the ReplicaEntityName entity and syncSourceEntityToSourceListener function ready (see Replica Instructions).
 
-
-.
 • Step 5: No secrets needed — the Base44 SDK handles cross-app authentication via service role.
 🔑 REPLICA APP ID: {                    }
 (Reference this ID in communications about this sync)

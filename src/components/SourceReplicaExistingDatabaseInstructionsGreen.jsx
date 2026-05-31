@@ -7,10 +7,10 @@ import { base44 } from "@/api/base44Client";
 
 const DEFAULTS = {
   project_name: "",
-  replica_entity_name: "ReplicaEntityName",
+  replica_entity_name: "",
   source_entity_name: "SourceEntityName",
   sync_function_name: "syncSourceEntityToSourceListener",
-  push_function_name: "pushtoReplicaEntityName",
+  push_function_name: "",
   secret_name: 'REPLICA_"  "_APP_ID',
   replica_app_id: "value-here",
   database_root_name: "people",
@@ -47,7 +47,21 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
   const [editingField, setEditingField] = useState(null);
   const [copiedAll, setCopiedAll] = useState(false);
 
-  const set = (field, value) => setForm((f) => ({ ...f, [field]: value }));
+  const set = (field, value) => {
+    if (field === "database_root_name") {
+      const newDbRoot = value;
+      const newReplicaEntity = "Replica" + newDbRoot;
+      const newPushFunction = "pushto" + newReplicaEntity;
+      setForm((f) => ({ 
+        ...f, 
+        [field]: newDbRoot,
+        replica_entity_name: newReplicaEntity,
+        push_function_name: newPushFunction
+      }));
+    } else {
+      setForm((f) => ({ ...f, [field]: value }));
+    }
+  };
 
   const handleCopyAll = () => {
     const columnFields = generateColumnFields(form.replica_entity_name, 8);
@@ -110,10 +124,10 @@ ${subscriptionCode}`;
   const handleAdd = () => {
     setForm({
       project_name: "",
-      replica_entity_name: "ReplicaEntityName",
+      replica_entity_name: "Replicapeople",
       source_entity_name: "SourceEntityName",
       sync_function_name: "syncSourceEntityToSourceListener",
-      push_function_name: "pushtoReplicaEntityName",
+      push_function_name: "pushtoReplicapeople",
       secret_name: 'REPLICA_"  "_APP_ID',
       replica_app_id: "value-here",
       database_root_name: "people",
@@ -163,10 +177,10 @@ ${subscriptionCode}`;
   const loadConfig = (record) => {
     setForm({
       project_name: record.project_name || "",
-      replica_entity_name: record.replica_entity_name || DEFAULTS.replica_entity_name,
+      replica_entity_name: record.replica_entity_name || ("Replica" + (record.database_root_name || DEFAULTS.database_root_name)),
       source_entity_name: record.source_entity_name || DEFAULTS.source_entity_name,
       sync_function_name: record.sync_function_name || DEFAULTS.sync_function_name,
-      push_function_name: record.push_function_name || DEFAULTS.push_function_name,
+      push_function_name: record.push_function_name || ("pushto" + (record.replica_entity_name || "Replica" + (record.database_root_name || DEFAULTS.database_root_name))),
       secret_name: record.secret_name || DEFAULTS.secret_name,
       replica_app_id: record.replica_app_id || DEFAULTS.replica_app_id,
       database_root_name: record.database_root_name || DEFAULTS.database_root_name,
@@ -179,10 +193,10 @@ ${subscriptionCode}`;
 
   const fields = [
     { label: "Database Root Name", key: "database_root_name" },
-    { label: "Replica Entity", key: "replica_entity_name" },
+    { label: "Replica Entity", key: "replica_entity_name", editable: false },
     { label: "Source Entity", key: "source_entity_name" },
     { label: "Sync Function", key: "sync_function_name" },
-    { label: "Push Function", key: "push_function_name" },
+    { label: "Push Function", key: "push_function_name", editable: false },
     { label: "Secret Name", key: "secret_name" },
     { label: "Replica App ID", key: "replica_app_id" },
   ];
@@ -398,23 +412,25 @@ ${columnFields}      });
               </Button>
             </div>
 
-            {fields.map(({ label, key }) => (
+            {fields.map(({ label, key, editable }) => (
               <div key={key} className="flex items-center gap-2">
                 <span className="text-xs text-muted-foreground w-40 shrink-0">{label}</span>
                 <Input
                   value={form[key]}
                   onChange={(e) => set(key, e.target.value)}
                   className="h-7 text-xs font-mono flex-1"
-                  disabled={editingField !== key}
+                  disabled={editable === false || editingField !== key}
                 />
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setEditingField(editingField === key ? null : key)}
-                  className="h-7 text-xs px-2 shrink-0"
-                >
-                  <Pencil className="w-3 h-3" />
-                </Button>
+                {editable !== false && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setEditingField(editingField === key ? null : key)}
+                    className="h-7 text-xs px-2 shrink-0"
+                  >
+                    <Pencil className="w-3 h-3" />
+                  </Button>
+                )}
               </div>
             ))}
 

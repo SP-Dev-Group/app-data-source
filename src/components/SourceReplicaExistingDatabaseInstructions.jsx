@@ -15,7 +15,7 @@ Replica Entity: ReplicaEntityName
 Function: syncSourceEntityToSourceListener
 Function: pushtoReplicaEntityName
 Replica App Set Secret Name: REPLICA_"  "_APP_ID
-Replica App Set Secret Value as it's appID from API: value-here
+Replica App Set Secret Value as it's appID from API: REPLICA_"  "_APP_ID: value-here
 Automation: none
 Menu: Source Instructions
 

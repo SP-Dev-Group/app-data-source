@@ -743,6 +743,10 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                 <p><strong>Step 4:</strong> Paste the ClickCopy into the Base44 chat message for the Base44 AI to do the build</p>
               </div>
               
+              <div className="mb-2">
+                <span className="text-xs font-bold text-white bg-red-500 px-3 py-1 rounded">Step 5: Test the Source and Replica function</span>
+              </div>
+              
               <div className="flex gap-2">
                 <button
                   onClick={() => setSourcePopupOpen(true)}

@@ -9,7 +9,7 @@ const DEFAULTS = {
   project_name: "",
   replica_entity_name: "",
   source_entity_name: "SourceEntityName",
-  sync_function_name: "syncSourceEntityToSourceListener",
+  sync_function_name: "syncSourceEntityNameToSourceListener",
   push_function_name: "",
   secret_name: "",
   replica_app_id: "value-here",
@@ -101,6 +101,14 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
         replica_entity_name: newReplicaEntity,
         push_function_name: newPushFunction,
         secret_name: newSecretName
+      }));
+    } else if (field === "source_entity_name") {
+      // Generate sync function name based on source entity: sync{SourceEntity}ToSourceListener
+      const newSyncFunction = "sync" + value + "ToSourceListener";
+      setForm((f) => ({ 
+        ...f, 
+        [field]: value,
+        sync_function_name: newSyncFunction
       }));
     } else {
       setForm((f) => ({ ...f, [field]: value }));

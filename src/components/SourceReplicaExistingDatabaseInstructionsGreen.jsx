@@ -1,206 +1,200 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { DatabaseZap, Copy, Check } from "lucide-react";
+import { DatabaseZap, Copy, Check, Save, Search, X } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 
-const instructionContent = `INSTRUCTIONS FOR CREATING SOURCE REPLICA WITH 
-EXISTING DATABASES
+const DEFAULTS = {
+  config_name: "",
+  replica_entity_name: "ReplicaEntityName",
+  source_entity_name: "SourceEntityName",
+  sync_function_name: "syncSourceEntityToSourceListener",
+  push_function_name: "pushtoReplicaEntityName",
+  secret_name: 'REPLICA_"  "_APP_ID',
+  replica_app_id: "value-here",
+};
 
-SOURCE APP INSTRUCTIONS
-
-In this app, the source app, data is pushed directly to the replica app's entity using the Base44 SDK whenever a record changes.
-
-Replica Entity: ReplicaEntityName
-Source Entity: SourceEntityName
-Function: syncSourceEntityToSourceListener
-Function: pushtoReplicaEntityName
-Replica App Set Secret Name: REPLICA_"  "_APP_ID
-Replica App Set Secret Value as it's appID from API: REPLICA_"  "_APP_ID: value-here
-Automation: none
-Menu: Source Instructions
-
-• Step 1: 
-In this, the source app, use the existing entity named SourceEntityName with fields: unique_id (string, required), Column1, Column2, Column3 and all other existing fields.
-
-• Step 2:
-In this, the source app, create a backend function named pushtoReplicaEntityName using the code snippet below. In this app, source app, update REPLICA_"  "_APP_ID to match your replica app's ID.
-
-• Step 3:
-In this app, the source app, create an Entity Automation — Entity: {   } | Events: create, update | Function: pushtoReplicaEntityName
-
-• Step 4:
-No setup needed on replica app  beyond having the ReplicaEntityName entity and syncSourceEntityToSourceListener function ready (see Replica Instructions).
-
-• Step 5:
-No secrets needed — the Base44 SDK handles cross-app authentication via service role.
-🔑 REPLICA APP ID: { value-here                   }
-(Reference this ID in communications about this sync)
-
-
-
-
-THIS SCRIPT IS FOR "EXISTING" ENTITY / DATABASE
-
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
-import { createClient } from 'npm:@base44/sdk@0.8.25';
-
-const REPLICA_"  "_APP_ID = "";
-
-Deno.serve(async (req) => {
-  try {
-    const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    
-    if (!user || user.role !== 'admin') {
-      return Response.json({ error: 'Unauthorized' }, { status: 403 });
-    }
-
-    const payload = await req.json();
-    const record = payload.data || payload;
-
-    const replicaClient = createClient({ 
-      appId: REPLICA_"  "_APP_ID, 
-      serviceRole: true 
-    });
-
-    const existing = await replicaClient.entities.ReplicaEntityName.filter({ 
-      unique_id: record.unique_id || record.id 
-    });
-
-    if (existing && existing.length > 0) {
-      await replicaClient.entities.ReplicaEntityName.update(existing[0].id, {
-        Column1: record.Column1,
-        Column2: record.Column2,
-        Column3: record.Column3,
-      });
-    } else {
-      await replicaClient.entities.ReplicaEntityName.create({
-        unique_id: record.unique_id || record.id,
-        Column1: record.Column1,
-        Column2: record.Column2,
-        Column3: record.Column3,
-      });
-    }
-
-    return Response.json({ success: true });
-  } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
-  }
-});
-
-
-REPLICA APP INSTRUCTIONS
-
-Replica App Setup - Live
-This replica app receives live pushes directly from the source app. Follow these steps to replicate this setup in a new app.
-•Step 1: - Create a backend function named syncSourceEntityToSourceListener — use the code    snippet below.
-•Step 2: - Use the existing entity named ReplicaEntityName with fields: unique_id (string, required), Column1, Column2, Column3 and all other fields.
-•Step 3: 
-- No automation needed on the replica side — the source app calls the function syncSourceEntityToSourceListener directly via the Base44 SDK.
-•Step 4: In the source app, set up the pushtoReplicaEntityName function and entity automation pointing to this replica app (see Source Instructions).
-•Step 5: In the page that displays the table, add the frontend subscription snippet below — this makes the table auto-refresh live whenever the entity changes.
-🔑🔑 REPLICA APP ID: {       value-here                      }
-       (This is the ID referenced in source code communications)
-
-
-Step 1: Backend Function (syncSourceEntityToSourceListener)
-
-"EXISTING" Entities
-
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
-
-Deno.serve(async (req) => {
-  try {
-    const base44 = createClientFromRequest(req);
-    const payload = await req.json();
-    const record = payload.data || payload;
-
-    const existing = await base44.entities.{"  db   "}.filter({ 
-      unique_id: record.unique_id 
-    });
-
-    if (existing && existing.length > 0) {
-      await base44.entities.{"  db   "}.update(existing[0].id, {
-        Column1: record.Column1,
-        Column2: record.Column2,
-        Column3: record.Column3,
-      });
-    } else {
-      await base44.entities.{"  db   "}.create({
-        unique_id: record.unique_id,
-        Column1: record.Column1,
-        Column2: record.Column2,
-        Column3: record.Column3,
-      });
-    }
-
-    return Response.json({ success: true });
-  } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
-  }
-});
-
-
-Step 5: Live Table Updates (Frontend Subscription)
-Add this code to the page component that displays the table:
-
-useEffect(() => {
-  const unsubscribe = base44.entities.{"  db   "}.subscribe((event) => {
-    console.log(\`{"  db   "} \${event.type}:\`, event.data);
-    refetch();
-  });
-
-  return () => unsubscribe();
-}, [refetch]);`;
-
-export default function SourceReplicaExistingDatabaseInstructionsGreen() {
-  const [open, setOpen] = useState(false);
+function CopyField({ label, value }) {
   const [copied, setCopied] = useState(false);
-
   const handleCopy = () => {
-    navigator.clipboard.writeText(instructionContent);
+    navigator.clipboard.writeText(value);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   };
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-muted-foreground w-40 shrink-0 text-xs">{label}</span>
+      <span className="font-mono text-xs flex-1 truncate">{value}</span>
+      <button onClick={handleCopy} className="text-muted-foreground hover:text-foreground transition-colors shrink-0">
+        {copied ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
+      </button>
+    </div>
+  );
+}
 
-  const renderContent = (text) => {
-    const tokens = text.split(/(SourceEntityName|ReplicaEntityName|syncSourceEntityToSourceListener|pushtoReplicaEntityName|REPLICA_"  "_APP_ID|unique_id|value-here|Column1|Column2|Column3)/g);
-    return tokens.map((part, idx) => {
-      if (part === 'pushtoReplicaEntityName') return <span key={idx} className="text-orange-400 font-semibold">{part}</span>;
-      if (part === 'ReplicaEntityName') return <span key={idx} className="text-blue-600 font-semibold">{part}</span>;
-      if (part === 'syncSourceEntityToSourceListener') return <span key={idx} className="text-pink-300 font-semibold">{part}</span>;
-      if (part === 'value-here') return <span key={idx} className="text-red-600 font-semibold">{part}</span>;
-      if (part === 'REPLICA_"  "_APP_ID') return <span key={idx} className="text-red-600 font-semibold">{part}</span>;
-      if (part === 'SourceEntityName' || part === 'unique_id') return <span key={idx} className="text-green-400 font-semibold">{part}</span>;
-      if (part === 'Column1') return <span key={idx} className="text-green-500 font-semibold">{part}</span>;
-      if (part === 'Column2') return <span key={idx} className="text-red-500 font-semibold">{part}</span>;
-      if (part === 'Column3') return <span key={idx} className="text-blue-500 font-semibold">{part}</span>;
-      return <span key={idx}>{part}</span>;
-    });
+export default function SourceReplicaExistingDatabaseInstructionsGreen() {
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState(DEFAULTS);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [searching, setSearching] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+
+  const set = (field, value) => setForm((f) => ({ ...f, [field]: value }));
+
+  const handleSave = async () => {
+    if (!form.config_name.trim()) return;
+    setSaving(true);
+    await base44.entities.SourceReplicaConfig.create({ ...form });
+    setSaving(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
   };
+
+  const handleSearch = async () => {
+    setSearching(true);
+    setShowResults(true);
+    const all = await base44.entities.SourceReplicaConfig.list();
+    const term = searchTerm.toLowerCase();
+    setSearchResults(
+      term
+        ? all.filter((r) => r.config_name?.toLowerCase().includes(term))
+        : all
+    );
+    setSearching(false);
+  };
+
+  const loadConfig = (record) => {
+    setForm({
+      config_name: record.config_name || "",
+      replica_entity_name: record.replica_entity_name || DEFAULTS.replica_entity_name,
+      source_entity_name: record.source_entity_name || DEFAULTS.source_entity_name,
+      sync_function_name: record.sync_function_name || DEFAULTS.sync_function_name,
+      push_function_name: record.push_function_name || DEFAULTS.push_function_name,
+      secret_name: record.secret_name || DEFAULTS.secret_name,
+      replica_app_id: record.replica_app_id || DEFAULTS.replica_app_id,
+    });
+    setShowResults(false);
+    setSearchTerm("");
+  };
+
+  const fields = [
+    { label: "Replica Entity", key: "replica_entity_name" },
+    { label: "Source Entity", key: "source_entity_name" },
+    { label: "Sync Function", key: "sync_function_name" },
+    { label: "Push Function", key: "push_function_name" },
+    { label: "Secret Name", key: "secret_name" },
+    { label: "Replica App ID", key: "replica_app_id" },
+  ];
 
   return (
     <>
-      <Button variant="outline" size="sm" onClick={() => setOpen(true)} className="flex items-center gap-2 text-xs h-8 justify-start text-green-600 hover:text-green-700">
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => setOpen(true)}
+        className="flex items-center gap-2 text-xs h-8 justify-start text-green-600 hover:text-green-700"
+      >
         <DatabaseZap className="h-3 w-3" />
         Source-Replica: Exisiting - Form version
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader className="flex flex-row items-center justify-between">
-            <DialogTitle className="text-lg font-bold">Source-Replica: Exisiting - Form version</DialogTitle>
-            <button
-              onClick={handleCopy}
-              className="text-muted-foreground hover:text-foreground transition-colors"
-              title="Copy all"
-            >
-              {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
-            </button>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-bold">Source-Replica: Existing — Form Version</DialogTitle>
           </DialogHeader>
 
-          <div className="space-y-4 text-xs mt-4 whitespace-pre-wrap font-mono leading-relaxed text-foreground">
-            {renderContent(instructionContent)}
+          {/* Search / Recall */}
+          <div className="border rounded-lg p-3 bg-muted/30 space-y-2">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Search Saved Configs</p>
+            <div className="flex gap-2">
+              <Input
+                placeholder="Search by config name..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="h-7 text-xs"
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+              />
+              <Button size="sm" variant="outline" onClick={handleSearch} disabled={searching} className="h-7 text-xs px-3">
+                <Search className="w-3 h-3 mr-1" /> Search
+              </Button>
+            </div>
+            {showResults && (
+              <div className="border rounded bg-background text-xs max-h-40 overflow-y-auto">
+                {searching ? (
+                  <p className="p-2 text-muted-foreground">Searching...</p>
+                ) : searchResults.length === 0 ? (
+                  <p className="p-2 text-muted-foreground">No results found.</p>
+                ) : (
+                  searchResults.map((r) => (
+                    <div
+                      key={r.id}
+                      className="flex items-center justify-between px-3 py-1.5 hover:bg-muted cursor-pointer border-b last:border-0"
+                      onClick={() => loadConfig(r)}
+                    >
+                      <span className="font-medium">{r.config_name}</span>
+                      <span className="text-muted-foreground text-[10px]">{r.replica_entity_name}</span>
+                    </div>
+                  ))
+                )}
+                <button
+                  onClick={() => setShowResults(false)}
+                  className="w-full text-center py-1 text-muted-foreground hover:text-foreground text-[10px] border-t"
+                >
+                  <X className="w-3 h-3 inline mr-1" />Close
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Form */}
+          <div className="border rounded-lg p-3 space-y-3">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Config Fields</p>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground w-40 shrink-0">Config Name <span className="text-red-500">*</span></span>
+              <Input
+                value={form.config_name}
+                onChange={(e) => set("config_name", e.target.value)}
+                placeholder="e.g. UserSync v1"
+                className="h-7 text-xs"
+              />
+            </div>
+
+            {fields.map(({ label, key }) => (
+              <div key={key} className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground w-40 shrink-0">{label}</span>
+                <Input
+                  value={form[key]}
+                  onChange={(e) => set(key, e.target.value)}
+                  className="h-7 text-xs font-mono"
+                />
+              </div>
+            ))}
+
+            <Button
+              size="sm"
+              onClick={handleSave}
+              disabled={saving || !form.config_name.trim()}
+              className="w-full h-7 text-xs mt-2"
+            >
+              {saved ? <><Check className="w-3 h-3 mr-1 text-green-300" /> Saved!</> : saving ? "Saving..." : <><Save className="w-3 h-3 mr-1" /> Save Config</>}
+            </Button>
+          </div>
+
+          {/* Copy Reference Panel */}
+          <div className="border rounded-lg p-3 space-y-2 bg-muted/20">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Copy Reference Values</p>
+            <CopyField label="Replica Entity" value={form.replica_entity_name} />
+            <CopyField label="Source Entity" value={form.source_entity_name} />
+            <CopyField label="Sync Function" value={form.sync_function_name} />
+            <CopyField label="Push Function" value={form.push_function_name} />
+            <CopyField label="Secret Name" value={form.secret_name} />
+            <CopyField label="Replica App ID" value={form.replica_app_id} />
           </div>
         </DialogContent>
       </Dialog>

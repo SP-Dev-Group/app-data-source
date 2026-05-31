@@ -171,8 +171,8 @@ export default function SourceReplicaExistingDatabaseInstructions() {
           </DialogHeader>
 
           <div className="space-y-4 text-xs mt-4 whitespace-pre-wrap font-mono leading-relaxed text-foreground">
-            {instructionContent.split(/(EntityNameReplica|sync"   "ToSourceListener|\{REPLICA_"  "_APP_ID\})/g).map((part, idx) => 
-              (part === 'EntityNameReplica' || part === 'sync"   "ToSourceListener' || part === '{REPLICA_"  "_APP_ID}') ? 
+            {instructionContent.split(/(EntityNameReplica|sync"   "ToSourceListener|\{REPLICA_"  "_APP_ID\}|\{push"  "ToReplica\})/g).map((part, idx) => 
+              (part === 'EntityNameReplica' || part === 'sync"   "ToSourceListener' || part === '{REPLICA_"  "_APP_ID}' || part === '{push"  "ToReplica}') ? 
                 <span key={idx} className="text-green-600 font-semibold">{part}</span> : 
                 <span key={idx}>{part}</span>
             )}

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState, useEffect } from "react";
 import { DatabaseZap, Copy, Check, Save, Search, X, Pencil, ClipboardCopy } from "lucide-react";
 import { base44 } from "@/api/base44Client";
@@ -433,10 +434,26 @@ ${columnFields}      });
           {/* Form */}
           <div className="border rounded-lg p-3 space-y-3">
             <div className="flex items-center justify-between mb-2">
-              <div className="flex gap-8">
-                <p className="text-sm font-bold text-green-600 uppercase tracking-wide px-3 py-1 rounded border border-green-600">SOURCE</p>
-                <p className="text-sm font-bold text-blue-600 uppercase tracking-wide px-3 py-1 rounded border border-blue-600">REPLICA</p>
-              </div>
+              <TooltipProvider>
+                <div className="flex gap-8">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <p className="text-sm font-bold text-green-600 uppercase tracking-wide px-3 py-1 rounded border border-green-600 cursor-help">SOURCE</p>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="text-xs">&nbsp;</p>
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <p className="text-sm font-bold text-blue-600 uppercase tracking-wide px-3 py-1 rounded border border-blue-600 cursor-help">REPLICA</p>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="text-xs">&nbsp;</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+              </TooltipProvider>
               <Button
                 size="sm"
                 variant="outline"

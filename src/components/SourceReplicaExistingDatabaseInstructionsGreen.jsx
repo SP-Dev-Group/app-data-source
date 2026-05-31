@@ -49,7 +49,10 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
 
   const set = (field, value) => {
     if (field === "database_root_name") {
-      const newDbRoot = value;
+      // Remove spaces and special characters, keep only alphanumeric
+      const sanitized = value.replace(/[^a-zA-Z0-9]/g, '');
+      // Capitalize first character
+      const newDbRoot = sanitized.charAt(0).toUpperCase() + sanitized.slice(1);
       const newReplicaEntity = "Replica" + newDbRoot;
       const newPushFunction = "pushto" + newReplicaEntity;
       setForm((f) => ({ 

@@ -377,13 +377,13 @@ ${columnFields}      });
         className="flex items-center gap-2 text-xs h-8 justify-start text-green-600 hover:text-green-700"
       >
         <DatabaseZap className="h-3 w-3" />
-        Source-Replica: Exisiting - Form version
+        Master: Source - Replica
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-lg font-bold">Source-Replica: Existing — Form Version</DialogTitle>
+            <DialogTitle className="text-lg font-bold">Master: Source - Replica</DialogTitle>
           </DialogHeader>
 
           {/* Search / Recall */}

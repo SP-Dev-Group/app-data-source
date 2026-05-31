@@ -476,6 +476,17 @@ ${columnFields}      });
                       {generateSourceCode(form.replica_entity_name, form.secret_name, form.replica_app_id)}
                     </pre>
                   </div>
+
+                  {/* Replica App Instruction Step 5 */}
+                  <div className="border rounded-lg p-3 space-y-3">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">REPLICA APP INSTRUCTION Step 5: Live Table Updates (Frontend Subscription)</p>
+                    <p className="text-xs bg-blue-50 border border-blue-200 rounded p-2 text-blue-800">
+                      <strong>Instruction:</strong> For any page which uses this entity (<code className="bg-blue-100 px-1 rounded">{form.replica_entity_name}</code>), add this frontend subscription code to the page containing the table / data for the {form.replica_entity_name}.
+                    </p>
+                    <pre className="bg-black text-blue-400 p-3 rounded text-[10px] overflow-x-auto">
+                      {generateSubscriptionCode(form.replica_entity_name)}
+                    </pre>
+                  </div>
                 </div>
               </DialogContent>
             </Dialog>

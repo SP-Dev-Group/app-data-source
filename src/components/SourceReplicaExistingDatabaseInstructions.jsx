@@ -22,8 +22,8 @@ Menu: Source Instructions
 • Step 1: 
 In this, the source app, use the existing entity named SourceEntityName with fields: unique_id (string, required) and all other existing fields..
 
-• Step 2: In this, the source app, create a backend function named pushtoReplicaEntityName using the code snippet below. In this app, source app, update REPLICA_"  "_APP_ID to match your replica app's ID.
-
+• Step 2:
+In this, the source app, create a backend function named pushtoReplicaEntityName using the code snippet below. In this app, source app, update REPLICA_"  "_APP_ID to match your replica app's ID.
 
 • Step 3: In this app, the source app, create an Entity Automation — Entity: {   } | Events: create, update | Function: pushtoReplicaEntityName
 

@@ -20,7 +20,7 @@ Automation: none
 Menu: Source Instructions
 
 • Step 1: 
-In this, the source app, use the existing entity named SourceEntityName with fields: unique_id (string, required) and all other existing fields..
+In this, the source app, use the existing entity named SourceEntityName with fields: unique_id (string, required), Column1, Column2, Column3 and all other existing fields.
 
 • Step 2:
 In this, the source app, create a backend function named pushtoReplicaEntityName using the code snippet below. In this app, source app, update REPLICA_"  "_APP_ID to match your replica app's ID.
@@ -69,12 +69,16 @@ Deno.serve(async (req) => {
 
     if (existing && existing.length > 0) {
       await replicaClient.entities.ReplicaEntityName.update(existing[0].id, {
-        name: record.name,
+        Column1: record.Column1,
+        Column2: record.Column2,
+        Column3: record.Column3,
       });
     } else {
       await replicaClient.entities.ReplicaEntityName.create({
         unique_id: record.unique_id || record.id,
-        name: record.name,
+        Column1: record.Column1,
+        Column2: record.Column2,
+        Column3: record.Column3,
       });
     }
 
@@ -90,7 +94,7 @@ REPLICA APP INSTRUCTIONS
 Replica App Setup - Live
 This replica app receives live pushes directly from the source app. Follow these steps to replicate this setup in a new app.
 •Step 1: - Create a backend function named syncSourceEntityToSourceListener — use the code    snippet below.
-•Step 2: - Use the existing entity named ReplicaEntityName with fields: unique_id (string, required) and all other fields.
+•Step 2: - Use the existing entity named ReplicaEntityName with fields: unique_id (string, required), Column1, Column2, Column3 and all other fields.
 •Step 3: 
 - No automation needed on the replica side — the source app calls the function syncSourceEntityToSourceListener directly via the Base44 SDK.
 •Step 4: In the source app, set up the pushtoReplicaEntityName function and entity automation pointing to this replica app (see Source Instructions).
@@ -117,12 +121,16 @@ Deno.serve(async (req) => {
 
     if (existing && existing.length > 0) {
       await base44.entities.{"  db   "}.update(existing[0].id, {
-        name: record.name,
+        Column1: record.Column1,
+        Column2: record.Column2,
+        Column3: record.Column3,
       });
     } else {
       await base44.entities.{"  db   "}.create({
         unique_id: record.unique_id,
-        name: record.name,
+        Column1: record.Column1,
+        Column2: record.Column2,
+        Column3: record.Column3,
       });
     }
 
@@ -155,6 +163,22 @@ export default function SourceReplicaExistingDatabaseInstructions() {
     setTimeout(() => setCopied(false), 1500);
   };
 
+  const renderContent = (text) => {
+    const tokens = text.split(/(SourceEntityName|ReplicaEntityName|syncSourceEntityToSourceListener|pushtoReplicaEntityName|REPLICA_"  "_APP_ID|unique_id|value-here|Column1|Column2|Column3)/g);
+    return tokens.map((part, idx) => {
+      if (part === 'pushtoReplicaEntityName') return <span key={idx} className="text-orange-400 font-semibold">{part}</span>;
+      if (part === 'ReplicaEntityName') return <span key={idx} className="text-blue-600 font-semibold">{part}</span>;
+      if (part === 'syncSourceEntityToSourceListener') return <span key={idx} className="text-pink-300 font-semibold">{part}</span>;
+      if (part === 'value-here') return <span key={idx} className="text-red-600 font-semibold">{part}</span>;
+      if (part === 'REPLICA_"  "_APP_ID') return <span key={idx} className="text-red-600 font-semibold">{part}</span>;
+      if (part === 'SourceEntityName' || part === 'unique_id') return <span key={idx} className="text-green-400 font-semibold">{part}</span>;
+      if (part === 'Column1') return <span key={idx} className="text-green-500 font-semibold">{part}</span>;
+      if (part === 'Column2') return <span key={idx} className="text-red-500 font-semibold">{part}</span>;
+      if (part === 'Column3') return <span key={idx} className="text-blue-500 font-semibold">{part}</span>;
+      return <span key={idx}>{part}</span>;
+    });
+  };
+
   return (
     <>
       <Button variant="outline" size="sm" onClick={() => setOpen(true)} className="flex items-center gap-2 text-xs h-8 justify-start">
@@ -176,21 +200,7 @@ export default function SourceReplicaExistingDatabaseInstructions() {
           </DialogHeader>
 
           <div className="space-y-4 text-xs mt-4 whitespace-pre-wrap font-mono leading-relaxed text-foreground">
-            {instructionContent.split(/(SourceEntityName|ReplicaEntityName|syncSourceEntityToSourceListener|pushtoReplicaEntityName|REPLICA_"  "_APP_ID|unique_id|value-here)/g).map((part, idx) => 
-              part === 'pushtoReplicaEntityName' ? 
-                <span key={idx} className="text-orange-400 font-semibold">{part}</span> :
-              part === 'ReplicaEntityName' ?
-                <span key={idx} className="text-blue-600 font-semibold">{part}</span> :
-              part === 'syncSourceEntityToSourceListener' ?
-                <span key={idx} className="text-pink-300 font-semibold">{part}</span> :
-              part === 'value-here' ?
-                <span key={idx} className="text-red-600 font-semibold">{part}</span> :
-              part === 'REPLICA_"  "_APP_ID' ?
-                <span key={idx} className="text-red-600 font-semibold">{part}</span> :
-              (part === 'SourceEntityName' || part === 'unique_id') ? 
-                <span key={idx} className="text-green-400 font-semibold">{part}</span> : 
-                <span key={idx}>{part}</span>
-            )}
+            {renderContent(instructionContent)}
           </div>
         </DialogContent>
       </Dialog>

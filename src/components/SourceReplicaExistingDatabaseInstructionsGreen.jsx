@@ -708,6 +708,8 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                   onClick={() => {
                     const sourceContent = `Click and Copy this message and paste to the chat message Base44 in the Replica App
 
+For this current page, use the following code to set up this app and page to receive data from a source app.
+
 SOURCE
 =====
 SOURCE APP FUNCTION: ${form.push_function_name}

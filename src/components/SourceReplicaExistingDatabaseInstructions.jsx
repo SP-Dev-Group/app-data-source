@@ -15,7 +15,7 @@ Replica Entity: ReplicaEntityName
 Function: syncSourceEntityToSourceListener
 Function: pushtoReplicaEntityName
 Replica App Set Secret Name: REPLICA_"  "_APP_ID
-Replica App Set Secret Value as it's appID from API: value here
+Replica App Set Secret Value as it's appID from API: value-here
 Automation: none
 Menu: Source Instructions
 
@@ -175,14 +175,14 @@ export default function SourceReplicaExistingDatabaseInstructions() {
           </DialogHeader>
 
           <div className="space-y-4 text-xs mt-4 whitespace-pre-wrap font-mono leading-relaxed text-foreground">
-            {instructionContent.split(/(SourceEntityName|ReplicaEntityName|syncSourceEntityToSourceListener|pushtoReplicaEntityName|REPLICA_"  "_APP_ID|unique_id|value here)/g).map((part, idx) => 
+            {instructionContent.split(/(SourceEntityName|ReplicaEntityName|syncSourceEntityToSourceListener|pushtoReplicaEntityName|REPLICA_"  "_APP_ID|unique_id|value-here)/g).map((part, idx) => 
               part === 'pushtoReplicaEntityName' ? 
                 <span key={idx} className="text-orange-400 font-semibold">{part}</span> :
               part === 'ReplicaEntityName' ?
                 <span key={idx} className="text-blue-600 font-semibold">{part}</span> :
               part === 'syncSourceEntityToSourceListener' ?
                 <span key={idx} className="text-pink-300 font-semibold">{part}</span> :
-              part === 'value here' ?
+              part === 'value-here' ?
                 <span key={idx} className="text-red-600 font-semibold">{part}</span> :
               part === 'REPLICA_"  "_APP_ID' ?
                 <span key={idx} className="text-red-600 font-semibold">{part}</span> :

@@ -496,18 +496,29 @@ ${columnFields}      });
                     size="sm"
                     variant="outline"
                     onClick={() => {
-                      const replicaContent = `REPLICA APP INSTRUCTIONS
-========================
-Step 1: Create backend function ${form.sync_function_name}
-Step 2: Use entity ${form.replica_entity_name} with fields: unique_id (string, required), column1, column2, column3, column4, column5
-Step 3: No automation needed on replica side
-Step 4: In source app, set up ${form.push_function_name} function and entity automation
-Step 5: Add frontend subscription to table page
+                      const replicaContent = `REPLICA
+=====
+Source Entity Schema: ${form.source_entity_name}
 
-Step 1: Backend Function (${form.sync_function_name})
-${generateReplicaCode(form.replica_entity_name)}
+Instruction: In this Replica app, create entity using the provided schema from Source App and name it ${form.replica_entity_name}
 
-Step 5: Live Table Updates (Frontend Subscription)
+Schema:
+{
+  "unique_id": "string (required)",
+  "column1": "string",
+  "column2": "string",
+  "column3": "string",
+  "column4": "string",
+  "column5": "string",${form.source_entity_name.includes("Two") ? `
+  "column6": "string",
+  "column7": "string",
+  "column8": "string",` : ""}
+}
+
+REPLICA APP INSTRUCTION Step 5: Live Table Updates (Frontend Subscription)
+
+Instruction: For any page which uses this entity (${form.replica_entity_name}), add this frontend subscription code to the page containing the table / data for the ${form.replica_entity_name}.
+
 ${generateSubscriptionCode(form.replica_entity_name)}`;
                       navigator.clipboard.writeText(replicaContent);
                       setCopiedAll(true);

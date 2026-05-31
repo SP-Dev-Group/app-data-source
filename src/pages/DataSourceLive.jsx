@@ -11,6 +11,7 @@ import DataSourceLiveArchiveViewer from "@/components/DataSourceLiveArchiveViewe
 import PageMeta from "@/components/PageMeta";
 import SourceReplicaNewDatabaseInstructions from "@/components/SourceReplicaNewDatabaseInstructions";
 import SourceReplicaExistingDatabaseInstructions from "@/components/SourceReplicaExistingDatabaseInstructions";
+import SourceReplicaExistingDatabaseInstructionsGreen from "@/components/SourceReplicaExistingDatabaseInstructionsGreen";
 
 const logError = (source, error) => {
   base44.entities.DataSourceLiveErrorLog.create({
@@ -236,6 +237,7 @@ export default function DataSourceLive() {
           </Button>
           <SourceReplicaNewDatabaseInstructions />
           <SourceReplicaExistingDatabaseInstructions />
+          <SourceReplicaExistingDatabaseInstructionsGreen />
         </div>
       </div>
     </div>

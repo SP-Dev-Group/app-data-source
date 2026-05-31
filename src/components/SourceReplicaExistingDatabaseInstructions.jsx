@@ -13,6 +13,7 @@ In this app, the source app, data is pushed directly to the replica app's entity
 Source Entity: SourceEntityName
 Entity: ReplicaEntityName
 Function: syncSourceEntityToSourceListener
+Function: pushtoReplicaEntityName
 Automation: none
 Menu: Source Instructions
 
@@ -172,8 +173,8 @@ export default function SourceReplicaExistingDatabaseInstructions() {
           </DialogHeader>
 
           <div className="space-y-4 text-xs mt-4 whitespace-pre-wrap font-mono leading-relaxed text-foreground">
-            {instructionContent.split(/(SourceEntityName|ReplicaEntityName|syncSourceEntityToSourceListener|REPLICA_"  "_APP_ID|push"  "ToReplica|unique_id)/g).map((part, idx) => 
-              (part === 'SourceEntityName' || part === 'ReplicaEntityName' || part === 'syncSourceEntityToSourceListener' || part === 'REPLICA_"  "_APP_ID' || part === 'push"  "ToReplica' || part === 'unique_id') ? 
+            {instructionContent.split(/(SourceEntityName|ReplicaEntityName|syncSourceEntityToSourceListener|pushtoReplicaEntityName|REPLICA_"  "_APP_ID|push"  "ToReplica|unique_id)/g).map((part, idx) => 
+              (part === 'SourceEntityName' || part === 'ReplicaEntityName' || part === 'syncSourceEntityToSourceListener' || part === 'pushtoReplicaEntityName' || part === 'REPLICA_"  "_APP_ID' || part === 'push"  "ToReplica' || part === 'unique_id') ? 
                 <span key={idx} className="text-green-600 font-semibold">{part}</span> : 
                 <span key={idx}>{part}</span>
             )}

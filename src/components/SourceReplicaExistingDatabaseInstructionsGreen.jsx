@@ -388,11 +388,14 @@ ${columnFields}      });
 
           {/* Search / Recall */}
           <div className="border rounded-lg p-3 bg-muted/30 space-y-2">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-2">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Search Saved Configs</p>
-              <Button size="sm" variant="outline" onClick={handleAdd} className="h-7 text-xs px-2">
-                <Save className="w-3 h-3 mr-1" /> Add New
-              </Button>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold text-white bg-red-500 px-2 py-0.5 rounded">Step 1</span>
+                <Button size="sm" variant="outline" onClick={handleAdd} className="h-7 text-xs px-2">
+                  <Save className="w-3 h-3 mr-1" /> Add New
+                </Button>
+              </div>
             </div>
             <div className="flex gap-2">
               <Input
@@ -616,7 +619,10 @@ ${columnFields}      });
 
             {/* Popup Buttons Box */}
             <div className="border rounded-lg p-3 bg-muted/20">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">View and Copy Instructions</p>
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">View and Copy Instructions</p>
+                <span className="text-[10px] font-bold text-white bg-red-500 px-2 py-0.5 rounded">Step 2</span>
+              </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => setSourcePopupOpen(true)}

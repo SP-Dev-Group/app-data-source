@@ -202,6 +202,117 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
             <CopyField label="Secret Name" value={form.secret_name} />
             <CopyField label="Replica App ID" value={form.replica_app_id} />
           </div>
+
+          {/* Source App Code */}
+          <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source App: pushtoReplicaEntityName Function</p>
+            <div className="text-[10px] text-muted-foreground">Replace placeholders: REPLICA_"  "_APP_ID, ReplicaEntityName, SourceEntityName</div>
+            <pre className="bg-black text-green-400 p-3 rounded text-[10px] overflow-x-auto max-h-64 overflow-y-auto">
+{`import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+import { createClient } from 'npm:@base44/sdk@0.8.25';
+
+const REPLICA_"  "_APP_ID = "${form.replica_app_id || ''}";
+
+Deno.serve(async (req) => {
+  try {
+    const base44 = createClientFromRequest(req);
+    const user = await base44.auth.me();
+    
+    if (!user || user.role !== 'admin') {
+      return Response.json({ error: 'Unauthorized' }, { status: 403 });
+    }
+
+    const payload = await req.json();
+    const record = payload.data || payload;
+
+    const replicaClient = createClient({ 
+      appId: REPLICA_"  "_APP_ID, 
+      serviceRole: true 
+    });
+
+    const existing = await replicaClient.entities.${form.replica_entity_name || 'ReplicaEntityName'}.filter({ 
+      unique_id: record.unique_id || record.id 
+    });
+
+    if (existing && existing.length > 0) {
+      await replicaClient.entities.${form.replica_entity_name || 'ReplicaEntityName'}.update(existing[0].id, {
+        name: record.name,
+      });
+    } else {
+      await replicaClient.entities.${form.replica_entity_name || 'ReplicaEntityName'}.create({
+        unique_id: record.unique_id || record.id,
+        name: record.name,
+      });
+    }
+
+    return Response.json({ success: true });
+  } catch (error) {
+    return Response.json({ error: error.message }, { status: 500 });
+  }
+});`}
+            </pre>
+          </div>
+
+          {/* Replica App Instructions */}
+          <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Replica App Instructions</p>
+            <div className="text-xs space-y-2">
+              <p><strong>Step 1:</strong> Create backend function <code className="bg-black text-green-400 px-1 rounded">syncSourceEntityToSourceListener</code></p>
+              <p><strong>Step 2:</strong> Use entity <code className="bg-black text-green-400 px-1 rounded">{form.replica_entity_name || 'ReplicaEntityName'}</code> with fields: unique_id (string, required) + other fields</p>
+              <p><strong>Step 3:</strong> No automation needed on replica side</p>
+              <p><strong>Step 4:</strong> In source app, set up pushtoReplicaEntityName function and entity automation</p>
+              <p><strong>Step 5:</strong> Add frontend subscription to table page</p>
+              <p className="text-red-500 font-semibold">🔑🔑 REPLICA APP ID: {form.replica_app_id || '{                             }'}</p>
+            </div>
+            
+            <div className="mt-3">
+              <p className="text-xs font-semibold text-muted-foreground mb-2">Step 1: Backend Function (syncSourceEntityToSourceListener)</p>
+              <pre className="bg-black text-green-400 p-3 rounded text-[10px] overflow-x-auto max-h-48 overflow-y-auto">
+{`import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+
+Deno.serve(async (req) => {
+  try {
+    const base44 = createClientFromRequest(req);
+    const payload = await req.json();
+    const record = payload.data || payload;
+
+    const existing = await base44.entities.${form.replica_entity_name || '{"  db   "}'}.filter({ 
+      unique_id: record.unique_id 
+    });
+
+    if (existing && existing.length > 0) {
+      await base44.entities.${form.replica_entity_name || '{"  db   "}'}.update(existing[0].id, {
+        name: record.name,
+      });
+    } else {
+      await base44.entities.${form.replica_entity_name || '{"  db   "}'}.create({
+        unique_id: record.unique_id,
+        name: record.name,
+      });
+    }
+
+    return Response.json({ success: true });
+  } catch (error) {
+    return Response.json({ error: error.message }, { status: 500 });
+  }
+});`}
+              </pre>
+            </div>
+
+            <div className="mt-3">
+              <p className="text-xs font-semibold text-muted-foreground mb-2">Step 5: Live Table Updates (Frontend Subscription)</p>
+              <pre className="bg-black text-blue-400 p-3 rounded text-[10px] overflow-x-auto">
+{`useEffect(() => {
+  const unsubscribe = base44.entities.${form.replica_entity_name || '{"  db   "}'}.subscribe((event) => {
+    console.log(\`${form.replica_entity_name || '{"  db   "}'} \${event.type}:\`, event.data);
+    refetch();
+  });
+
+  return () => unsubscribe();
+}, [refetch]);`}
+              </pre>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </>

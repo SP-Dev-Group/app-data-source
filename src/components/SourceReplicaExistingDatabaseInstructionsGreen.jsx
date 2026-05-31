@@ -11,7 +11,7 @@ const DEFAULTS = {
   source_entity_name: "SourceEntityName",
   sync_function_name: "syncSourceEntityToSourceListener",
   push_function_name: "",
-  secret_name: 'REPLICA_"  "_APP_ID',
+  secret_name: "",
   replica_app_id: "value-here",
   database_root_name: "people",
 };
@@ -55,11 +55,13 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
       const newDbRoot = sanitized.charAt(0).toUpperCase() + sanitized.slice(1);
       const newReplicaEntity = "Replica" + newDbRoot;
       const newPushFunction = "pushto" + newReplicaEntity;
+      const newSecretName = "REPLICA_" + newDbRoot + "_APP_ID";
       setForm((f) => ({ 
         ...f, 
         [field]: newDbRoot,
         replica_entity_name: newReplicaEntity,
-        push_function_name: newPushFunction
+        push_function_name: newPushFunction,
+        secret_name: newSecretName
       }));
     } else {
       setForm((f) => ({ ...f, [field]: value }));
@@ -131,9 +133,9 @@ ${subscriptionCode}`;
       source_entity_name: "SourceEntityName",
       sync_function_name: "syncSourceEntityToSourceListener",
       push_function_name: "pushtoReplicapeople",
-      secret_name: 'REPLICA_"  "_APP_ID',
+      secret_name: "REPLICA_people_APP_ID",
       replica_app_id: "value-here",
-      database_root_name: "people",
+      database_root_name: "People",
     });
     setLoadedRecordId(null);
     setEditingField("project_name");
@@ -178,15 +180,16 @@ ${subscriptionCode}`;
   }, [open]);
 
   const loadConfig = (record) => {
+    const dbRoot = record.database_root_name || DEFAULTS.database_root_name;
     setForm({
       project_name: record.project_name || "",
-      replica_entity_name: record.replica_entity_name || ("Replica" + (record.database_root_name || DEFAULTS.database_root_name)),
+      replica_entity_name: record.replica_entity_name || ("Replica" + dbRoot),
       source_entity_name: record.source_entity_name || DEFAULTS.source_entity_name,
       sync_function_name: record.sync_function_name || DEFAULTS.sync_function_name,
-      push_function_name: record.push_function_name || ("pushto" + (record.replica_entity_name || "Replica" + (record.database_root_name || DEFAULTS.database_root_name))),
-      secret_name: record.secret_name || DEFAULTS.secret_name,
+      push_function_name: record.push_function_name || ("pushto" + "Replica" + dbRoot),
+      secret_name: record.secret_name || ("REPLICA_" + dbRoot + "_APP_ID"),
       replica_app_id: record.replica_app_id || DEFAULTS.replica_app_id,
-      database_root_name: record.database_root_name || DEFAULTS.database_root_name,
+      database_root_name: dbRoot,
     });
     setLoadedRecordId(record.id);
     setShowResults(false);
@@ -200,7 +203,7 @@ ${subscriptionCode}`;
     { label: "Source Entity", key: "source_entity_name" },
     { label: "Sync Function", key: "sync_function_name" },
     { label: "Push Function", key: "push_function_name", editable: false },
-    { label: "Secret Name", key: "secret_name" },
+    { label: "Replica Secret Name", key: "secret_name", editable: false },
     { label: "Replica App ID", key: "replica_app_id" },
   ];
 

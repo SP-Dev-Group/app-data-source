@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DatabaseZap, Copy, Check, Save, Search, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
@@ -42,7 +42,7 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
-  const [showResults, setShowResults] = useState(false);
+  const [showResults, setShowResults] = useState(true);
 
   const set = (field, value) => setForm((f) => ({ ...f, [field]: value }));
 
@@ -67,10 +67,16 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
     setSearchResults(
       term
         ? all.filter((r) => r.project_name?.toLowerCase().includes(term))
-        : all
+        : all.slice(0, 3)
     );
     setSearching(false);
   };
+
+  useEffect(() => {
+    if (open) {
+      handleSearch();
+    }
+  }, [open]);
 
   const loadConfig = (record) => {
     setForm({
@@ -129,6 +135,7 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
                 <Search className="w-3 h-3 mr-1" /> Search
               </Button>
             </div>
+            <p className="text-[10px] text-muted-foreground">Showing first 3 saved configs. Search to find more.</p>
             {showResults && (
               <div className="border rounded bg-background text-xs max-h-40 overflow-y-auto">
                 {searching ? (

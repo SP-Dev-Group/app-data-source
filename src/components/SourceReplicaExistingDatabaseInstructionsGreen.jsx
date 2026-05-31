@@ -364,6 +364,25 @@ ${columnFields}      });
             <CopyField label="Replica App ID" value={form.replica_app_id} />
           </div>
 
+          {/* Source Entity Schema */}
+          <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source Entity Schema: {form.source_entity_name}</p>
+            <div className="text-[10px] text-muted-foreground">Required fields for entity: {form.source_entity_name}</div>
+            <pre className="bg-black text-blue-400 p-3 rounded text-[10px] overflow-x-auto">
+{`{
+  "unique_id": "string (required)",
+  "column1": "string",
+  "column2": "string",
+  "column3": "string",
+  "column4": "string",
+  "column5": "string",${form.source_entity_name.includes("Two") ? `
+  "column6": "string",
+  "column7": "string",
+  "column8": "string",` : ""}
+}`}
+            </pre>
+          </div>
+
           {/* Source App Code */}
           <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source App: {form.push_function_name} Function</p>

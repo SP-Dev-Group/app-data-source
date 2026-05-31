@@ -680,6 +680,7 @@ ${columnFields}      });
 
             {/* REPLICA APP INSTRUCTION Step 5 */}
             <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
+              <p className="text-xs font-bold text-blue-600 tracking-wide mb-2">REPLICA</p>
               <p className="text-xs font-semibold text-muted-foreground mb-2">REPLICA APP INSTRUCTION Step 5: Live Table Updates (Frontend Subscription)</p>
               <p className="text-xs bg-blue-50 border border-blue-200 rounded p-2 text-blue-800">
                 <strong>Instruction:</strong> For any page which uses this entity (<code className="bg-blue-100 px-1 rounded">{form.replica_entity_name}</code>), add this frontend subscription code to the page containing the table / data for the {form.replica_entity_name}.

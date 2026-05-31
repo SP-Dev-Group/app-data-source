@@ -440,18 +440,8 @@ ${columnFields}      });
 
           {/* Form */}
           <div className="border rounded-lg p-3 space-y-3">
-            <div className="flex items-center justify-between mb-2">
+            <div className="mb-2">
               <span className="text-xs font-bold text-white bg-red-500 px-3 py-1 rounded">Step 2: Fill in Form</span>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={handleCopyAll}
-                className="h-6 text-xs px-2"
-                title="Copy all content from Config Fields to bottom"
-              >
-                {copiedAll ? <Check className="w-3 h-3 mr-1 text-green-500" /> : <ClipboardCopy className="w-3 h-3 mr-1" />}
-                {copiedAll ? "Copied!" : "Copy All"}
-              </Button>
             </div>
 
             {/* Source Popup Dialog */}

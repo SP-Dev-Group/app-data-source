@@ -55,7 +55,7 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
       const newDbRoot = sanitized.charAt(0).toUpperCase() + sanitized.slice(1);
       const newReplicaEntity = "Replica" + newDbRoot;
       const newPushFunction = "pushto" + newReplicaEntity;
-      const newSecretName = "REPLICA_" + newDbRoot + "_APP_ID";
+      const newSecretName = "REPLICA_" + newDbRoot.toUpperCase() + "_APP_ID";
       setForm((f) => ({ 
         ...f, 
         [field]: newDbRoot,

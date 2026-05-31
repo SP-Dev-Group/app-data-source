@@ -487,6 +487,28 @@ ${columnFields}      });
                   <DialogTitle className="text-blue-600">REPLICA</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
+                  {/* Source Entity Schema */}
+                  <div className="border rounded-lg p-3 space-y-3">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source Entity Schema: {form.source_entity_name}</p>
+                    <div className="text-[10px] text-muted-foreground">Required fields for entity: {form.source_entity_name}</div>
+                    <p className="text-xs bg-blue-50 border border-blue-200 rounded p-2 text-blue-800 whitespace-normal break-words">
+                      <strong>Instruction:</strong> In this Replica app, create entity using the provided schema from Source App and name it <code className="bg-blue-100 px-1 rounded">{form.replica_entity_name}</code>
+                    </p>
+                    <pre className="bg-black text-blue-400 p-3 rounded text-[10px] overflow-x-auto">
+{`{
+  "unique_id": "string (required)",
+  "column1": "string",
+  "column2": "string",
+  "column3": "string",
+  "column4": "string",
+  "column5": "string",${form.source_entity_name.includes("Two") ? `
+  "column6": "string",
+  "column7": "string",
+  "column8": "string",` : ""}
+}`}
+                    </pre>
+                  </div>
+
                   {/* Replica App Instructions */}
                   <div className="border rounded-lg p-3 space-y-3">
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Replica App Instructions</p>

@@ -17,7 +17,7 @@ Menu: Source Instructions
 
 • Step 1: 
 In this, the source app, use the existing entity named {  }  with fields: unique_id (string, required) and all other existing fields..
-• Step 2: In this, the source app, create a backend function named push"  "ToReplica using the code snippet below. In this app, source app, update {REPLICA_"  "_APP_ID} to match your replica app's ID.
+• Step 2: In this, the source app, create a backend function named push"  "ToReplica using the code snippet below. In this app, source app, update REPLICA_"  "_APP_ID to match your replica app's ID.
 
 
 • Step 3: Strike out whichever is not appropriate:In this app, the source app, create an Entity Automation — Entity: {   } | Events: create, update | Function: push"  "ToReplica
@@ -171,8 +171,8 @@ export default function SourceReplicaExistingDatabaseInstructions() {
           </DialogHeader>
 
           <div className="space-y-4 text-xs mt-4 whitespace-pre-wrap font-mono leading-relaxed text-foreground">
-            {instructionContent.split(/(EntityNameReplica|sync"   "ToSourceListener|\{REPLICA_"  "_APP_ID\}|push"  "ToReplica|unique_id)/g).map((part, idx) => 
-              (part === 'EntityNameReplica' || part === 'sync"   "ToSourceListener' || part === '{REPLICA_"  "_APP_ID}' || part === 'push"  "ToReplica' || part === 'unique_id') ? 
+            {instructionContent.split(/(EntityNameReplica|sync"   "ToSourceListener|REPLICA_"  "_APP_ID|push"  "ToReplica|unique_id)/g).map((part, idx) => 
+              (part === 'EntityNameReplica' || part === 'sync"   "ToSourceListener' || part === 'REPLICA_"  "_APP_ID' || part === 'push"  "ToReplica' || part === 'unique_id') ? 
                 <span key={idx} className="text-green-600 font-semibold">{part}</span> : 
                 <span key={idx}>{part}</span>
             )}

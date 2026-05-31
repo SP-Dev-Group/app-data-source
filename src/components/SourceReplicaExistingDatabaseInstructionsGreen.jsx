@@ -487,7 +487,7 @@ ${columnFields}      });
                 <li>Go to the Replica App, Dashboard / Secret / Add Secret</li>
                 <li>Paste value in the <strong>Secret Name</strong> box</li>
                 <li>In Replica App, Dashboard / API copy the appID from the code snippet</li>
-                <li>Use the appID string for the <strong>Replica App ID</strong></li>
+                <li>Replica App, Dashboard / Secret / Secret Value, paste in the <strong>appID string</strong></li>
                 <li>Paste the appID here in the <strong>Replica App ID</strong> form</li>
               </ul>
             </div>

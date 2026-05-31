@@ -640,7 +640,7 @@ ${columnFields}      });
 
           {/* Source App Code */}
           <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source App: {form.push_function_name} Function</p>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">SOURCE APP FUNCTION: {form.push_function_name}</p>
             <div className="text-[10px] text-muted-foreground">Code generated from your config: {form.project_name}</div>
             <pre className="bg-black text-green-400 p-3 rounded text-[10px] overflow-x-auto max-h-96 overflow-y-auto">
               {generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}

@@ -99,7 +99,7 @@ This replica app receives live pushes directly from the source app. Follow these
 - No automation needed on the replica side — the source app calls the function syncSourceEntityToSourceListener directly via the Base44 SDK.
 •Step 4: In the source app, set up the pushtoReplicaEntityName function and entity automation pointing to this replica app (see Source Instructions).
 •Step 5: In the page that displays the table, add the frontend subscription snippet below — this makes the table auto-refresh live whenever the entity changes.
-🔑🔑 REPLICA APP ID: {                             }
+🔑🔑 REPLICA APP ID: {       value-here                      }
        (This is the ID referenced in source code communications)
 
 

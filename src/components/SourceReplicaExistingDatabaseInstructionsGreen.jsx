@@ -488,13 +488,15 @@ ${columnFields}      });
             <Dialog open={replicaPopupOpen} onOpenChange={setReplicaPopupOpen}>
               <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <div className="flex items-center justify-between">
-                    <DialogTitle className="text-blue-600">REPLICA</DialogTitle>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        const replicaContent = `REPLICA APP INSTRUCTIONS
+                  <DialogTitle className="text-blue-600">REPLICA</DialogTitle>
+                </DialogHeader>
+                <div className="flex items-center justify-between mb-4">
+                  <p className="text-xs font-semibold text-blue-600 uppercase tracking-wide">REPLICA APP INSTRUCTIONS</p>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      const replicaContent = `REPLICA APP INSTRUCTIONS
 ========================
 Step 1: Create backend function ${form.sync_function_name}
 Step 2: Use entity ${form.replica_entity_name} with fields: unique_id (string, required), column1, column2, column3, column4, column5
@@ -507,17 +509,16 @@ ${generateReplicaCode(form.replica_entity_name)}
 
 Step 5: Live Table Updates (Frontend Subscription)
 ${generateSubscriptionCode(form.replica_entity_name)}`;
-                        navigator.clipboard.writeText(replicaContent);
-                        setCopiedAll(true);
-                        setTimeout(() => setCopiedAll(false), 2000);
-                      }}
-                      className="h-7 text-xs px-2"
-                    >
-                      <ClipboardCopy className="w-3 h-3 mr-1" />
-                      {copiedAll ? "Copied!" : "Copy All"}
-                    </Button>
-                  </div>
-                </DialogHeader>
+                      navigator.clipboard.writeText(replicaContent);
+                      setCopiedAll(true);
+                      setTimeout(() => setCopiedAll(false), 2000);
+                    }}
+                    className="h-7 text-xs px-2"
+                  >
+                    <ClipboardCopy className="w-3 h-3 mr-1" />
+                    {copiedAll ? "Copied!" : "Copy All"}
+                  </Button>
+                </div>
                 <div className="space-y-4">
                   {/* Source Entity Schema */}
                   <div className="border rounded-lg p-3 space-y-3">

@@ -743,10 +743,6 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                 <p><strong>Step 4:</strong> Paste the ClickCopy into the Base44 chat message for the Base44 AI to do the build</p>
               </div>
               
-              <div className="mb-2">
-                <span className="text-xs font-bold text-white bg-red-500 px-3 py-1 rounded">Step 5: Test the Source and Replica function</span>
-              </div>
-              
               <div className="flex gap-2">
                 <button
                   onClick={() => setSourcePopupOpen(true)}
@@ -761,6 +757,14 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                   REPLICA
                 </button>
               </div>
+            </div>
+
+            {/* Step 5 Box - Outside the Step 4 box */}
+            <div className="border rounded-lg p-3 bg-red-50 border-red-200">
+              <div className="mb-2">
+                <span className="text-xs font-bold text-white bg-red-500 px-3 py-1 rounded">Step 5: Test the Source and Replica function</span>
+              </div>
+              <p className="text-[10px] text-red-700">After setting up both apps, test the synchronization by creating or updating records in the Source app and verifying they appear in the Replica app.</p>
             </div>
           </div>
 

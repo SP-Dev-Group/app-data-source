@@ -544,14 +544,19 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                 <DialogHeader>
                   <DialogTitle className="text-blue-600">REPLICA</DialogTitle>
                 </DialogHeader>
-                <div className="flex items-center justify-between mb-4">
-                  <p className="text-xs font-semibold text-blue-600 uppercase tracking-wide">REPLICA APP INSTRUCTIONS</p>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                      const replicaContent = `REPLICA
-=====
+                <div className="space-y-4">
+                  {/* REPLICA APP INSTRUCTIONS Box */}
+                  <div className="border rounded-lg p-3 bg-blue-50 border-blue-200 space-y-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-xs font-semibold text-blue-800 uppercase tracking-wide">REPLICA APP INSTRUCTIONS</p>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          const replicaContent = `REPLICA APP INSTRUCTIONS
+========================
+Paste this message to the chat for the page that will host the table of data. "Use the following to create entity and page code to host the table displaying the entity".
+
 Source Entity Schema: ${form.source_entity_name}
 
 Instruction: In this Replica app, create entity using the provided schema from Source App and name it ${form.replica_entity_name}
@@ -574,51 +579,17 @@ REPLICA APP INSTRUCTION Step 5: Live Table Updates (Frontend Subscription)
 Instruction: For any page which uses this entity (${form.replica_entity_name}), add this frontend subscription code to the page containing the table / data for the ${form.replica_entity_name}.
 
 ${generateSubscriptionCode(form.replica_entity_name)}`;
-                      navigator.clipboard.writeText(replicaContent);
-                      setCopiedAll(true);
-                      setTimeout(() => setCopiedAll(false), 2000);
-                    }}
-                    className="h-7 text-xs px-2"
-                  >
-                    <ClipboardCopy className="w-3 h-3 mr-1" />
-                    {copiedAll ? "Copied!" : "Copy All"}
-                  </Button>
-                </div>
-                <div className="space-y-4">
-                  {/* Source Entity Schema */}
-                  <div className="border rounded-lg p-3 space-y-3">
-                    <p className="text-xs font-bold text-blue-600 tracking-wide mb-2">REPLICA</p>
-                    <p className="text-xs font-semibold text-muted-foreground tracking-wide">Source Entity Schema: {form.source_entity_name}</p>
-                    <div className="text-[10px] text-muted-foreground">Required fields for entity: {form.source_entity_name}</div>
-                    <div className="text-xs bg-blue-50 border border-blue-200 rounded p-2 text-blue-800">
-                      <strong>Instruction:</strong> In this Replica app, create entity using the provided schema from Source App and name it{' '}
-                      <span className="bg-blue-100 px-1 rounded font-mono text-[10px] break-all">{form.replica_entity_name}</span>
+                          navigator.clipboard.writeText(replicaContent);
+                          setCopiedAll(true);
+                          setTimeout(() => setCopiedAll(false), 2000);
+                        }}
+                        className="h-7 text-xs px-2"
+                      >
+                        <ClipboardCopy className="w-3 h-3 mr-1" />
+                        {copiedAll ? "Copied!" : "Copy All"}
+                      </Button>
                     </div>
-                    <pre className="bg-black text-blue-400 p-3 rounded text-[10px] overflow-x-auto">
-{`{
-  "unique_id": "string (required)",
-  "column1": "string",
-  "column2": "string",
-  "column3": "string",
-  "column4": "string",
-  "column5": "string",${form.source_entity_name.includes("Two") ? `
-  "column6": "string",
-  "column7": "string",
-  "column8": "string",` : ""}
-}`}
-                    </pre>
-                  </div>
-
-                  {/* REPLICA APP INSTRUCTION Step 5 */}
-                  <div className="border rounded-lg p-3 space-y-3">
-                    <p className="text-xs font-bold text-blue-600 tracking-wide mb-2">REPLICA</p>
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">REPLICA APP INSTRUCTION Step 5: Live Table Updates (Frontend Subscription)</p>
-                    <p className="text-xs bg-blue-50 border border-blue-200 rounded p-2 text-blue-800">
-                      <strong>Instruction:</strong> For any page which uses this entity (<code className="bg-blue-100 px-1 rounded">{form.replica_entity_name}</code>), add this frontend subscription code to the page containing the table / data for the {form.replica_entity_name}.
-                    </p>
-                    <pre className="bg-black text-blue-400 p-3 rounded text-[10px] overflow-x-auto">
-                      {generateSubscriptionCode(form.replica_entity_name)}
-                    </pre>
+                    <p className="text-xs text-blue-700">Paste this message to the chat for the page that will host the table of data. "Use the following to create entity and page code to host the table displaying the entity".</p>
                   </div>
                 </div>
               </DialogContent>

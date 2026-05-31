@@ -706,7 +706,9 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                   size="sm"
                   variant="outline"
                   onClick={() => {
-                    const sourceContent = `SOURCE
+                    const sourceContent = `Click and Copy this message and paste to the chat message Base44 in the Replica App
+
+SOURCE
 =====
 SOURCE APP FUNCTION: ${form.push_function_name}
 

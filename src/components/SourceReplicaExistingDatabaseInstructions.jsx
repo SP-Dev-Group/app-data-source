@@ -175,7 +175,7 @@ export default function SourceReplicaExistingDatabaseInstructions() {
           <div className="space-y-4 text-xs mt-4 whitespace-pre-wrap font-mono leading-relaxed text-foreground">
             {instructionContent.split(/(SourceEntityName|ReplicaEntityName|syncSourceEntityToSourceListener|pushtoReplicaEntityName|REPLICA_"  "_APP_ID|unique_id)/g).map((part, idx) => 
               part === 'pushtoReplicaEntityName' ? 
-                <span key={idx} className="text-orange-600 font-semibold">{part}</span> :
+                <span key={idx} className="text-orange-400 font-semibold">{part}</span> :
               part === 'ReplicaEntityName' ?
                 <span key={idx} className="text-blue-600 font-semibold">{part}</span> :
               part === 'syncSourceEntityToSourceListener' ?

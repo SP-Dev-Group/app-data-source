@@ -486,7 +486,7 @@ ${columnFields}      });
 
             {/* Replica Popup Dialog */}
             <Dialog open={replicaPopupOpen} onOpenChange={setReplicaPopupOpen}>
-              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+              <DialogContent className="max-w-2xl">
                 <DialogHeader>
                   <DialogTitle className="text-blue-600">REPLICA</DialogTitle>
                 </DialogHeader>

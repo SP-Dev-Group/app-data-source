@@ -451,6 +451,47 @@ ${columnFields}      });
                   <DialogTitle className="text-green-600">SOURCE</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
+                  {/* SOURCE Copy Instruction Box at Top */}
+                  <div className="border rounded-lg p-3 bg-green-50 border-green-200 flex items-center justify-between">
+                    <p className="text-xs text-green-800 font-medium">Click and Copy this message and paste to the chat message Base44 in the Replica App</p>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        const sourceContent = `SOURCE
+=====
+SOURCE APP FUNCTION: ${form.push_function_name}
+
+${generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}
+
+Source App Instructions
+
+Step 1: Create backend function ${form.sync_function_name}
+Step 2: Use entity ${form.replica_entity_name} with fields: unique_id (string, required), column1, column2, column3, column4, column5
+Step 3: No automation needed on replica side
+Step 4: In source app, set up ${form.push_function_name} function and entity automation
+Step 5: Add frontend subscription to table page
+🔑🔑 REPLICA APP ID: ${form.replica_app_id}
+
+Step 1: Backend Function (${form.sync_function_name})
+
+${generateReplicaCode(form.replica_entity_name)}
+
+SOURCE APP INSTRUCTION: Live Table Updates (Frontend Subscription)
+
+Instruction: For any page which uses this entity (${form.replica_entity_name}), add this frontend subscription code to the page containing the table / data for the ${form.replica_entity_name}.
+
+${generateSubscriptionCode(form.replica_entity_name)}`;
+                        navigator.clipboard.writeText(sourceContent);
+                        setCopiedAll(true);
+                        setTimeout(() => setCopiedAll(false), 2000);
+                      }}
+                      className="h-7 text-xs px-2 shrink-0"
+                    >
+                      <ClipboardCopy className="w-3 h-3 mr-1" />
+                      {copiedAll ? "Copied!" : "Copy"}
+                    </Button>
+                  </div>
                   {/* Source App Code */}
                   <div className="border rounded-lg p-3 space-y-3">
                     <p className="text-xs font-bold text-green-600 tracking-wide mb-2">SOURCE</p>

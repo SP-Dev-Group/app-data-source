@@ -50,10 +50,14 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
   const handleSave = async () => {
     if (!form.project_name.trim()) return;
     setSaving(true);
+    const payload = {
+      ...form,
+      unique_id: form.project_name.trim(),
+    };
     if (loadedRecordId) {
-      await base44.entities.SourceReplicaConfig.update(loadedRecordId, { ...form });
+      await base44.entities.SourceReplicaConfig.update(loadedRecordId, payload);
     } else {
-      await base44.entities.SourceReplicaConfig.create({ ...form });
+      await base44.entities.SourceReplicaConfig.create(payload);
     }
     setSaving(false);
     setSaved(true);

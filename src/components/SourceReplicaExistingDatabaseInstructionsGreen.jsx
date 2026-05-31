@@ -448,7 +448,46 @@ ${columnFields}      });
             <Dialog open={sourcePopupOpen} onOpenChange={setSourcePopupOpen}>
               <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle className="text-green-600">SOURCE</DialogTitle>
+                  <div className="flex items-center justify-between">
+                    <DialogTitle className="text-green-600">SOURCE</DialogTitle>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        const sourceContent = `SOURCE
+=====
+SOURCE APP FUNCTION: ${form.push_function_name}
+
+${generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}
+
+Source App Instructions
+
+Step 1: Create backend function ${form.sync_function_name}
+Step 2: Use entity ${form.replica_entity_name} with fields: unique_id (string, required), column1, column2, column3, column4, column5
+Step 3: No automation needed on replica side
+Step 4: In source app, set up ${form.push_function_name} function and entity automation
+Step 5: Add frontend subscription to table page
+🔑🔑 REPLICA APP ID: ${form.replica_app_id}
+
+Step 1: Backend Function (${form.sync_function_name})
+
+${generateReplicaCode(form.replica_entity_name)}
+
+SOURCE APP INSTRUCTION: Live Table Updates (Frontend Subscription)
+
+Instruction: For any page which uses this entity (${form.replica_entity_name}), add this frontend subscription code to the page containing the table / data for the ${form.replica_entity_name}.
+
+${generateSubscriptionCode(form.replica_entity_name)}`;
+                        navigator.clipboard.writeText(sourceContent);
+                        setCopiedAll(true);
+                        setTimeout(() => setCopiedAll(false), 2000);
+                      }}
+                      className="h-7 text-xs px-2"
+                    >
+                      <ClipboardCopy className="w-3 h-3 mr-1" />
+                      {copiedAll ? "Copied!" : "Copy All"}
+                    </Button>
+                  </div>
                 </DialogHeader>
                 <div className="space-y-4">
                   {/* Source App Code */}
@@ -682,6 +721,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                 <p><strong>Step 2:</strong> Click copy the body</p>
                 <p><strong>Step 3:</strong> Open the Replica App on the page which will display the table with the data from the database entity</p>
                 <p><strong>Step 4:</strong> Paste the click copy into the chat message for the Base44 AI to do the build</p>
+                <p className="text-green-600 font-semibold"><strong>For SOURCE:</strong> Click and Copy this message and paste to the chat message Base44 in the Replica App</p>
               </div>
               
               <div className="flex gap-2">

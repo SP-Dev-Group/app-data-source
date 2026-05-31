@@ -183,13 +183,13 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
     <>
       <Button variant="outline" size="sm" onClick={() => setOpen(true)} className="flex items-center gap-2 text-xs h-8 justify-start text-green-600 hover:text-green-700">
         <DatabaseZap className="h-3 w-3" />
-        Source-Replica: Existing Databases
+        Source-Replica: Exisiting - Form version
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader className="flex flex-row items-center justify-between">
-            <DialogTitle className="text-lg font-bold">Source-Replica: Existing Databases</DialogTitle>
+            <DialogTitle className="text-lg font-bold">Source-Replica: Exisiting - Form version</DialogTitle>
             <button
               onClick={handleCopy}
               className="text-muted-foreground hover:text-foreground transition-colors"

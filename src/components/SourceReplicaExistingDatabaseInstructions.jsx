@@ -179,7 +179,7 @@ export default function SourceReplicaExistingDatabaseInstructions() {
               part === 'ReplicaEntityName' ?
                 <span key={idx} className="text-blue-600 font-semibold">{part}</span> :
               part === 'syncSourceEntityToSourceListener' ?
-                <span key={idx} className="text-purple-600 font-semibold">{part}</span> :
+                <span key={idx} className="text-pink-600 font-semibold">{part}</span> :
               (part === 'SourceEntityName' || part === 'REPLICA_"  "_APP_ID' || part === 'unique_id') ? 
                 <span key={idx} className="text-green-600 font-semibold">{part}</span> : 
                 <span key={idx}>{part}</span>

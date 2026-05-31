@@ -174,7 +174,9 @@ export default function SourceReplicaExistingDatabaseInstructions() {
 
           <div className="space-y-4 text-xs mt-4 whitespace-pre-wrap font-mono leading-relaxed text-foreground">
             {instructionContent.split(/(SourceEntityName|ReplicaEntityName|syncSourceEntityToSourceListener|pushtoReplicaEntityName|REPLICA_"  "_APP_ID|unique_id)/g).map((part, idx) => 
-              (part === 'SourceEntityName' || part === 'ReplicaEntityName' || part === 'syncSourceEntityToSourceListener' || part === 'pushtoReplicaEntityName' || part === 'REPLICA_"  "_APP_ID' || part === 'unique_id') ? 
+              part === 'pushtoReplicaEntityName' ? 
+                <span key={idx} className="text-orange-600 font-semibold">{part}</span> :
+              (part === 'SourceEntityName' || part === 'ReplicaEntityName' || part === 'syncSourceEntityToSourceListener' || part === 'REPLICA_"  "_APP_ID' || part === 'unique_id') ? 
                 <span key={idx} className="text-green-600 font-semibold">{part}</span> : 
                 <span key={idx}>{part}</span>
             )}

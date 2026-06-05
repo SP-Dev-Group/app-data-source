@@ -119,8 +119,7 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
   };
 
   const handleCopyAll = () => {
-    const columnFields = generateColumnFields(form.replica_entity_name, 8);
-    const sourceCode = generateSourceCode(form.replica_entity_name, form.secret_name, form.replica_app_id);
+    const sourceCode = generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id);
     const replicaCode = generateReplicaCode(form.replica_entity_name);
     const subscriptionCode = generateSubscriptionCode(form.replica_entity_name);
 
@@ -159,7 +158,7 @@ ${sourceCode}
 REPLICA APP INSTRUCTIONS
 ========================
 Step 1: Create backend function ${form.sync_function_name}
-Step 2: Use entity ${form.replica_entity_name} with fields: unique_id (string, required), column1, column2, column3, column4, column5
+Step 2: Create entity ${form.replica_entity_name} in the Replica app with the same fields as the source entity (schema-agnostic — new fields added to source are pushed automatically)
 Step 3: No automation needed on replica side
 Step 4: In source app, set up ${form.push_function_name} function and entity automation
 Step 5: Add frontend subscription to table page
@@ -257,33 +256,9 @@ ${subscriptionCode}`;
     { label: "Replica App ID", key: "replica_app_id" },
   ];
 
-  // Map entity names to their column count
-  const getEntityColumns = (entityName) => {
-    const entityColumnMap = {
-      "ReplicaEntitySample": 5,
-      "ReplicaEntitySampleTwo": 8,
-      "SourceEntitySample": 5,
-      "SourceEntitySampleTwo": 8,
-    };
-    // Default to 8 if not found, or try to detect from entity name
-    if (entityName.includes("Two")) return 8;
-    if (entityName.includes("One") || (entityName.includes("Sample") && !entityName.includes("Two"))) return 5;
-    return entityColumnMap[entityName] || 8;
-  };
-
-  const generateColumnFields = (entityName, indent = 8) => {
-    const columnCount = getEntityColumns(entityName);
-    const indentStr = " ".repeat(indent);
-    let fields = "";
-    for (let i = 1; i <= columnCount; i++) {
-      fields += `${indentStr}column${i}: record.column${i},\n`;
-    }
-    return fields;
-  };
-
   const generateSourceCode = (functionName, entityName, secretName, appId) => {
-    const columnFields = generateColumnFields(entityName, 8);
     return `// Function Name: ${functionName}
+// Schema-agnostic: all source fields are pushed automatically — no changes needed when new fields are added
 
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 import { createClient } from 'npm:@base44/sdk@0.8.25';
@@ -302,6 +277,9 @@ Deno.serve(async (req) => {
     const payload = await req.json();
     const record = payload.data || payload;
 
+    // Strip Base44 internal fields — all remaining fields synced automatically (schema drift safe)
+    const { id, created_date, updated_date, created_by_id, ...fields } = record;
+
     const replicaClient = createClient({ 
       appId: ${secretName}, 
       serviceRole: true 
@@ -312,13 +290,9 @@ Deno.serve(async (req) => {
     });
 
     if (existing && existing.length > 0) {
-      await replicaClient.entities.${entityName}.update(existing[0].id, {
-        unique_id: record.unique_id,
-${columnFields}      });
+      await replicaClient.entities.${entityName}.update(existing[0].id, { ...fields });
     } else {
-      await replicaClient.entities.${entityName}.create({
-        unique_id: record.unique_id,
-${columnFields}      });
+      await replicaClient.entities.${entityName}.create({ ...fields });
     }
 
     return Response.json({ success: true });
@@ -329,8 +303,8 @@ ${columnFields}      });
   };
 
   const generateReplicaCode = (entityName) => {
-    const columnFields = generateColumnFields(entityName, 8);
-    return `import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+    return `// Schema-agnostic: all incoming fields are synced automatically — no changes needed when new fields are added
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 Deno.serve(async (req) => {
   try {
@@ -338,18 +312,17 @@ Deno.serve(async (req) => {
     const payload = await req.json();
     const record = payload.data || payload;
 
+    // Strip Base44 internal fields — all remaining fields synced automatically (schema drift safe)
+    const { id, created_date, updated_date, created_by_id, ...fields } = record;
+
     const existing = await base44.entities.${entityName}.filter({ 
       unique_id: record.unique_id 
     });
 
     if (existing && existing.length > 0) {
-      await base44.entities.${entityName}.update(existing[0].id, {
-        unique_id: record.unique_id,
-${columnFields}      });
+      await base44.entities.${entityName}.update(existing[0].id, { ...fields });
     } else {
-      await base44.entities.${entityName}.create({
-        unique_id: record.unique_id,
-${columnFields}      });
+      await base44.entities.${entityName}.create({ ...fields });
     }
 
     return Response.json({ success: true });
@@ -469,7 +442,7 @@ ${generateSourceCode(form.push_function_name, form.replica_entity_name, form.sec
 Source App Instructions
 
 Step 1: Create backend function ${form.sync_function_name}
-Step 2: Use entity ${form.replica_entity_name} with fields: unique_id (string, required), column1, column2, column3, column4, column5
+Step 2: Create entity ${form.replica_entity_name} in the Replica app with the same fields as the source entity (schema-agnostic — new fields added to source are pushed automatically)
 Step 3: No automation needed on replica side
 Step 4: In source app, set up ${form.push_function_name} function and entity automation
 Step 5: Add frontend subscription to table page
@@ -500,7 +473,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source App Instructions</p>
                     <div className="text-xs space-y-2">
                       <p><strong>Step 1:</strong> Create backend function <code className="bg-black text-green-400 px-1 rounded">{form.sync_function_name}</code></p>
-                      <p><strong>Step 2:</strong> Use entity <code className="bg-black text-green-400 px-1 rounded">{form.replica_entity_name}</code> with fields: unique_id (string, required), column1, column2, column3, column4, column5</p>
+                      <p><strong>Step 2:</strong> Create entity <code className="bg-black text-green-400 px-1 rounded">{form.replica_entity_name}</code> in the Replica app with the same fields as the source entity (schema-agnostic — new fields added to source are pushed automatically)</p>
                       <p><strong>Step 3:</strong> No automation needed on replica side</p>
                       <p><strong>Step 4:</strong> In source app, set up {form.push_function_name} function and entity automation</p>
                       <p><strong>Step 5:</strong> Add frontend subscription to table page</p>
@@ -837,7 +810,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source App Instructions</p>
               <div className="text-xs space-y-2">
                 <p><strong>Step 1:</strong> Create backend function <code className="bg-black text-green-400 px-1 rounded">{form.sync_function_name}</code></p>
-                <p><strong>Step 2:</strong> Use entity <code className="bg-black text-green-400 px-1 rounded">{form.replica_entity_name}</code> with fields: unique_id (string, required), column1, column2, column3, column4, column5</p>
+                <p><strong>Step 2:</strong> Create entity <code className="bg-black text-green-400 px-1 rounded">{form.replica_entity_name}</code> in the Replica app with the same fields as the source entity (schema-agnostic — new fields added to source are pushed automatically)</p>
                 <p><strong>Step 3:</strong> No automation needed on replica side</p>
                 <p><strong>Step 4:</strong> In source app, set up {form.push_function_name} function and entity automation</p>
                 <p><strong>Step 5:</strong> Add frontend subscription to table page</p>

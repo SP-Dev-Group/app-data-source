@@ -88,6 +88,7 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
   const [copiedAll, setCopiedAll] = useState(false);
   const [sourcePopupOpen, setSourcePopupOpen] = useState(false);
   const [replicaPopupOpen, setReplicaPopupOpen] = useState(false);
+  const [ssotSchema, setSsotSchema] = useState("");
 
   const set = (field, value) => {
     if (field === "database_root_name") {
@@ -138,18 +139,8 @@ SOURCE ENTITY SCHEMA
 ====================
 Instruction: In this Replica app, create entity using the provided schema from Source App and name it ${form.replica_entity_name}
 
-Schema:
-{
-  "unique_id": "string (required)",
-  "column1": "string",
-  "column2": "string",
-  "column3": "string",
-  "column4": "string",
-  "column5": "string",${form.source_entity_name.includes("Two") ? `
-  "column6": "string",
-  "column7": "string",
-  "column8": "string",` : ""}
-}
+Schema (SSOT):
+${ssotSchema.trim() || '(No schema pasted)'}
 
 SOURCE APP: ${form.push_function_name} FUNCTION
 ========================================
@@ -534,18 +525,8 @@ Source Entity Schema: ${form.source_entity_name}
 
 Instruction: In this Replica app, create entity using the provided schema from Source App and name it ${form.replica_entity_name}
 
-Schema:
-{
-  "unique_id": "string (required)",
-  "column1": "string",
-  "column2": "string",
-  "column3": "string",
-  "column4": "string",
-  "column5": "string",${form.source_entity_name.includes("Two") ? `
-  "column6": "string",
-  "column7": "string",
-  "column8": "string",` : ""}
-}
+Schema (SSOT — copy of source entity schema):
+${ssotSchema.trim() || '(No schema pasted — go to Step INSERT and paste the entity schema from the Source App three-dots menu)'}
 
 REPLICA APP INSTRUCTION Step 5: Live Table Updates (Frontend Subscription)
 
@@ -574,18 +555,8 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                       <strong>Instruction:</strong> In this Replica app, create entity using the provided schema from Source App and name it{' '}
                       <span className="bg-blue-100 px-1 rounded break-words font-mono text-[10px] w-full inline-block">{form.replica_entity_name}</span>
                     </div>
-                    <pre className="bg-black text-blue-400 p-3 rounded text-[10px] overflow-x-auto">
-{`{
-  "unique_id": "string (required)",
-  "column1": "string",
-  "column2": "string",
-  "column3": "string",
-  "column4": "string",
-  "column5": "string",${form.source_entity_name.includes("Two") ? `
-  "column6": "string",
-  "column7": "string",
-  "column8": "string",` : ""}
-}`}
+                    <pre className="bg-black text-blue-400 p-3 rounded text-[10px] overflow-x-auto max-h-48 overflow-y-auto">
+                      {ssotSchema.trim() || '(No schema pasted yet — go back and paste in Step INSERT)'}
                     </pre>
                   </div>
 
@@ -687,6 +658,23 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
               {saved ? <><Check className="w-3 h-3 mr-1 text-green-300" /> Saved!</> : saving ? "Saving..." : <><Save className="w-3 h-3 mr-1" /> Save Config</>}
             </Button>
 
+            {/* Step INSERT: SSOT Entity Schema */}
+            <div className="border rounded-lg p-3 bg-yellow-50 border-yellow-300 space-y-2 mt-1">
+              <div className="mb-1">
+                <span className="text-xs font-bold text-white bg-yellow-500 px-3 py-1 rounded">Step INSERT: Paste SSOT Entity Schema</span>
+              </div>
+              <p className="text-[10px] text-yellow-800">In the Source App, go to the entity (three dots menu → Copy Schema / View Schema) and paste the full JSON schema here. This will be used in the Replica instructions to build the identical entity.</p>
+              <textarea
+                value={ssotSchema}
+                onChange={(e) => setSsotSchema(e.target.value)}
+                placeholder={`Paste entity schema JSON here, e.g.\n{\n  "name": "MyEntity",\n  "properties": {\n    "unique_id": { "type": "string" },\n    ...\n  }\n}`}
+                className="w-full h-32 text-[10px] font-mono border border-yellow-300 rounded p-2 bg-white resize-y focus:outline-none focus:ring-1 focus:ring-yellow-400"
+              />
+              {ssotSchema.trim() && (
+                <p className="text-[10px] text-green-700 font-medium">✓ Schema captured — will be included in Replica instructions</p>
+              )}
+            </div>
+
             {/* Step 4 Label */}
             <div className="mb-2">
               <span className="text-xs font-bold text-white bg-red-500 px-3 py-1 rounded">Step 4</span>
@@ -764,18 +752,8 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                 <strong>Instruction:</strong> In this Replica app, create entity using the provided schema from Source App and name it{' '}
                 <span className="bg-blue-100 px-1 rounded break-words font-mono text-[10px] w-full inline-block">{form.replica_entity_name}</span>
               </div>
-              <pre className="bg-black text-blue-400 p-3 rounded text-[10px] overflow-x-auto">
-{`{
-  "unique_id": "string (required)",
-  "column1": "string",
-  "column2": "string",
-  "column3": "string",
-  "column4": "string",
-  "column5": "string",${form.source_entity_name.includes("Two") ? `
-  "column6": "string",
-  "column7": "string",
-  "column8": "string",` : ""}
-}`}
+              <pre className="bg-black text-blue-400 p-3 rounded text-[10px] overflow-x-auto max-h-48 overflow-y-auto">
+                {ssotSchema.trim() || '(No schema pasted yet — go back and paste in Step INSERT)'}
               </pre>
             </div>
 

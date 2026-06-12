@@ -12,6 +12,7 @@ import PageMeta from "@/components/PageMeta";
 import SourceReplicaNewDatabaseInstructions from "@/components/SourceReplicaNewDatabaseInstructions";
 import SourceReplicaExistingDatabaseInstructions from "@/components/SourceReplicaExistingDatabaseInstructions";
 import SourceReplicaExistingDatabaseInstructionsGreen from "@/components/SourceReplicaExistingDatabaseInstructionsGreen";
+import SourceReplicaExistingDatabaseInstructionsRed from "@/components/SourceReplicaExistingDatabaseInstructionsRed";
 
 const logError = (source, error) => {
   base44.entities.DataSourceLiveErrorLog.create({
@@ -238,6 +239,7 @@ export default function DataSourceLive() {
           <SourceReplicaNewDatabaseInstructions />
           <SourceReplicaExistingDatabaseInstructions />
           <SourceReplicaExistingDatabaseInstructionsGreen />
+          <SourceReplicaExistingDatabaseInstructionsRed />
         </div>
       </div>
     </div>

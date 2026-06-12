@@ -89,6 +89,8 @@ export default function SourceReplicaExistingDatabaseInstructionsGreen() {
   const [sourcePopupOpen, setSourcePopupOpen] = useState(false);
   const [replicaPopupOpen, setReplicaPopupOpen] = useState(false);
   const [ssotSchema, setSsotSchema] = useState("");
+  const [savingSchema, setSavingSchema] = useState(false);
+  const [schemaSaved, setSchemaSaved] = useState(false);
 
   const set = (field, value) => {
     if (field === "database_root_name") {
@@ -189,6 +191,7 @@ ${subscriptionCode}`;
     const payload = {
       ...form,
       unique_id: form.project_name.trim(),
+      ssot_schema: ssotSchema.trim(),
     };
     if (loadedRecordId) {
       await base44.entities.SourceReplicaConfig.update(loadedRecordId, payload);
@@ -197,7 +200,20 @@ ${subscriptionCode}`;
     }
     setSaving(false);
     setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    setSchemaSaved(true);
+    setTimeout(() => {
+      setSaved(false);
+      setSchemaSaved(false);
+    }, 2000);
+  };
+
+  const handleSaveSchema = async () => {
+    if (!loadedRecordId || !ssotSchema.trim()) return;
+    setSavingSchema(true);
+    await base44.entities.SourceReplicaConfig.update(loadedRecordId, { ssot_schema: ssotSchema.trim() });
+    setSavingSchema(false);
+    setSchemaSaved(true);
+    setTimeout(() => setSchemaSaved(false), 2000);
   };
 
   const handleSearch = async () => {
@@ -231,10 +247,12 @@ ${subscriptionCode}`;
       replica_app_id: record.replica_app_id || DEFAULTS.replica_app_id,
       database_root_name: dbRoot,
     });
+    setSsotSchema(record.ssot_schema || "");
     setLoadedRecordId(record.id);
     setShowResults(false);
     setSearchTerm("");
     setEditingField(null);
+    setSchemaSaved(false);
   };
 
   const fields = [
@@ -670,8 +688,11 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                 placeholder={`Paste entity schema JSON here, e.g.\n{\n  "name": "MyEntity",\n  "properties": {\n    "unique_id": { "type": "string" },\n    ...\n  }\n}`}
                 className="w-full h-32 text-[10px] font-mono border border-yellow-300 rounded p-2 bg-white resize-y focus:outline-none focus:ring-1 focus:ring-yellow-400"
               />
-              {ssotSchema.trim() && (
-                <p className="text-[10px] text-green-700 font-medium">✓ Schema captured — will be included in Replica instructions</p>
+              {ssotSchema.trim() && schemaSaved && (
+                <p className="text-[10px] text-green-700 font-medium">✓ Schema saved to config</p>
+              )}
+              {ssotSchema.trim() && !schemaSaved && (
+                <p className="text-[10px] text-yellow-700 font-medium">⚠ Schema entered but not saved yet — click Save Config</p>
               )}
             </div>
 

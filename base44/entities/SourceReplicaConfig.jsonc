@@ -20,7 +20,7 @@
     },
     "sync_function_name": {
       "type": "string",
-      "description": "Function: syncSourceEntityToSourceListener"
+      "description": "Function: syncSourceEntityNameToSourceListener"
     },
     "push_function_name": {
       "type": "string",
@@ -33,6 +33,10 @@
     "replica_app_id": {
       "type": "string",
       "description": "Replica App ID value"
+    },
+    "ssot_schema": {
+      "type": "string",
+      "description": "SSOT Entity Schema JSON (pasted from Source app)"
     }
   },
   "required": [

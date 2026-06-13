@@ -413,7 +413,7 @@ Deno.serve(async (req) => {
             <Dialog open={sourcePopupOpen} onOpenChange={setSourcePopupOpen}>
               <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle className="text-blue-600">SOURCE [EXP]</DialogTitle>
+                  <DialogTitle className="text-blue-600">SOURCE V3</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div className="border rounded-lg p-3 bg-blue-50 border-blue-200 flex items-center justify-between">
@@ -521,7 +521,7 @@ Make it active, so it can run when triggered.`;
             <Dialog open={replicaPopupOpen} onOpenChange={setReplicaPopupOpen}>
               <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle className="text-blue-600">REPLICA [EXP]</DialogTitle>
+                  <DialogTitle className="text-blue-600">REPLICA V3</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div className="border rounded-lg p-3 bg-blue-50 border-blue-200 space-y-3">

@@ -112,6 +112,12 @@ export default function SourceReplicaExistingDatabaseInstructionsRed() {
         [field]: value,
         sync_function_name: newSyncFunction
       }));
+    } else if (field === "replica_entity_name") {
+      setForm((f) => ({
+        ...f,
+        [field]: value,
+        push_function_name: "pushto" + value
+      }));
     } else {
       setForm((f) => ({ ...f, [field]: value }));
     }

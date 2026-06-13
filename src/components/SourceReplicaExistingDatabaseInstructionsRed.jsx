@@ -410,22 +410,23 @@ Deno.serve(async (req) => {
 
 SOURCE
 =====
-SOURCE APP FUNCTION: ${form.push_function_name}
-
-${generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}
-
 Source App Instructions
 
+IMPORTANT: DO NOT CREATE ${form.replica_entity_name} the replica entity in this app as it is intended for the external receiving app.
+
 Step 1: Create backend function ${form.sync_function_name}
-Step 2: Create entity ${form.replica_entity_name} in the Replica app with the same fields as the source entity (schema-agnostic — new fields added to source are pushed automatically)
-Step 3: No automation needed on replica side
-Step 4: In source app, set up ${form.push_function_name} function and entity automation
-Step 5: Add frontend subscription to table page
+Step 2: No automation needed on replica side
+Step 3: In this, the source app, set up ${form.push_function_name} function and entity automation
+Step 4: Add frontend subscription to table page
 🔑🔑 REPLICA APP ID: ${form.replica_app_id}
 
 Step 1: Backend Function (${form.sync_function_name})
 
-${generateReplicaCode(form.replica_entity_name)}`;
+${generateReplicaCode(form.replica_entity_name)}
+
+SOURCE APP FUNCTION: ${form.push_function_name}
+
+${generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}`;
                         navigator.clipboard.writeText(sourceContent);
                         setCopiedAll(true);
                         setTimeout(() => setCopiedAll(false), 2000);

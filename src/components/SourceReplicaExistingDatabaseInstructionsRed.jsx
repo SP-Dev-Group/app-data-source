@@ -444,7 +444,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                   </div>
                   <div className="border rounded-lg p-3 space-y-3">
                     <p className="text-xs font-bold text-red-600 tracking-wide mb-2">SOURCE</p>
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source App Instructions</p>
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">This App is the Source App and these are instructions for this the SOURCE app. Instructions</p>
                     <div className="text-xs space-y-2">
                       <p><strong>Step 1:</strong> Create backend function <code className="bg-black text-red-400 px-1 rounded">{form.sync_function_name}</code></p>
                       <p><strong>Step 2:</strong> No automation needed on replica side</p>

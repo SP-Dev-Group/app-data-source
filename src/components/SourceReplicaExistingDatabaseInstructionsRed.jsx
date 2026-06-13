@@ -33,7 +33,7 @@ const DEFAULTS = {
   sync_function_name: "",
   push_function_name: "",
   secret_name: "",
-  replica_app_id: "value-here",
+  replica_app_id: "",
   database_root_name: "",
 };
 
@@ -152,7 +152,7 @@ export default function SourceReplicaExistingDatabaseInstructionsRed() {
       sync_function_name: "",
       push_function_name: "",
       secret_name: "",
-      replica_app_id: "value-here",
+      replica_app_id: "",
       database_root_name: "",
     });
     setLoadedRecordId(null);

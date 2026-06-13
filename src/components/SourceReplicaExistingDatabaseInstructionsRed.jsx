@@ -8,8 +8,8 @@ import { base44 } from "@/api/base44Client";
 const DEFAULTS = {
   project_name: "",
   replica_entity_name: "",
-  source_entity_name: "SourceEntityName",
-  sync_function_name: "syncSourceEntityNameToSourceListener",
+  source_entity_name: "",
+  sync_function_name: "",
   push_function_name: "",
   secret_name: "",
   replica_app_id: "value-here",
@@ -121,8 +121,8 @@ export default function SourceReplicaExistingDatabaseInstructionsRed() {
     setForm({
       project_name: "",
       replica_entity_name: "",
-      source_entity_name: "SourceEntityName",
-      sync_function_name: "syncSourceEntityToSourceListener",
+      source_entity_name: "",
+      sync_function_name: "",
       push_function_name: "",
       secret_name: "",
       replica_app_id: "value-here",

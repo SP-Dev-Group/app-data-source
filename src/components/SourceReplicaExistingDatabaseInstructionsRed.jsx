@@ -477,20 +477,19 @@ ${generateSourceCode(form.push_function_name, form.replica_entity_name, form.sec
                         size="sm"
                         variant="outline"
                         onClick={() => {
-                          const replicaContent = `REPLICA APP INSTRUCTIONS
-========================
-"Use the following to create entity and page code to host the table displaying the entity".
+                          const replicaContent = `"Use the following to create entity and page code to host the table displaying the entity".
 
+REPLICA
 Source Entity Schema: ${form.source_entity_name}
 
 Instruction: In this Replica app, create entity using the provided schema from Source App and name it ${form.replica_entity_name}
 
-Schema (SSOT — copy of source entity schema):
-${ssotSchema.trim() || '(No schema pasted — go to Step INSERT and paste the entity schema from the Source App three-dots menu)'}
+${ssotSchema.trim() || '(No schema pasted yet — go back and paste in Step INSERT)'}
 
-REPLICA APP INSTRUCTION Step 5: Live Table Updates (Frontend Subscription)
+REPLICA
+REPLICA APP INSTRUCTION: Live Table Updates (Frontend Subscription)
 
-Instruction: For any page which uses this entity (${form.replica_entity_name}), add this frontend subscription code to the page containing the table / data for the ${form.replica_entity_name}.
+Instruction: For any page which uses this entity (${form.replica_entity_name}), add this frontend subscription code.
 
 ${generateSubscriptionCode(form.replica_entity_name)}`;
                           navigator.clipboard.writeText(replicaContent);

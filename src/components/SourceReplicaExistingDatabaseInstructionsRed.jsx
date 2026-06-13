@@ -493,6 +493,17 @@ ${generateSourceCode(form.push_function_name, form.replica_entity_name, form.sec
                     <CopyableCode>{generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}</CopyableCode>
                   </div>
 
+                  <div className="border rounded-lg p-3 space-y-3">
+                    <p className="text-xs font-bold text-red-600 tracking-wide mb-2">SOURCE</p>
+                    <p className="text-xs font-bold text-red-600 mb-2">STEP 4</p>
+                    <div className="text-xs space-y-2 text-foreground">
+                      <p><strong>Make an automation</strong></p>
+                      <p><strong>Name it:</strong> <code className="bg-black text-red-400 px-1 rounded">{form.sync_function_name}{getTodayAUS()}</code></p>
+                      <p><strong>Use:</strong> <code className="bg-black text-red-400 px-1 rounded">{form.push_function_name}</code></p>
+                      <p><strong>Runs When:</strong> <code className="bg-black text-red-400 px-1 rounded">{form.source_entity_name}</code> is Created, Updated or Deleted</p>
+                    </div>
+                  </div>
+
                 </div>
               </DialogContent>
             </Dialog>

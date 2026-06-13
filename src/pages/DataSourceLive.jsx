@@ -13,6 +13,7 @@ import SourceReplicaNewDatabaseInstructions from "@/components/SourceReplicaNewD
 import SourceReplicaExistingDatabaseInstructions from "@/components/SourceReplicaExistingDatabaseInstructions";
 import SourceReplicaExistingDatabaseInstructionsGreen from "@/components/SourceReplicaExistingDatabaseInstructionsGreen";
 import SourceReplicaExistingDatabaseInstructionsRed from "@/components/SourceReplicaExistingDatabaseInstructionsRed";
+import SourceReplicaExistingDatabaseInstructionsBlue from "@/components/SourceReplicaExistingDatabaseInstructionsBlue";
 
 const logError = (source, error) => {
   base44.entities.DataSourceLiveErrorLog.create({
@@ -240,6 +241,7 @@ export default function DataSourceLive() {
           <SourceReplicaExistingDatabaseInstructions />
           <SourceReplicaExistingDatabaseInstructionsGreen />
           <SourceReplicaExistingDatabaseInstructionsRed />
+          <SourceReplicaExistingDatabaseInstructionsBlue />
         </div>
       </div>
     </div>

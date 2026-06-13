@@ -557,6 +557,9 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                 {key === "database_root_name" && (
                   <p className="text-[10px] text-muted-foreground italic">allocate a root name / theme name to run throughout</p>
                 )}
+                {key === "source_entity_name" && (
+                  <p className="text-[10px] text-muted-foreground italic">use an existing database entity name, or create a new one if starting from scratch</p>
+                )}
               <div className="flex items-center gap-2">
                 <span className="text-xs text-muted-foreground w-40 shrink-0">{label}</span>
                 <Input

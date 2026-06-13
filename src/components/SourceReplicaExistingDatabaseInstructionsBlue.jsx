@@ -761,57 +761,6 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
             <CopyField label="Replica App ID" value={form.replica_app_id} />
           </div>
 
-          {/* REPLICA Section */}
-          <div className="space-y-3 mt-4">
-            <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
-              <p className="text-xs font-bold text-blue-600 tracking-wide mb-2">REPLICA</p>
-              <p className="text-xs font-semibold text-muted-foreground tracking-wide">Source Entity Schema: {form.source_entity_name}</p>
-              <div className="text-xs bg-blue-50 border border-blue-200 rounded p-2 text-blue-800 leading-relaxed">
-                <strong>Instruction:</strong> In this Replica app, create entity using the provided schema from Source App and name it{' '}
-                <span className="bg-blue-100 px-1 rounded break-words font-mono text-[10px] w-full inline-block">{form.replica_entity_name}</span>
-              </div>
-              <CopyableCode>{ssotSchema.trim() || '(No schema pasted yet — go back and paste in Step INSERT)'}</CopyableCode>
-            </div>
-
-            <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
-              <p className="text-xs font-bold text-blue-600 tracking-wide mb-2">REPLICA</p>
-              <p className="text-xs font-semibold text-muted-foreground mb-2">REPLICA APP INSTRUCTION: Live Table Updates (Frontend Subscription)</p>
-              <p className="text-xs bg-blue-50 border border-blue-200 rounded p-2 text-blue-800">
-                <strong>Instruction:</strong> For any page which uses this entity (<code className="bg-blue-100 px-1 rounded">{form.replica_entity_name}</code>), add this frontend subscription code.
-              </p>
-              <CopyableCode>{generateSubscriptionCode(form.replica_entity_name)}</CopyableCode>
-            </div>
-          </div>
-
-          {/* SOURCE Section */}
-          <div className="space-y-3">
-            <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
-              <p className="text-xs font-bold text-blue-600 tracking-wide mb-2">SOURCE</p>
-              <p className="text-xs font-semibold text-muted-foreground tracking-wide">SOURCE APP FUNCTION: {form.push_function_name}</p>
-              <div className="text-[10px] text-muted-foreground">Code generated from your config: {form.project_name}</div>
-              <CopyableCode>{generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}</CopyableCode>
-            </div>
-
-            <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
-              <p className="text-xs font-bold text-blue-600 tracking-wide mb-2">SOURCE</p>
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source App Instructions</p>
-              <div className="text-xs space-y-2">
-                <p><strong>Step 1:</strong> Create backend function <code className="bg-black text-blue-400 px-1 rounded">{form.sync_function_name}</code></p>
-                <p><strong>Step 2:</strong> Create entity <code className="bg-black text-blue-400 px-1 rounded">{form.replica_entity_name}</code> in the Replica app</p>
-                <p><strong>Step 3:</strong> No automation needed on replica side</p>
-                <p><strong>Step 4:</strong> In source app, set up {form.push_function_name} function and entity automation</p>
-                <p><strong>Step 5:</strong> Add frontend subscription to table page</p>
-                <p className="text-blue-500 font-semibold">🔑🔑 REPLICA APP ID: {form.replica_app_id}</p>
-              </div>
-
-              <div className="mt-3">
-                <p className="text-xs font-semibold text-muted-foreground mb-2">Step 1: Backend Function ({form.sync_function_name})</p>
-                <CopyableCode>{generateReplicaCode(form.replica_entity_name)}</CopyableCode>
-              </div>
-
-
-            </div>
-          </div>
         </DialogContent>
       </Dialog>
     </>

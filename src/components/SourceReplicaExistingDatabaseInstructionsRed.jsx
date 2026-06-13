@@ -196,7 +196,7 @@ export default function SourceReplicaExistingDatabaseInstructionsRed() {
   };
 
   const fields = [
-    { label: "Database Root Name", key: "database_root_name" },
+    { label: "Allocate a Root Name", key: "database_root_name" },
     { label: "Replica Entity", key: "replica_entity_name" },
     { label: "Source Entity", key: "source_entity_name" },
     { label: "Sync Function", key: "sync_function_name" },
@@ -678,7 +678,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
           {/* Copy Reference Panel */}
           <div className="border border-red-200 rounded-lg p-3 space-y-2 bg-red-50/20">
             <p className="text-xs font-semibold text-red-700 uppercase tracking-wide">Copy Reference Values</p>
-            <CopyField label="Database Root Name" value={form.database_root_name} />
+            <CopyField label="Allocate a Root Name" value={form.database_root_name} />
             <CopyField label="Replica Entity" value={form.replica_entity_name} />
             <CopyField label="Source Entity" value={form.source_entity_name} />
             <CopyField label="Sync Function" value={form.sync_function_name} />

@@ -425,13 +425,7 @@ Step 5: Add frontend subscription to table page
 
 Step 1: Backend Function (${form.sync_function_name})
 
-${generateReplicaCode(form.replica_entity_name)}
-
-SOURCE APP INSTRUCTION: Live Table Updates (Frontend Subscription)
-
-Instruction: For any page which uses this entity (${form.replica_entity_name}), add this frontend subscription code to the page containing the table / data for the ${form.replica_entity_name}.
-
-${generateSubscriptionCode(form.replica_entity_name)}`;
+${generateReplicaCode(form.replica_entity_name)}`;
                         navigator.clipboard.writeText(sourceContent);
                         setCopiedAll(true);
                         setTimeout(() => setCopiedAll(false), 2000);

@@ -721,26 +721,10 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
 
             {/* Popup Buttons Box */}
             <div className="border border-blue-200 rounded-lg p-3 bg-blue-50/30">
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide">View and Copy Instructions</p>
-              </div>
-
-              <div className="mb-3 text-[10px] text-muted-foreground space-y-1">
-                <p className="font-semibold text-blue-800 mb-1">VIEW AND COPY REPLICA INSTRUCTIONS</p>
-                <p><strong>Step 1:</strong> Click and open <button onClick={(e) => { e.stopPropagation(); setReplicaPopupOpen(true); }} className="text-xs font-bold text-white uppercase tracking-wide px-2 py-0.5 rounded bg-blue-600 border border-blue-600 hover:bg-blue-700 transition-colors cursor-pointer">REPLICA</button></p>
-                <p><strong>Step 2:</strong> Click copy the body</p>
-                <p><strong>Step 3:</strong> Open the Replica App on the page which will display the table</p>
-                <p><strong>Step 4:</strong> Paste into the chat message for the Base44 AI to do the build</p>
-              </div>
-
-              <div className="mb-3 text-[10px] text-muted-foreground space-y-1 border-t pt-3">
-                <p className="font-semibold text-blue-800 mb-1">VIEW AND COPY SOURCE INSTRUCTIONS</p>
-                <p><strong>Step 1:</strong> Click and open <button onClick={(e) => { e.stopPropagation(); setSourcePopupOpen(true); }} className="text-xs font-bold text-white uppercase tracking-wide px-2 py-0.5 rounded bg-blue-500 border border-blue-500 hover:bg-blue-600 transition-colors cursor-pointer">SOURCE</button></p>
-                <p><strong>Step 2:</strong> Click copy the body</p>
-                <p><strong>Step 3:</strong> In this Source App open the page which will host the data table</p>
-                <p><strong>Step 4:</strong> Paste into the Base44 chat message for the AI to do the build</p>
-              </div>
-
+              <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide mb-2">View and Copy Instructions</p>
+              <p className="text-[10px] text-muted-foreground mb-3">
+                Open the <strong>SOURCE</strong> and <strong>REPLICA</strong> tabs to <strong>COPY</strong> then <strong>PASTE</strong> into each app. Also tell the chat in each app which <strong>page file name</strong> the process belongs to — otherwise the Base44 builder may start a new page instead of updating the correct one.
+              </p>
               <div className="flex gap-2">
                 <button
                   onClick={() => setSourcePopupOpen(true)}

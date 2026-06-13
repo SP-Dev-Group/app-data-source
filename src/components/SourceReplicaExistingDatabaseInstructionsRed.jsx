@@ -439,14 +439,19 @@ ${generateSourceCode(form.push_function_name, form.replica_entity_name, form.sec
                   </div>
                   <div className="border rounded-lg p-3 space-y-3">
                     <p className="text-xs font-bold text-red-600 tracking-wide mb-2">SOURCE</p>
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">This App is the Source App and these are instructions for this the SOURCE app. Instructions</p>
-                    <p className="text-xs text-red-700 font-medium bg-red-50 border border-red-200 rounded p-2">IMPORTANT: DO NOT CREATE <code className="bg-red-100 px-1 rounded">{form.replica_entity_name}</code> the replica entity in this app as it is intended for the external receiving app.</p>
-                    <div className="text-xs space-y-2">
-                      <p><strong>Step 1:</strong> Create backend function <code className="bg-black text-red-400 px-1 rounded">{form.sync_function_name}</code></p>
-                      <p><strong>Step 2:</strong> No automation needed on replica side</p>
-                      <p><strong>Step 3:</strong> In this, the source app, set up {form.push_function_name} function and entity automation</p>
-                      <p><strong>Step 4:</strong> Add frontend subscription to table page</p>
-                      <p className="text-red-500 font-semibold">🔑🔑 REPLICA APP ID: {form.replica_app_id}</p>
+                    <div className="text-xs space-y-2 text-muted-foreground">
+                      <p><strong>Overview:</strong> There are two apps, a source app and a replica app. This app is the source app and contains one entity specifically as a SSOT - single source of truth entity. The SSOT source app entity will be listened to and on change will trigger the push to the external base44 app, referred to as the replica app. You will use the two function code blocks to create a new unique listening function and a new unique push to style function.</p>
+                    </div>
+                    <div className="text-xs space-y-2 text-red-700 bg-red-50 border border-red-200 rounded p-2">
+                      <p><strong>Instruction 1:</strong> Follow the steps exactly as instructed, don't assume or change anything.</p>
+                      <p><strong>Instruction 2:</strong> There is to be no automation in the external app.</p>
+                      <p><strong>Instruction 3:</strong> Do not create the replica entity <code className="bg-red-100 px-1 rounded">{form.replica_entity_name}</code> in this app, as this is the source app. The replica entity will be created in the external app using other code, not available here.</p>
+                      <p><strong>Instruction 4:</strong> Use / reference only the source entity <code className="bg-red-100 px-1 rounded">{form.source_entity_name}</code> and the replica entity <code className="bg-red-100 px-1 rounded">{form.replica_entity_name}</code> named in the code, therefore, do not use another entity from within this app or the external app.</p>
+                      <p><strong>Instruction 5:</strong> Use only the Replica Secret Name <code className="bg-red-100 px-1 rounded">{form.secret_name}</code> and Replica App ID <code className="bg-red-100 px-1 rounded">{form.replica_app_id}</code>, as provided in these notes and code blocks.</p>
+                    </div>
+                    <div className="text-xs space-y-2 text-muted-foreground">
+                      <p><strong>Step 1:</strong> Create a new backend function and call it <code className="bg-black text-red-400 px-1 rounded">{form.sync_function_name}</code>. (Do not use existing backend functions in this app under any circumstance, do not use this code to overwrite any other function already existing in this app).</p>
+                      <p><strong>Step 2:</strong> Create the other function: For the push function, use the push function name provided which is <code className="bg-black text-red-400 px-1 rounded">{form.push_function_name}</code>. Do not use any other push function or function that may already exist in this app. Do not use this push function code to overwrite any other function or code already in this app.</p>
                     </div>
                     <div className="mt-3">
                       <p className="text-xs font-semibold text-muted-foreground mb-2">Step 1: Backend Function ({form.sync_function_name})</p>

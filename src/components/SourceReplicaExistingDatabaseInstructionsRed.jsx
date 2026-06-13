@@ -197,8 +197,8 @@ export default function SourceReplicaExistingDatabaseInstructionsRed() {
 
   const fields = [
     { label: "Allocate a Root Name", key: "database_root_name" },
-    { label: "Replica Entity", key: "replica_entity_name" },
     { label: "Source Entity", key: "source_entity_name" },
+    { label: "Replica Entity", key: "replica_entity_name" },
     { label: "Sync Function", key: "sync_function_name" },
     { label: "Push Function", key: "push_function_name", editable: false },
     { label: "Replica Secret Name", key: "secret_name", editable: false },

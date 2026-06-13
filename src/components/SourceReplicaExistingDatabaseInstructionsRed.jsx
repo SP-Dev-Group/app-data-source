@@ -13,7 +13,7 @@ const DEFAULTS = {
   push_function_name: "",
   secret_name: "",
   replica_app_id: "value-here",
-  database_root_name: "people",
+  database_root_name: "",
 };
 
 function CopyField({ label, value }) {
@@ -120,13 +120,13 @@ export default function SourceReplicaExistingDatabaseInstructionsRed() {
   const handleAdd = () => {
     setForm({
       project_name: "",
-      replica_entity_name: "Replicapeople",
+      replica_entity_name: "",
       source_entity_name: "SourceEntityName",
       sync_function_name: "syncSourceEntityToSourceListener",
-      push_function_name: "pushtoReplicapeople",
-      secret_name: "REPLICA_people_APP_ID",
+      push_function_name: "",
+      secret_name: "",
       replica_app_id: "value-here",
-      database_root_name: "People",
+      database_root_name: "",
     });
     setLoadedRecordId(null);
     setEditingField("project_name");

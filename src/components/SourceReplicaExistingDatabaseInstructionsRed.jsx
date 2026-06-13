@@ -401,7 +401,7 @@ Deno.serve(async (req) => {
                 </DialogHeader>
                 <div className="space-y-4">
                   <div className="border rounded-lg p-3 bg-red-50 border-red-200 flex items-center justify-between">
-                    <p className="text-xs text-red-800 font-medium">Click and Copy this message and paste to the chat message Base44 in the Replica App</p>
+                    <p className="text-xs text-red-800 font-medium">Click and Copy this message and paste to the chat message Base44 in the Source App</p>
                     <Button
                       size="sm"
                       variant="outline"

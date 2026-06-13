@@ -766,14 +766,8 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
             <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
               <p className="text-xs font-bold text-red-600 tracking-wide mb-2">SOURCE</p>
               <p className="text-xs font-semibold text-muted-foreground tracking-wide">SOURCE APP FUNCTION: {form.push_function_name}</p>
-              <p className="text-xs font-bold text-red-600">Put Step 2 Code Block</p>
               <div className="text-[10px] text-muted-foreground">Code generated from your config: {form.project_name}</div>
               <CopyableCode>{generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}</CopyableCode>
-
-              <div className="border-t pt-3 mt-3">
-                <p className="text-xs font-bold text-red-600 mb-2">STEP 4</p>
-                <p className="text-xs text-foreground">Make an automation; Name it: <code className="bg-black text-red-400 px-1 rounded">{form.sync_function_name}{getTodayAUS()}</code>. Use: <code className="bg-black text-red-400 px-1 rounded">{form.push_function_name}</code>; Runs When: <code className="bg-black text-red-400 px-1 rounded">{form.source_entity_name}</code> is Created, Updated or Deleted.</p>
-              </div>
             </div>
 
             <div className="border rounded-lg p-3 space-y-3 bg-muted/20">

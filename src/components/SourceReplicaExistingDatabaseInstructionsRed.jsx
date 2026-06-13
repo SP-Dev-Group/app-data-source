@@ -3,6 +3,27 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { DatabaseZap, Copy, Check, Save, Search, X, Pencil, ClipboardCopy } from "lucide-react";
+
+function CopyableCode({ children }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(children);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+  return (
+    <div className="relative group">
+      <pre className="bg-black text-red-400 p-3 rounded text-[10px] overflow-x-auto max-h-96 overflow-y-auto pr-10">{children}</pre>
+      <button
+        onClick={handleCopy}
+        className="absolute top-2 right-2 text-red-400 hover:text-white transition-colors opacity-60 group-hover:opacity-100"
+        title="Copy to clipboard"
+      >
+        {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+      </button>
+    </div>
+  );
+}
 import { base44 } from "@/api/base44Client";
 
 const DEFAULTS = {
@@ -434,17 +455,13 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                     </div>
                     <div className="mt-3">
                       <p className="text-xs font-semibold text-muted-foreground mb-2">Step 1: Backend Function ({form.sync_function_name})</p>
-                      <pre className="bg-black text-red-400 p-3 rounded text-[10px] overflow-x-auto max-h-96 overflow-y-auto">
-                        {generateReplicaCode(form.replica_entity_name)}
-                      </pre>
+                      <CopyableCode>{generateReplicaCode(form.replica_entity_name)}</CopyableCode>
                     </div>
                   </div>
                   <div className="border rounded-lg p-3 space-y-3">
                     <p className="text-xs font-bold text-red-600 tracking-wide mb-2">SOURCE</p>
                     <p className="text-xs font-semibold text-muted-foreground tracking-wide">SOURCE APP FUNCTION: {form.push_function_name}</p>
-                    <pre className="bg-black text-red-400 p-3 rounded text-[10px] overflow-x-auto max-h-96 overflow-y-auto">
-                      {generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}
-                    </pre>
+                    <CopyableCode>{generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}</CopyableCode>
                   </div>
                   <div className="border rounded-lg p-3 space-y-3">
                     <p className="text-xs font-bold text-red-600 tracking-wide mb-2">SOURCE</p>
@@ -452,9 +469,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                     <p className="text-xs bg-red-50 border border-red-200 rounded p-2 text-red-800">
                       <strong>Instruction:</strong> For any page which uses this entity (<code className="bg-red-100 px-1 rounded">{form.replica_entity_name}</code>), add this frontend subscription code.
                     </p>
-                    <pre className="bg-black text-red-400 p-3 rounded text-[10px] overflow-x-auto">
-                      {generateSubscriptionCode(form.replica_entity_name)}
-                    </pre>
+                    <CopyableCode>{generateSubscriptionCode(form.replica_entity_name)}</CopyableCode>
                   </div>
                 </div>
               </DialogContent>
@@ -510,9 +525,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                       <strong>Instruction:</strong> In this Replica app, create entity using the provided schema from Source App and name it{' '}
                       <span className="bg-red-100 px-1 rounded break-words font-mono text-[10px] w-full inline-block">{form.replica_entity_name}</span>
                     </div>
-                    <pre className="bg-black text-red-400 p-3 rounded text-[10px] overflow-x-auto max-h-48 overflow-y-auto">
-                      {ssotSchema.trim() || '(No schema pasted yet — go back and paste in Step INSERT)'}
-                    </pre>
+                    <CopyableCode>{ssotSchema.trim() || '(No schema pasted yet — go back and paste in Step INSERT)'}</CopyableCode>
                   </div>
 
                   <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
@@ -521,9 +534,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                     <p className="text-xs bg-red-50 border border-red-200 rounded p-2 text-red-800">
                       <strong>Instruction:</strong> For any page which uses this entity (<code className="bg-red-100 px-1 rounded">{form.replica_entity_name}</code>), add this frontend subscription code.
                     </p>
-                    <pre className="bg-black text-red-400 p-3 rounded text-[10px] overflow-x-auto">
-                      {generateSubscriptionCode(form.replica_entity_name)}
-                    </pre>
+                    <CopyableCode>{generateSubscriptionCode(form.replica_entity_name)}</CopyableCode>
                   </div>
                 </div>
               </DialogContent>
@@ -716,9 +727,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                 <strong>Instruction:</strong> In this Replica app, create entity using the provided schema from Source App and name it{' '}
                 <span className="bg-red-100 px-1 rounded break-words font-mono text-[10px] w-full inline-block">{form.replica_entity_name}</span>
               </div>
-              <pre className="bg-black text-red-400 p-3 rounded text-[10px] overflow-x-auto max-h-48 overflow-y-auto">
-                {ssotSchema.trim() || '(No schema pasted yet — go back and paste in Step INSERT)'}
-              </pre>
+              <CopyableCode>{ssotSchema.trim() || '(No schema pasted yet — go back and paste in Step INSERT)'}</CopyableCode>
             </div>
 
             <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
@@ -727,9 +736,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
               <p className="text-xs bg-red-50 border border-red-200 rounded p-2 text-red-800">
                 <strong>Instruction:</strong> For any page which uses this entity (<code className="bg-red-100 px-1 rounded">{form.replica_entity_name}</code>), add this frontend subscription code.
               </p>
-              <pre className="bg-black text-red-400 p-3 rounded text-[10px] overflow-x-auto">
-                {generateSubscriptionCode(form.replica_entity_name)}
-              </pre>
+              <CopyableCode>{generateSubscriptionCode(form.replica_entity_name)}</CopyableCode>
             </div>
           </div>
 
@@ -739,9 +746,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
               <p className="text-xs font-bold text-red-600 tracking-wide mb-2">SOURCE</p>
               <p className="text-xs font-semibold text-muted-foreground tracking-wide">SOURCE APP FUNCTION: {form.push_function_name}</p>
               <div className="text-[10px] text-muted-foreground">Code generated from your config: {form.project_name}</div>
-              <pre className="bg-black text-red-400 p-3 rounded text-[10px] overflow-x-auto max-h-96 overflow-y-auto">
-                {generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}
-              </pre>
+              <CopyableCode>{generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}</CopyableCode>
             </div>
 
             <div className="border rounded-lg p-3 space-y-3 bg-muted/20">
@@ -758,9 +763,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
 
               <div className="mt-3">
                 <p className="text-xs font-semibold text-muted-foreground mb-2">Step 1: Backend Function ({form.sync_function_name})</p>
-                <pre className="bg-black text-red-400 p-3 rounded text-[10px] overflow-x-auto max-h-96 overflow-y-auto">
-                  {generateReplicaCode(form.replica_entity_name)}
-                </pre>
+                <CopyableCode>{generateReplicaCode(form.replica_entity_name)}</CopyableCode>
               </div>
 
               <div className="border rounded-lg p-3 space-y-3 mt-3">
@@ -769,9 +772,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                 <p className="text-xs bg-red-50 border border-red-200 rounded p-2 text-red-800">
                   <strong>Instruction:</strong> For any page which uses this entity (<code className="bg-red-100 px-1 rounded">{form.replica_entity_name}</code>), add this frontend subscription code.
                 </p>
-                <pre className="bg-black text-red-400 p-3 rounded text-[10px] overflow-x-auto">
-                  {generateSubscriptionCode(form.replica_entity_name)}
-                </pre>
+                <CopyableCode>{generateSubscriptionCode(form.replica_entity_name)}</CopyableCode>
               </div>
             </div>
           </div>

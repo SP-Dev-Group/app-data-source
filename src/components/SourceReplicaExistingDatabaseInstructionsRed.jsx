@@ -547,7 +547,11 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
             </div>
 
             {fields.slice(0, 5).map(({ label, key, editable }) => (
-              <div key={key} className="flex items-center gap-2">
+              <div key={key} className="flex flex-col gap-1">
+                {key === "replica_entity_name" && (
+                  <p className="text-[10px] text-muted-foreground italic">Create Name or use default name as shown</p>
+                )}
+              <div className="flex items-center gap-2">
                 <span className="text-xs text-muted-foreground w-40 shrink-0">{label}</span>
                 <Input
                   value={form[key]}
@@ -565,6 +569,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                     <Pencil className="w-3 h-3" />
                   </Button>
                 )}
+              </div>
               </div>
             ))}
 

@@ -191,7 +191,7 @@ export default function SourceReplicaExistingDatabaseInstructionsRed() {
     setSearchResults(
       term
         ? all.filter((r) => r.project_name?.toLowerCase().includes(term))
-        : all.slice(0, 3)
+        : all
     );
     setSearching(false);
   };
@@ -358,7 +358,7 @@ Deno.serve(async (req) => {
                 <Search className="w-3 h-3 mr-1" /> Search
               </Button>
             </div>
-            <p className="text-[10px] text-red-500">Showing first 3 saved configs. Search to find more.</p>
+            <p className="text-[10px] text-red-500">All saved configs shown. Search to filter.</p>
             {showResults && (
               <div className="border border-red-200 rounded bg-background text-xs max-h-40 overflow-y-auto">
                 {searching ? (

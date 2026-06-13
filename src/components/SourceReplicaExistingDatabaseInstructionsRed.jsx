@@ -447,10 +447,9 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source App Instructions</p>
                     <div className="text-xs space-y-2">
                       <p><strong>Step 1:</strong> Create backend function <code className="bg-black text-red-400 px-1 rounded">{form.sync_function_name}</code></p>
-                      <p><strong>Step 2:</strong> Create entity <code className="bg-black text-red-400 px-1 rounded">{form.replica_entity_name}</code> in the Replica app</p>
-                      <p><strong>Step 3:</strong> No automation needed on replica side</p>
-                      <p><strong>Step 4:</strong> In source app, set up {form.push_function_name} function and entity automation</p>
-                      <p><strong>Step 5:</strong> Add frontend subscription to table page</p>
+                      <p><strong>Step 2:</strong> No automation needed on replica side</p>
+                      <p><strong>Step 3:</strong> In this, the source app, set up {form.push_function_name} function and entity automation</p>
+                      <p><strong>Step 4:</strong> Add frontend subscription to table page</p>
                       <p className="text-red-500 font-semibold">🔑🔑 REPLICA APP ID: {form.replica_app_id}</p>
                     </div>
                     <div className="mt-3">

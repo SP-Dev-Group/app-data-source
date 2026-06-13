@@ -439,6 +439,7 @@ ${generateReplicaCode(form.replica_entity_name)}`;
                   <div className="border rounded-lg p-3 space-y-3">
                     <p className="text-xs font-bold text-red-600 tracking-wide mb-2">SOURCE</p>
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">This App is the Source App and these are instructions for this the SOURCE app. Instructions</p>
+                    <p className="text-xs text-red-700 font-medium bg-red-50 border border-red-200 rounded p-2">DO NOT CREATE the replica entity in this app as it is intended for the external receiving app.</p>
                     <div className="text-xs space-y-2">
                       <p><strong>Step 1:</strong> Create backend function <code className="bg-black text-red-400 px-1 rounded">{form.sync_function_name}</code></p>
                       <p><strong>Step 2:</strong> No automation needed on replica side</p>

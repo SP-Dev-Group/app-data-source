@@ -422,19 +422,29 @@ Deno.serve(async (req) => {
                       size="sm"
                       variant="outline"
                       onClick={() => {
-                        const sourceContent = `For this current page, use the following code to set up this app and page to receive data from a source app.
+                        const sourceContent = `SOURCE
 
-SOURCE
-=====
-Source App Instructions
+Instructions for the SOURCE APP, this app.
 
-IMPORTANT: DO NOT CREATE ${form.replica_entity_name} the replica entity in this app as it is intended for the external receiving app.
+Overview: There are two apps, a source app and a replica app. This app is the source app and contains one entity specifically as a SSOT - single source of truth entity. The SSOT source app entity will be listened to and on change will trigger the push to the external base44 app, referred to as the replica app. You will use the two function code blocks to create a new unique listening function and a new unique push to style function.
 
-Step 1: Create backend function ${form.sync_function_name}
-Step 2: No automation needed on replica side
-Step 3: In this, the source app, set up ${form.push_function_name} function and entity automation
-Step 4: Add frontend subscription to table page
-🔑🔑 REPLICA APP ID: ${form.replica_app_id}
+The following instructions are specifically for this app, referred to as the source app. These instructions are not meant for the external base44 app, referred to as the replica app.
+
+Instruction 1: Follow the steps exactly as instructed, don't assume or change anything.
+
+Instruction 2: There is to be no automation in the external app.
+
+Instruction 3: Do not create the replica entity ${form.replica_entity_name} in this app, as this is the source app. The replica entity will be created in the external app using other code, not available here.
+
+Instruction 4: Use / reference only the source entity ${form.source_entity_name} and the replica entity ${form.replica_entity_name} named in the code, therefore, do not use another entity from within this app or the external app.
+
+Instruction 5: Use only the Replica Secret Name ${form.secret_name} and Replica App ID ${form.replica_app_id}, as provided in these notes and code blocks.
+
+2 STEPS for the SOURCE APP, this app.
+
+Step 1: Create a new backend function and call it ${form.sync_function_name}. (Do not use existing backend functions in this app under any circumstance, do not use this code to overwrite any other function already existing in this app).
+
+Step 2: Create the other function: For the push function, use the push function name provided which is ${form.push_function_name}. Do not use any other push function or function that may already exist in this app. Do not use this push function code to overwrite any other function or code already in this app.
 
 Step 1: Backend Function (${form.sync_function_name})
 

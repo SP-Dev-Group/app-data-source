@@ -527,23 +527,26 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
               <p className="text-xs font-semibold text-red-700 uppercase tracking-wide">Config Fields</p>
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground w-40 shrink-0">Project Name <span className="text-red-500">*</span></span>
-              <Input
-                value={form.project_name}
-                onChange={(e) => set("project_name", e.target.value)}
-                placeholder="e.g. DataSync Project"
-                className="h-7 text-xs flex-1"
-                disabled={editingField !== "project_name"}
-              />
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => setEditingField(editingField === "project_name" ? null : "project_name")}
-                className="h-7 text-xs px-2 shrink-0"
-              >
-                <Pencil className="w-3 h-3" />
-              </Button>
+            <div className="flex flex-col gap-1">
+              <p className="text-[10px] text-muted-foreground italic">provide a unique name that describes i.e "WorkersNotes4"</p>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground w-40 shrink-0">Project Name <span className="text-red-500">*</span></span>
+                <Input
+                  value={form.project_name}
+                  onChange={(e) => set("project_name", e.target.value)}
+                  placeholder="e.g. DataSync Project"
+                  className="h-7 text-xs flex-1"
+                  disabled={editingField !== "project_name"}
+                />
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setEditingField(editingField === "project_name" ? null : "project_name")}
+                  className="h-7 text-xs px-2 shrink-0"
+                >
+                  <Pencil className="w-3 h-3" />
+                </Button>
+              </div>
             </div>
 
             {fields.slice(0, 5).map(({ label, key, editable }) => (

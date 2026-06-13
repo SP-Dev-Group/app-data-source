@@ -26,6 +26,14 @@ function CopyableCode({ children }) {
 }
 import { base44 } from "@/api/base44Client";
 
+const getTodayAUS = () => {
+  const d = new Date();
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year = d.getFullYear();
+  return `${day}-${month}-${year}`;
+};
+
 const DEFAULTS = {
   project_name: "",
   replica_entity_name: "",
@@ -127,7 +135,7 @@ export default function SourceReplicaExistingDatabaseInstructionsRed() {
         secret_name: newSecretName
       }));
     } else if (field === "source_entity_name") {
-      const newSyncFunction = "sync" + value + "ToSourceListener";
+      const newSyncFunction = "sync" + value + "ToSourceListenerFor" + form.project_name + "-" + getTodayAUS();
       setForm((f) => ({
         ...f,
         [field]: value,
@@ -139,6 +147,14 @@ export default function SourceReplicaExistingDatabaseInstructionsRed() {
         [field]: value,
         push_function_name: "pushto" + value
       }));
+    } else if (field === "project_name") {
+      setForm((f) => {
+        const srcEntity = f.source_entity_name;
+        const newSyncFunction = srcEntity
+          ? "sync" + srcEntity + "ToSourceListenerFor" + value + "-" + getTodayAUS()
+          : f.sync_function_name;
+        return { ...f, [field]: value, sync_function_name: newSyncFunction };
+      });
     } else {
       setForm((f) => ({ ...f, [field]: value }));
     }

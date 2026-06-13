@@ -342,13 +342,13 @@ Deno.serve(async (req) => {
         className="flex items-center gap-2 text-xs h-8 justify-start text-blue-600 hover:text-blue-700"
       >
         <DatabaseZap className="h-3 w-3" />
-        Master: Source - Replica [EXP]
+        Master: Source to Replica (V3)
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-lg font-bold text-blue-600">Master: Source - Replica [EXPERIMENTAL]</DialogTitle>
+            <DialogTitle className="text-lg font-bold text-blue-600">Master: Source to Replica (V3)</DialogTitle>
           </DialogHeader>
 
           {/* Search / Recall */}

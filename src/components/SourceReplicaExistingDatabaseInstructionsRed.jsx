@@ -765,14 +765,7 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                 <CopyableCode>{generateReplicaCode(form.replica_entity_name)}</CopyableCode>
               </div>
 
-              <div className="border rounded-lg p-3 space-y-3 mt-3">
-                <p className="text-xs font-bold text-red-600 tracking-wide mb-2">SOURCE</p>
-                <p className="text-xs font-semibold text-muted-foreground mb-2">SOURCE APP INSTRUCTION: Live Table Updates (Frontend Subscription)</p>
-                <p className="text-xs bg-red-50 border border-red-200 rounded p-2 text-red-800">
-                  <strong>Instruction:</strong> For any page which uses this entity (<code className="bg-red-100 px-1 rounded">{form.replica_entity_name}</code>), add this frontend subscription code.
-                </p>
-                <CopyableCode>{generateSubscriptionCode(form.replica_entity_name)}</CopyableCode>
-              </div>
+
             </div>
           </div>
         </DialogContent>

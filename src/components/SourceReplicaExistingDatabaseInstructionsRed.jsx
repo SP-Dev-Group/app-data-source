@@ -452,7 +452,14 @@ ${generateReplicaCode(form.replica_entity_name)}
 
 SOURCE APP FUNCTION: ${form.push_function_name}
 
-${generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}`;
+${generateSourceCode(form.push_function_name, form.replica_entity_name, form.secret_name, form.replica_app_id)}
+
+STEP 4
+
+Make an automation
+Name it: ${form.sync_function_name}${getTodayAUS()}
+Use: ${form.push_function_name}
+Runs When: ${form.source_entity_name} is Created, Updated or Deleted`;
                         navigator.clipboard.writeText(sourceContent);
                         setCopiedAll(true);
                         setTimeout(() => setCopiedAll(false), 2000);

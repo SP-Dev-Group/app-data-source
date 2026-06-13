@@ -353,14 +353,14 @@ Deno.serve(async (req) => {
 
           {/* Search / Recall */}
           <div className="border border-blue-200 rounded-lg p-3 bg-blue-50/50 space-y-2">
+            <div className="mb-2">
+              <span className="text-xs font-bold text-white bg-blue-600 px-3 py-1 rounded">Step 1: Create New</span>
+            </div>
             <div className="flex items-center justify-between mb-2">
               <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide">Search Saved Configs</p>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-white bg-blue-600 px-3 py-1 rounded">Step 1: Create New</span>
-                <Button size="sm" variant="outline" onClick={handleAdd} className="h-7 text-xs px-2 border-blue-300 text-blue-700 hover:bg-blue-50">
-                  <Save className="w-3 h-3 mr-1" /> Add New
-                </Button>
-              </div>
+              <Button size="sm" variant="outline" onClick={handleAdd} className="h-7 text-xs px-2 border-blue-300 text-blue-700 hover:bg-blue-50">
+                <Save className="w-3 h-3 mr-1" /> Add New
+              </Button>
             </div>
             <div className="flex gap-2">
               <Input
@@ -640,6 +640,15 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
               </div>
             ))}
 
+            <Button
+              size="sm"
+              onClick={handleSave}
+              disabled={saving || !form.project_name.trim()}
+              className="w-full h-7 text-xs bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              {saved ? <><Check className="w-3 h-3 mr-1" /> Saved!</> : saving ? "Saving..." : <><Save className="w-3 h-3 mr-1" /> Save Config</>}
+            </Button>
+
             <div className="mb-2">
               <span className="text-xs font-bold text-white bg-blue-600 px-3 py-1 rounded">Step 3: Complete these with Replica App</span>
             </div>
@@ -696,6 +705,15 @@ ${generateSubscriptionCode(form.replica_entity_name)}`;
                 <p className="text-[10px] text-yellow-700 font-medium">⚠ Schema entered but not saved yet — click Save Config</p>
               )}
             </div>
+
+            <Button
+              size="sm"
+              onClick={handleSave}
+              disabled={saving || !form.project_name.trim()}
+              className="w-full h-7 text-xs bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              {saved ? <><Check className="w-3 h-3 mr-1" /> Saved!</> : saving ? "Saving..." : <><Save className="w-3 h-3 mr-1" /> Save Config</>}
+            </Button>
 
             <div className="mb-2">
               <span className="text-xs font-bold text-white bg-blue-600 px-3 py-1 rounded">Step 4</span>

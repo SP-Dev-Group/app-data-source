@@ -455,8 +455,10 @@ ${generateSourceCode(form.push_function_name, form.replica_entity_name, form.sec
                   </div>
                   <div className="border rounded-lg p-3 space-y-3">
                     <p className="text-xs font-bold text-red-600 tracking-wide mb-2">SOURCE</p>
+                    <p className="text-xs font-semibold text-red-700 bg-red-50 border border-red-200 rounded p-2 mb-2">Instructions for the SOURCE APP, this app.</p>
                     <div className="text-xs space-y-2 text-muted-foreground">
                       <p><strong>Overview:</strong> There are two apps, a source app and a replica app. This app is the source app and contains one entity specifically as a SSOT - single source of truth entity. The SSOT source app entity will be listened to and on change will trigger the push to the external base44 app, referred to as the replica app. You will use the two function code blocks to create a new unique listening function and a new unique push to style function.</p>
+                      <p className="text-[10px] text-muted-foreground">The following instructions are specifically for this app, referred to as the source app. These instructions are not meant for the external base44 app, referred to as the replica app.</p>
                     </div>
                     <div className="text-xs space-y-2 text-red-700 bg-red-50 border border-red-200 rounded p-2">
                       <p><strong>Instruction 1:</strong> Follow the steps exactly as instructed, don't assume or change anything.</p>
@@ -465,7 +467,8 @@ ${generateSourceCode(form.push_function_name, form.replica_entity_name, form.sec
                       <p><strong>Instruction 4:</strong> Use / reference only the source entity <code className="bg-red-100 px-1 rounded">{form.source_entity_name}</code> and the replica entity <code className="bg-red-100 px-1 rounded">{form.replica_entity_name}</code> named in the code, therefore, do not use another entity from within this app or the external app.</p>
                       <p><strong>Instruction 5:</strong> Use only the Replica Secret Name <code className="bg-red-100 px-1 rounded">{form.secret_name}</code> and Replica App ID <code className="bg-red-100 px-1 rounded">{form.replica_app_id}</code>, as provided in these notes and code blocks.</p>
                     </div>
-                    <div className="text-xs space-y-2 text-muted-foreground">
+                    <div className="text-xs space-y-2 text-muted-foreground border-t pt-2 mt-2">
+                      <p className="font-semibold text-red-700">2 STEPS for the SOURCE APP, this app.</p>
                       <p><strong>Step 1:</strong> Create a new backend function and call it <code className="bg-black text-red-400 px-1 rounded">{form.sync_function_name}</code>. (Do not use existing backend functions in this app under any circumstance, do not use this code to overwrite any other function already existing in this app).</p>
                       <p><strong>Step 2:</strong> Create the other function: For the push function, use the push function name provided which is <code className="bg-black text-red-400 px-1 rounded">{form.push_function_name}</code>. Do not use any other push function or function that may already exist in this app. Do not use this push function code to overwrite any other function or code already in this app.</p>
                     </div>

@@ -459,7 +459,8 @@ STEP 4
 Make an automation
 Name it: ${form.sync_function_name}${getTodayAUS()}
 Use: ${form.push_function_name}
-Runs When: ${form.source_entity_name} is Created, Updated or Deleted. Make it active.`;
+Runs When: ${form.source_entity_name} is Created, Updated or Deleted.
+Make it active, so it can run when triggered.`;
                         navigator.clipboard.writeText(sourceContent);
                         setCopiedAll(true);
                         setTimeout(() => setCopiedAll(false), 2000);
@@ -507,7 +508,8 @@ Runs When: ${form.source_entity_name} is Created, Updated or Deleted. Make it ac
                       <p><strong>Make an automation</strong></p>
                       <p><strong>Name it:</strong> <code className="bg-black text-red-400 px-1 rounded">{form.sync_function_name}{getTodayAUS()}</code></p>
                       <p><strong>Use:</strong> <code className="bg-black text-red-400 px-1 rounded">{form.push_function_name}</code></p>
-                      <p><strong>Runs When:</strong> <code className="bg-black text-red-400 px-1 rounded">{form.source_entity_name}</code> is Created, Updated or Deleted. Make it active.</p>
+                      <p><strong>Runs When:</strong> <code className="bg-black text-red-400 px-1 rounded">{form.source_entity_name}</code> is Created, Updated or Deleted.</p>
+                      <p>Make it active, so it can run when triggered.</p>
                     </div>
                   </div>
 

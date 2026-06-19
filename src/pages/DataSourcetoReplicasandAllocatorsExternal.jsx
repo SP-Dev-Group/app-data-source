@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus, Loader2 } from "lucide-react";
+import { ArrowLeft, Plus, Loader2, Send } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -12,6 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { toast } from "sonner";
 import AddExternalSSOTDialog from "@/components/external/AddExternalSSOTDialog";
 import AddReplicaConfigDialog from "@/components/external/AddReplicaConfigDialog";
 
@@ -20,6 +21,24 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
   const queryClient = useQueryClient();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [replicaDialogOpen, setReplicaDialogOpen] = useState(false);
+  const [pushingId, setPushingId] = useState(null);
+
+  const handlePush = async (config) => {
+    setPushingId(config.id);
+    try {
+      const res = await base44.functions.invoke("pushToReplica10", { configId: config.id });
+      const { pushed, errors } = res.data;
+      if (errors && errors.length > 0) {
+        toast.warning(`Pushed ${pushed} record(s) with ${errors.length} error(s)`);
+      } else {
+        toast.success(`Pushed ${pushed} record(s) to "${config.project_name}"`);
+      }
+    } catch (err) {
+      toast.error(`Push failed: ${err.message}`);
+    } finally {
+      setPushingId(null);
+    }
+  };
 
   const { data: ssotRecords, isLoading } = useQuery({
     queryKey: ["SourceSSOT10"],
@@ -112,18 +131,19 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
                 <TableHead>Replica Entity</TableHead>
                 <TableHead>Source Entity</TableHead>
                 <TableHead>Secret Name</TableHead>
+                <TableHead>Push</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {replicaLoading ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8">
+                  <TableCell colSpan={6} className="text-center py-8">
                     <Loader2 className="w-6 h-6 animate-spin mx-auto" />
                   </TableCell>
                 </TableRow>
               ) : replicaConfigs?.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                     No replica configs yet.
                   </TableCell>
                 </TableRow>
@@ -135,6 +155,19 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
                     <TableCell>{config.replica_entity_name}</TableCell>
                     <TableCell>{config.source_entity_name}</TableCell>
                     <TableCell className="font-mono text-sm">{config.secret_name}</TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        disabled={pushingId === config.id}
+                        onClick={() => handlePush(config)}
+                      >
+                        {pushingId === config.id
+                          ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          : <Send className="w-3.5 h-3.5" />}
+                        <span className="ml-1">Push All</span>
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))
               )}

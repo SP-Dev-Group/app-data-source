@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus, Loader2, Send } from "lucide-react";
-import { toast } from "sonner";
+import { ArrowLeft, Plus, Loader2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -40,23 +39,6 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
     queryClient.invalidateQueries({ queryKey: ["ReplicaAppConfig10"] });
   };
 
-  const [pushingId, setPushingId] = useState(null);
-
-  const handlePush = async (record) => {
-    setPushingId(record.id);
-    try {
-      const res = await base44.functions.invoke("pushToReplica", {
-        record,
-        source_entity_name: "SourceSSOT10",
-      });
-      toast.success(`Pushed to ${res.data?.results?.length ?? 0} replica(s)`);
-    } catch (err) {
-      toast.error(err.message || "Push failed");
-    } finally {
-      setPushingId(null);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-4xl mx-auto">
@@ -85,19 +67,18 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
               <TableRow>
                 <TableHead>Unique ID</TableHead>
                 <TableHead>Name</TableHead>
-                <TableHead className="w-[90px]">Push</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {isLoading ? (
                 <TableRow>
-                  <TableCell colSpan={3} className="text-center py-8">
+                  <TableCell colSpan={2} className="text-center py-8">
                     <Loader2 className="w-6 h-6 animate-spin mx-auto" />
                   </TableCell>
                 </TableRow>
               ) : ssotRecords?.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={2} className="text-center py-8 text-muted-foreground">
                     No records yet. Add a record to get started.
                   </TableCell>
                 </TableRow>
@@ -106,18 +87,6 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
                   <TableRow key={record.id}>
                     <TableCell className="font-mono text-sm">{record.unique_id}</TableCell>
                     <TableCell>{record.Name}</TableCell>
-                    <TableCell>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        disabled={pushingId === record.id}
-                        onClick={() => handlePush(record)}
-                      >
-                        {pushingId === record.id
-                          ? <Loader2 className="w-3 h-3 animate-spin" />
-                          : <><Send className="w-3 h-3 mr-1" /> Push</>}
-                      </Button>
-                    </TableCell>
                   </TableRow>
                 ))
               )}

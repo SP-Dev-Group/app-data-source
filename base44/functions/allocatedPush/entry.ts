@@ -18,11 +18,19 @@ Deno.serve(async (req) => {
 
     // Get source record from source app
     const sourceAppId = Deno.env.get('SOURCE_APP_ID');
+    const sourceServiceKey = Deno.env.get('BASE44_SERVICE_ROLE_KEY');
+    
     if (!sourceAppId) {
       return Response.json({ error: 'SOURCE_APP_ID not configured' }, { status: 500 });
     }
+    if (!sourceServiceKey) {
+      return Response.json({ error: 'BASE44_SERVICE_ROLE_KEY not configured' }, { status: 500 });
+    }
 
-    const sourceClient = createClient({ appId: sourceAppId, serviceRole: true });
+    const sourceClient = createClient({ 
+      appId: sourceAppId, 
+      serviceRoleKey: sourceServiceKey
+    });
     const sourceRecords = await sourceClient.entities.StaffSSOT.filter({ unique_id });
 
     if (!sourceRecords || sourceRecords.length === 0) {

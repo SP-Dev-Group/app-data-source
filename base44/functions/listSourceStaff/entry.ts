@@ -11,11 +11,19 @@ Deno.serve(async (req) => {
     }
 
     const sourceAppId = Deno.env.get('SOURCE_APP_ID');
+    const sourceServiceKey = Deno.env.get('BASE44_SERVICE_ROLE_KEY');
+    
     if (!sourceAppId) {
       return Response.json({ error: 'SOURCE_APP_ID secret not configured' }, { status: 500 });
     }
+    if (!sourceServiceKey) {
+      return Response.json({ error: 'BASE44_SERVICE_ROLE_KEY secret not configured' }, { status: 500 });
+    }
 
-    const sourceClient = createClient({ appId: sourceAppId, serviceRole: true });
+    const sourceClient = createClient({ 
+      appId: sourceAppId, 
+      serviceRoleKey: sourceServiceKey
+    });
     const staff = await sourceClient.entities.StaffSSOT.list('-created_date', 500);
 
     return Response.json({ staff });

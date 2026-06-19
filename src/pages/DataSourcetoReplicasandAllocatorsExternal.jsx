@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus, Loader2, Send, Pencil, Archive } from "lucide-react";
+import { ArrowLeft, Plus, Loader2, Send, Pencil, Archive, Tag } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -17,6 +17,7 @@ import AddExternalSSOTDialog from "@/components/external/AddExternalSSOTDialog";
 import AddReplicaConfigDialog from "@/components/external/AddReplicaConfigDialog";
 import EditSSOTRecordDialog from "@/components/external/EditSSOTRecordDialog";
 import ArchiveSSOTRecordDialog from "@/components/external/ArchiveSSOTRecordDialog";
+import AllocateProjectsDialog from "@/components/external/AllocateProjectsDialog";
 
 export default function DataSourcetoReplicasandAllocatorsExternal() {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
   const [pushingId, setPushingId] = useState(null);
   const [editRecord, setEditRecord] = useState(null);
   const [archiveRecord, setArchiveRecord] = useState(null);
+  const [allocateRecord, setAllocateRecord] = useState(null);
 
   const handlePush = async (config) => {
     setPushingId(config.id);
@@ -92,6 +94,8 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
               <TableRow>
                 <TableHead>Unique ID</TableHead>
                 <TableHead>Name</TableHead>
+                <TableHead>Allocated Projects</TableHead>
+                <TableHead>Allocate</TableHead>
                 <TableHead>Edit</TableHead>
                 <TableHead>Archive</TableHead>
               </TableRow>
@@ -105,7 +109,7 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
                 </TableRow>
               ) : ssotRecords?.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                     No records yet. Add a record to get started.
                   </TableCell>
                 </TableRow>
@@ -114,6 +118,22 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
                   <TableRow key={record.id}>
                     <TableCell className="font-mono text-sm">{record.unique_id}</TableCell>
                     <TableCell>{record.Name}</TableCell>
+                    <TableCell>
+                      {record.allocated_projects?.length > 0
+                        ? <div className="flex flex-wrap gap-1">
+                            {record.allocated_projects.map((p) => (
+                              <span key={p} className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">{p}</span>
+                            ))}
+                          </div>
+                        : <span className="text-xs text-muted-foreground">None</span>
+                      }
+                    </TableCell>
+                    <TableCell>
+                      <Button size="sm" variant="outline" onClick={() => setAllocateRecord(record)}>
+                        <Tag className="w-3.5 h-3.5" />
+                        <span className="ml-1">Allocate</span>
+                      </Button>
+                    </TableCell>
                     <TableCell>
                       <Button size="sm" variant="outline" onClick={() => setEditRecord(record)}>
                         <Pencil className="w-3.5 h-3.5" />
@@ -219,6 +239,13 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
         open={!!archiveRecord}
         record={archiveRecord}
         onClose={() => setArchiveRecord(null)}
+        onSuccess={handleSuccess}
+      />
+
+      <AllocateProjectsDialog
+        open={!!allocateRecord}
+        record={allocateRecord}
+        onClose={() => setAllocateRecord(null)}
         onSuccess={handleSuccess}
       />
     </div>

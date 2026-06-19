@@ -9,6 +9,13 @@
     "Name": {
       "type": "string",
       "description": "Name"
+    },
+    "allocated_projects": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of project_name values from ReplicaAppConfig10 that this record is allocated to"
     }
   },
   "required": [

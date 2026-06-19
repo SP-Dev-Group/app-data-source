@@ -45,7 +45,10 @@ export default function Menu() {
         className="flex flex-col gap-3 w-full max-w-xs"
       >
         <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white" onClick={() => navigate("/datasourcetoreplicasandallocators")}>
-          Source to Replica Allocator
+          Source to Replica Allocator Internal
+        </Button>
+        <Button className="w-full bg-purple-400 hover:bg-purple-500 text-white" onClick={() => navigate("/datasourcetoreplicasandallocatorsexternal")}>
+          Source to Replica Allocator External
         </Button>
         <Button className="w-full bg-red-500 hover:bg-red-600 text-white" onClick={() => navigate("/googlemenu")}>
           Google Menu

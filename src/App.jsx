@@ -25,6 +25,7 @@ import AzureMenu from './pages/AzureMenu';
 import Base44Menu from './pages/Base44Menu';
 import StaffAllocationManager from './pages/StaffAllocationManager';
 import DataSourcetoReplicasAndAllocators from './pages/DataSourcetoReplicasAndAllocators';
+import DataSourcetoReplicasandAllocatorsExternal from './pages/DataSourcetoReplicasandAllocatorsExternal';
 
 
 const AuthenticatedApp = () => {
@@ -72,6 +73,7 @@ const AuthenticatedApp = () => {
       <Route path="/base44menu" element={<Base44Menu />} />
       <Route path="/staffallocation" element={<StaffAllocationManager />} />
       <Route path="/datasourcetoreplicasandallocators" element={<DataSourcetoReplicasAndAllocators />} />
+      <Route path="/datasourcetoreplicasandallocatorsexternal" element={<DataSourcetoReplicasandAllocatorsExternal />} />
 
       <Route path="*" element={<PageNotFound />} />
     </Routes>

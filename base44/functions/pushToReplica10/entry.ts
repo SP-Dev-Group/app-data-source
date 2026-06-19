@@ -77,25 +77,14 @@ Deno.serve(async (req) => {
         delete cleaned.is_sample;
         cleaned.unique_id = uid;
 
-        // Remap fields: if replica schema exists, match source keys to replica keys
-        // by case-insensitive comparison (e.g. source "Name" → replica "name")
-        let pushPayload;
-        if (replicaFields) {
-          pushPayload = {};
-          for (const [srcKey, srcVal] of Object.entries(cleaned)) {
-            const match = replicaFields.find(
-              (f) => f.toLowerCase() === srcKey.toLowerCase()
-            );
-            if (match) {
-              pushPayload[match] = srcVal;
-            }
-            // Always keep unique_id
-            if (srcKey === 'unique_id') {
-              pushPayload['unique_id'] = srcVal;
-            }
-          }
-        } else {
-          pushPayload = cleaned;
+        // Remap all keys to lowercase to match replica entity field names
+        // e.g. source "Name" → replica "name"
+        const pushPayload = {};
+        for (const [srcKey, srcVal] of Object.entries(cleaned)) {
+          const targetKey = replicaFields
+            ? (replicaFields.find((f) => f.toLowerCase() === srcKey.toLowerCase()) || srcKey.toLowerCase())
+            : srcKey.toLowerCase();
+          pushPayload[targetKey] = srcVal;
         }
 
         if (existing && existing.length > 0) {

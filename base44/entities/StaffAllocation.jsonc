@@ -1,0 +1,24 @@
+{
+  "name": "StaffAllocation",
+  "type": "object",
+  "properties": {
+    "unique_id": {
+      "type": "string",
+      "description": "Staff record unique_id from StaffSSOT source entity"
+    },
+    "staff_name": {
+      "type": "string",
+      "description": "Staff full name for display"
+    },
+    "allocated_projects": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of project_name values from SourceReplicaConfig that this record is allocated to"
+    }
+  },
+  "required": [
+    "unique_id"
+  ]
+}

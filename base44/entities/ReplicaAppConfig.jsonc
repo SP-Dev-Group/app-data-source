@@ -1,0 +1,42 @@
+{
+  "name": "ReplicaAppConfig",
+  "type": "object",
+  "properties": {
+    "project_name": {
+      "type": "string",
+      "description": "Human-readable project name (e.g. NewsBookSite Staff)"
+    },
+    "replica_app_id": {
+      "type": "string",
+      "description": "The Base44 App ID of the external replica app"
+    },
+    "replica_entity_name": {
+      "type": "string",
+      "description": "Entity name in the replica app to push data into (e.g. ReplicaStaffforNewsBookSite)"
+    },
+    "secret_name": {
+      "type": "string",
+      "description": "Name of the secret stored in this app's environment (e.g. DEST_APP_SERVICE_ROLE_KEY)"
+    },
+    "secret_value": {
+      "type": "string",
+      "description": "The actual service role key value for the replica app"
+    },
+    "source_entity_name": {
+      "type": "string",
+      "description": "Source entity name in this (SSOT) app (e.g. SourceSSOT1)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional notes about this replica configuration"
+    }
+  },
+  "required": [
+    "project_name",
+    "replica_app_id",
+    "replica_entity_name",
+    "secret_name",
+    "secret_value",
+    "source_entity_name"
+  ]
+}

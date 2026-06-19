@@ -43,8 +43,14 @@ export default function EditSSOTRecordDialog({ open, record, onClose, onSuccess 
     // Update the source record
     await base44.entities.SourceSSOT10.update(record.id, { Name: name.trim() });
 
+    // Push to all replica configs
+    const configs = await base44.entities.ReplicaAppConfig10.list();
+    await Promise.all(configs.map((config) =>
+      base44.functions.invoke("pushToReplica10", { configId: config.id }).catch(() => {})
+    ));
+
     setSaving(false);
-    toast.success("Record updated");
+    toast.success("Record updated and pushed to all replicas");
     onSuccess();
     handleClose();
   };

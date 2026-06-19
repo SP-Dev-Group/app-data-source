@@ -43,8 +43,14 @@ export default function ArchiveSSOTRecordDialog({ open, record, onClose, onSucce
     // Delete the source record
     await base44.entities.SourceSSOT10.delete(record.id);
 
+    // Push updated state to all replica configs
+    const configs = await base44.entities.ReplicaAppConfig10.list();
+    await Promise.all(configs.map((config) =>
+      base44.functions.invoke("pushToReplica10", { configId: config.id }).catch(() => {})
+    ));
+
     setSaving(false);
-    toast.success(`Record "${record.Name}" archived`);
+    toast.success(`Record "${record.Name}" archived and replicas updated`);
     onSuccess();
     handleClose();
   };

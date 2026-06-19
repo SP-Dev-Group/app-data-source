@@ -17,10 +17,10 @@ export default function AllocateProjectsDialog({ open, record, onClose, onSucces
   });
 
   useEffect(() => {
-    if (record) {
+    if (open && record) {
       setSelected(record.allocated_projects || []);
     }
-  }, [record]);
+  }, [open, record?.id]);
 
   const toggle = (projectName) => {
     setSelected((prev) =>

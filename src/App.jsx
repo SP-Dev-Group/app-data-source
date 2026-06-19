@@ -24,6 +24,7 @@ import GoogleObjectStorage from './pages/GoogleObjectStorage';
 import AzureMenu from './pages/AzureMenu';
 import Base44Menu from './pages/Base44Menu';
 import StaffAllocationManager from './pages/StaffAllocationManager';
+import DataSourcetoReplicasAndAllocators from './pages/DataSourcetoReplicasAndAllocators';
 
 
 const AuthenticatedApp = () => {
@@ -70,6 +71,7 @@ const AuthenticatedApp = () => {
       <Route path="/azuremenu" element={<AzureMenu />} />
       <Route path="/base44menu" element={<Base44Menu />} />
       <Route path="/staffallocation" element={<StaffAllocationManager />} />
+      <Route path="/datasourcetoreplicasandallocators" element={<DataSourcetoReplicasAndAllocators />} />
 
       <Route path="*" element={<PageNotFound />} />
     </Routes>

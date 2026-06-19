@@ -79,6 +79,8 @@ export default function DataSourcetoReplicasAndAllocators() {
           </Button>
         </div>
 
+        <h2 className="text-xl font-semibold text-foreground mb-3">SSOT</h2>
+
         <div className="rounded-lg border border-border overflow-hidden">
           <Table>
             <TableHeader>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus, Loader2, Send } from "lucide-react";
+import { ArrowLeft, Plus, Loader2, Send, Pencil, Archive } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -15,6 +15,8 @@ import {
 import { toast } from "sonner";
 import AddExternalSSOTDialog from "@/components/external/AddExternalSSOTDialog";
 import AddReplicaConfigDialog from "@/components/external/AddReplicaConfigDialog";
+import EditSSOTRecordDialog from "@/components/external/EditSSOTRecordDialog";
+import ArchiveSSOTRecordDialog from "@/components/external/ArchiveSSOTRecordDialog";
 
 export default function DataSourcetoReplicasandAllocatorsExternal() {
   const navigate = useNavigate();
@@ -22,6 +24,8 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [replicaDialogOpen, setReplicaDialogOpen] = useState(false);
   const [pushingId, setPushingId] = useState(null);
+  const [editRecord, setEditRecord] = useState(null);
+  const [archiveRecord, setArchiveRecord] = useState(null);
 
   const handlePush = async (config) => {
     setPushingId(config.id);
@@ -70,9 +74,11 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
               Data Source to Replicas — External
             </h1>
           </div>
-          <Button onClick={() => setDialogOpen(true)}>
-            <Plus className="w-4 h-4 mr-1" /> Add Record
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={() => setDialogOpen(true)}>
+              <Plus className="w-4 h-4 mr-1" /> Add Record
+            </Button>
+          </div>
         </div>
 
         <h2 className="text-lg font-semibold text-foreground mb-1">SSOT — SourceSSOT10</h2>
@@ -86,18 +92,20 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
               <TableRow>
                 <TableHead>Unique ID</TableHead>
                 <TableHead>Name</TableHead>
+                <TableHead>Edit</TableHead>
+                <TableHead>Archive</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {isLoading ? (
                 <TableRow>
-                  <TableCell colSpan={2} className="text-center py-8">
+                  <TableCell colSpan={4} className="text-center py-8">
                     <Loader2 className="w-6 h-6 animate-spin mx-auto" />
                   </TableCell>
                 </TableRow>
               ) : ssotRecords?.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={2} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
                     No records yet. Add a record to get started.
                   </TableCell>
                 </TableRow>
@@ -106,6 +114,18 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
                   <TableRow key={record.id}>
                     <TableCell className="font-mono text-sm">{record.unique_id}</TableCell>
                     <TableCell>{record.Name}</TableCell>
+                    <TableCell>
+                      <Button size="sm" variant="outline" onClick={() => setEditRecord(record)}>
+                        <Pencil className="w-3.5 h-3.5" />
+                        <span className="ml-1">Edit</span>
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <Button size="sm" variant="outline" className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground" onClick={() => setArchiveRecord(record)}>
+                        <Archive className="w-3.5 h-3.5" />
+                        <span className="ml-1">Archive</span>
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))
               )}
@@ -185,6 +205,20 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
       <AddExternalSSOTDialog
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
+        onSuccess={handleSuccess}
+      />
+
+      <EditSSOTRecordDialog
+        open={!!editRecord}
+        record={editRecord}
+        onClose={() => setEditRecord(null)}
+        onSuccess={handleSuccess}
+      />
+
+      <ArchiveSSOTRecordDialog
+        open={!!archiveRecord}
+        record={archiveRecord}
+        onClose={() => setArchiveRecord(null)}
         onSuccess={handleSuccess}
       />
     </div>

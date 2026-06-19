@@ -1,0 +1,37 @@
+{
+  "name": "SourceSSOT10VersionHistory",
+  "type": "object",
+  "properties": {
+    "source_id": {
+      "type": "string",
+      "description": "The ID of the original SourceSSOT10 record"
+    },
+    "unique_id": {
+      "type": "string",
+      "description": "The unique_id field from the original record"
+    },
+    "Name": {
+      "type": "string",
+      "description": "Name value at this version"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "created",
+        "updated",
+        "archived"
+      ],
+      "description": "What action triggered this version entry"
+    },
+    "version": {
+      "type": "number",
+      "description": "Version number (1 = first created, increments on each update)"
+    }
+  },
+  "required": [
+    "source_id",
+    "unique_id",
+    "event_type",
+    "version"
+  ]
+}

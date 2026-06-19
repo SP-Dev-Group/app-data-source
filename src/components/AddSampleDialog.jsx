@@ -15,7 +15,6 @@ const REPLICAS = [
 // Stages: "form" | "review" | "select" | "done"
 export default function AddSampleDialog({ open, onClose, onSuccess }) {
   const [stage, setStage] = useState("form");
-  const [uniqueId, setUniqueId] = useState("");
   const [name, setName] = useState("");
   const [generatedRecord, setGeneratedRecord] = useState(null);
   const [selected, setSelected] = useState([]);
@@ -24,7 +23,6 @@ export default function AddSampleDialog({ open, onClose, onSuccess }) {
 
   const reset = () => {
     setStage("form");
-    setUniqueId("");
     setName("");
     setGeneratedRecord(null);
     setSelected([]);
@@ -39,11 +37,12 @@ export default function AddSampleDialog({ open, onClose, onSuccess }) {
 
   // Stage 1: Generate record preview
   const handleGenerate = () => {
-    if (!uniqueId.trim() || !name.trim()) {
-      toast.error("Please fill in both fields");
+    if (!name.trim()) {
+      toast.error("Please enter a name");
       return;
     }
-    setGeneratedRecord({ unique_id: uniqueId.trim(), Name: name.trim() });
+    const uid = `UID-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    setGeneratedRecord({ unique_id: uid, Name: name.trim() });
     setStage("review");
   };
 
@@ -97,20 +96,13 @@ export default function AddSampleDialog({ open, onClose, onSuccess }) {
         {stage === "form" && (
           <div className="space-y-4 pt-2">
             <div>
-              <label className="text-sm font-medium text-foreground mb-1 block">Unique ID</label>
-              <Input
-                placeholder="Enter unique ID"
-                value={uniqueId}
-                onChange={(e) => setUniqueId(e.target.value)}
-              />
-            </div>
-            <div>
               <label className="text-sm font-medium text-foreground mb-1 block">Name</label>
               <Input
                 placeholder="Enter name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleGenerate()}
+                autoFocus
               />
             </div>
             <div className="flex justify-end gap-2 pt-2">

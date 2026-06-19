@@ -45,7 +45,7 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
           </Button>
         </div>
 
-        <h2 className="text-lg font-semibold text-foreground mb-1">SSOT — SourceSSOT-1</h2>
+        <h2 className="text-lg font-semibold text-foreground mb-1">SSOT — SourceSSOT10</h2>
         <p className="text-xs text-muted-foreground mb-3">
           Records stored locally as the source of truth. Use push functionality to sync to external replica apps.
         </p>

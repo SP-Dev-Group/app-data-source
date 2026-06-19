@@ -89,7 +89,7 @@ export default function AddReplicaConfigDialog({ open, onClose, onSuccess }) {
         </DialogHeader>
 
         {stage === "form" && (
-          <div className="space-y-3 pt-2">
+          <div className="max-h-[70vh] overflow-y-auto pr-1 space-y-3 pt-2">
             <Field label="Project Name" value={form.project_name} onChange={set("project_name")} placeholder="e.g. NewsBookSite Staff" required />
             <Field label="Replica App ID" value={form.replica_app_id} onChange={set("replica_app_id")} placeholder="Base44 App ID of the replica app" required />
             <Field label="Replica Entity Name" value={form.replica_entity_name} onChange={set("replica_entity_name")} placeholder="e.g. ReplicaStaffforNewsBookSite" required />
@@ -107,7 +107,7 @@ export default function AddReplicaConfigDialog({ open, onClose, onSuccess }) {
         )}
 
         {stage === "review" && (
-          <div className="space-y-4 pt-2">
+          <div className="max-h-[70vh] overflow-y-auto pr-1 space-y-4 pt-2">
             <p className="text-sm text-muted-foreground">Review before saving:</p>
             <div className="rounded-lg border border-border bg-muted/40 p-4 space-y-3">
               <ReviewRow label="Project Name" value={form.project_name} />

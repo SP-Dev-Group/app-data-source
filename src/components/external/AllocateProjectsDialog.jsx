@@ -20,16 +20,26 @@ export default function AllocateProjectsDialog({ open, record, onClose, onSucces
   useEffect(() => {
     if (open && record && record.id !== initializedForId.current) {
       initializedForId.current = record.id;
-      setSelected(record.allocated_projects || []);
+      // Store selected as config IDs internally
+      if (configs) {
+        const matchedIds = configs
+          .filter((c) => (record.allocated_projects || []).includes(c.project_name))
+          .map((c) => c.id);
+        setSelected(matchedIds);
+      }
     }
     if (!open) {
       initializedForId.current = null;
     }
-  }, [open, record?.id]);
+  }, [open, record?.id, configs]);
 
   const handleSave = async () => {
     setSaving(true);
-    await base44.entities.SourceSSOT10.update(record.id, { allocated_projects: selected });
+    // Convert config IDs back to project names for storage
+    const projectNames = (configs || [])
+      .filter((c) => selected.includes(c.id))
+      .map((c) => c.project_name);
+    await base44.entities.SourceSSOT10.update(record.id, { allocated_projects: projectNames });
     setSaving(false);
     toast.success("Allocations saved");
     onSuccess();
@@ -56,11 +66,11 @@ export default function AllocateProjectsDialog({ open, record, onClose, onSucces
               <div key={config.id} className="flex items-center gap-3">
                 <input
                   type="checkbox"
-                  checked={selected.includes(config.project_name)}
+                  checked={selected.includes(config.id)}
                   onChange={(e) => {
                     const checked = e.target.checked;
                     setSelected((prev) =>
-                      checked ? [...prev, config.project_name] : prev.filter((p) => p !== config.project_name)
+                      checked ? [...prev, config.id] : prev.filter((id) => id !== config.id)
                     );
                   }}
                   className="w-4 h-4 accent-primary cursor-pointer"

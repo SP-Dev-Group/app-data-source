@@ -13,11 +13,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import AddExternalSSOTDialog from "@/components/external/AddExternalSSOTDialog";
+import AddReplicaConfigDialog from "@/components/external/AddReplicaConfigDialog";
 
 export default function DataSourcetoReplicasandAllocatorsExternal() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [replicaDialogOpen, setReplicaDialogOpen] = useState(false);
 
   const { data: ssotRecords, isLoading } = useQuery({
     queryKey: ["SourceSSOT10"],
@@ -31,6 +33,10 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
 
   const handleSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ["SourceSSOT10"] });
+  };
+
+  const handleReplicaSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ["ReplicaAppConfig10"] });
   };
 
   return (
@@ -88,7 +94,12 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
           </Table>
         </div>
 
-        <h2 className="text-lg font-semibold text-foreground mt-8 mb-1">Replica App Configs — ReplicaAppConfig10</h2>
+        <div className="flex items-center justify-between mt-8 mb-1">
+          <h2 className="text-lg font-semibold text-foreground">Replica App Configs — ReplicaAppConfig10</h2>
+          <Button size="sm" onClick={() => setReplicaDialogOpen(true)}>
+            <Plus className="w-4 h-4 mr-1" /> Add Config
+          </Button>
+        </div>
         <p className="text-xs text-muted-foreground mb-3">
           Registered external replica apps that records can be pushed to.
         </p>
@@ -131,6 +142,12 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
           </Table>
         </div>
       </div>
+
+      <AddReplicaConfigDialog
+        open={replicaDialogOpen}
+        onClose={() => setReplicaDialogOpen(false)}
+        onSuccess={handleReplicaSuccess}
+      />
 
       <AddExternalSSOTDialog
         open={dialogOpen}

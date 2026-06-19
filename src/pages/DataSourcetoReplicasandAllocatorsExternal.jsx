@@ -24,6 +24,11 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
     queryFn: () => base44.entities.SourceSSOT10.list(),
   });
 
+  const { data: replicaConfigs, isLoading: replicaLoading } = useQuery({
+    queryKey: ["ReplicaAppConfig10"],
+    queryFn: () => base44.entities.ReplicaAppConfig10.list(),
+  });
+
   const handleSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ["SourceSSOT10"] });
   };
@@ -76,6 +81,49 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
                   <TableRow key={record.id}>
                     <TableCell className="font-mono text-sm">{record.unique_id}</TableCell>
                     <TableCell>{record.Name}</TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+
+        <h2 className="text-lg font-semibold text-foreground mt-8 mb-1">Replica App Configs — ReplicaAppConfig10</h2>
+        <p className="text-xs text-muted-foreground mb-3">
+          Registered external replica apps that records can be pushed to.
+        </p>
+        <div className="rounded-lg border border-border overflow-hidden">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Project Name</TableHead>
+                <TableHead>Replica App ID</TableHead>
+                <TableHead>Replica Entity</TableHead>
+                <TableHead>Source Entity</TableHead>
+                <TableHead>Secret Name</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {replicaLoading ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center py-8">
+                    <Loader2 className="w-6 h-6 animate-spin mx-auto" />
+                  </TableCell>
+                </TableRow>
+              ) : replicaConfigs?.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                    No replica configs yet.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                replicaConfigs?.map((config) => (
+                  <TableRow key={config.id}>
+                    <TableCell className="font-medium">{config.project_name}</TableCell>
+                    <TableCell className="font-mono text-sm">{config.replica_app_id}</TableCell>
+                    <TableCell>{config.replica_entity_name}</TableCell>
+                    <TableCell>{config.source_entity_name}</TableCell>
+                    <TableCell className="font-mono text-sm">{config.secret_name}</TableCell>
                   </TableRow>
                 ))
               )}

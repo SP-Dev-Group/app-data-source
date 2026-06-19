@@ -37,7 +37,7 @@ export default function AddExternalSSOTDialog({ open, onClose, onSuccess }) {
 
   const handleSave = async () => {
     setSaving(true);
-    await base44.entities.SourceSSOT1.create(generatedRecord);
+    await base44.entities.SourceSSOT10.create(generatedRecord);
     setSaving(false);
     toast.success("Record saved to SourceSSOT-1");
     onSuccess();

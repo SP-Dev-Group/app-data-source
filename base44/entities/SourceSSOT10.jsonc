@@ -1,0 +1,18 @@
+{
+  "name": "SourceSSOT10",
+  "type": "object",
+  "properties": {
+    "unique_id": {
+      "type": "string",
+      "description": "Unique identifier (auto-generated)"
+    },
+    "Name": {
+      "type": "string",
+      "description": "Name"
+    }
+  },
+  "required": [
+    "unique_id",
+    "Name"
+  ]
+}

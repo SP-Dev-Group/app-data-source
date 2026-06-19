@@ -20,12 +20,12 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const { data: ssotRecords, isLoading } = useQuery({
-    queryKey: ["SourceSSOT1"],
-    queryFn: () => base44.entities.SourceSSOT1.list(),
+    queryKey: ["SourceSSOT10"],
+    queryFn: () => base44.entities.SourceSSOT10.list(),
   });
 
   const handleSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ["SourceSSOT1"] });
+    queryClient.invalidateQueries({ queryKey: ["SourceSSOT10"] });
   };
 
   return (

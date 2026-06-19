@@ -40,8 +40,14 @@ export default function AllocateProjectsDialog({ open, record, onClose, onSucces
       .filter((c) => selected.includes(c.id))
       .map((c) => c.project_name);
     await base44.entities.SourceSSOT10.update(record.id, { allocated_projects: projectNames });
+
+    // Push record to each checked replica
+    if (projectNames.length > 0) {
+      await base44.functions.invoke("pushAllocatedRecord10", { recordId: record.id });
+    }
+
     setSaving(false);
-    toast.success("Allocations saved");
+    toast.success(`Allocations saved and pushed to ${projectNames.length} replica(s)`);
     onSuccess();
     onClose();
   };

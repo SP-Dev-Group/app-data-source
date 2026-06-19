@@ -13,9 +13,11 @@ import {
 } from "@/components/ui/table";
 import { toast } from "sonner";
 import AddSampleDialog from "@/components/AddSampleDialog";
+import ManageAllocationsDialog from "@/components/ManageAllocationsDialog";
 
 export default function DataSourcetoReplicasAndAllocators() {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [manageRecord, setManageRecord] = useState(null);
   const queryClient = useQueryClient();
 
   // SSOT
@@ -127,13 +129,57 @@ export default function DataSourcetoReplicasAndAllocators() {
         </div>
 
         <h2 className="text-xl font-semibold text-foreground mb-3">SSOT - SampleSSOT1</h2>
+        <p className="text-xs text-muted-foreground mb-3">Click a row to manage its replica allocations.</p>
         <div className="rounded-lg border border-border overflow-hidden mb-8">
-          <EntityTable
-            records={ssotRecords}
-            isLoading={ssotLoading}
-            onDelete={(id) => ssotDeleteMutation.mutate(id)}
-            deleteMutation={ssotDeleteMutation}
-          />
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Unique ID</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead className="w-[80px]">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {ssotLoading ? (
+                <TableRow>
+                  <TableCell colSpan={3} className="text-center py-8">
+                    <Loader2 className="w-6 h-6 animate-spin mx-auto" />
+                  </TableCell>
+                </TableRow>
+              ) : ssotRecords?.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">
+                    No records found.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                ssotRecords?.map((record) => (
+                  <TableRow
+                    key={record.id}
+                    className="cursor-pointer hover:bg-primary/5"
+                    onClick={() => setManageRecord(record)}
+                  >
+                    <TableCell className="font-mono text-sm">{record.unique_id}</TableCell>
+                    <TableCell>{record.Name}</TableCell>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => ssotDeleteMutation.mutate(record.id)}
+                        disabled={ssotDeleteMutation.isPending}
+                      >
+                        {ssotDeleteMutation.isPending ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Trash2 className="w-4 h-4 text-destructive" />
+                        )}
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
         </div>
 
         <h2 className="text-xl font-semibold text-foreground mb-3">Replica 1-1 - SampleReplica1_1</h2>
@@ -160,6 +206,13 @@ export default function DataSourcetoReplicasAndAllocators() {
       <AddSampleDialog
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
+        onSuccess={handleDialogSuccess}
+      />
+
+      <ManageAllocationsDialog
+        open={!!manageRecord}
+        onClose={() => setManageRecord(null)}
+        record={manageRecord}
         onSuccess={handleDialogSuccess}
       />
     </div>

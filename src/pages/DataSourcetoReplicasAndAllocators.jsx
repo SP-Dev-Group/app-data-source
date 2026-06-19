@@ -2,7 +2,7 @@ import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Loader2 } from "lucide-react";
+import { Plus, Trash2, Loader2, Check, X } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -18,6 +18,7 @@ import ManageAllocationsDialog from "@/components/ManageAllocationsDialog";
 export default function DataSourcetoReplicasAndAllocators() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [manageRecord, setManageRecord] = useState(null);
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
   const queryClient = useQueryClient();
 
   // SSOT
@@ -142,23 +143,41 @@ export default function DataSourcetoReplicasAndAllocators() {
                   <TableRow
                     key={record.id}
                     className="cursor-pointer hover:bg-primary/5"
-                    onClick={() => setManageRecord(record)}
+                    onClick={() => { if (deleteConfirmId !== record.id) setManageRecord(record); }}
                   >
                     <TableCell className="font-mono text-sm">{record.unique_id}</TableCell>
                     <TableCell>{record.Name}</TableCell>
                     <TableCell onClick={(e) => e.stopPropagation()}>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => ssotDeleteMutation.mutate(record.id)}
-                        disabled={ssotDeleteMutation.isPending}
-                      >
-                        {ssotDeleteMutation.isPending ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
+                      {ssotDeleteMutation.isPending && deleteConfirmId === record.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin mx-auto" />
+                      ) : deleteConfirmId === record.id ? (
+                        <div className="flex items-center gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 text-destructive"
+                            onClick={() => { ssotDeleteMutation.mutate(record.id); setDeleteConfirmId(null); }}
+                          >
+                            <Check className="w-3.5 h-3.5" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7"
+                            onClick={() => setDeleteConfirmId(null)}
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setDeleteConfirmId(record.id)}
+                        >
                           <Trash2 className="w-4 h-4 text-destructive" />
-                        )}
-                      </Button>
+                        </Button>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))

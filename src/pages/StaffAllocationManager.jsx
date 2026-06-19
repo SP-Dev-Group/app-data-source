@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { ArrowLeft, RefreshCw, Users, Loader2 } from "lucide-react";
+import { ArrowLeft, RefreshCw, Users, Loader2, RotateCw } from "lucide-react";
 
 export default function StaffAllocationManager() {
   const navigate = useNavigate();
@@ -13,6 +13,7 @@ export default function StaffAllocationManager() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState({});
+  const [syncing, setSyncing] = useState({});
 
   const loadData = async () => {
     setLoading(true);
@@ -97,9 +98,29 @@ export default function StaffAllocationManager() {
     setProcessing(p => ({ ...p, [key]: false }));
   };
 
+  const handleSyncRow = async (staffRecord) => {
+    const uid = staffRecord.unique_id || staffRecord.staff_id;
+    const alloc = allocations[uid];
+    const projects = alloc?.allocated_projects || [];
+    if (projects.length === 0) return;
+
+    setSyncing(s => ({ ...s, [uid]: true }));
+    for (const projectName of projects) {
+      await base44.functions.invoke('allocatedPush', { unique_id: uid, project_name: projectName });
+    }
+    setSyncing(s => ({ ...s, [uid]: false }));
+  };
+
   const getShortName = (projectName) => {
     return projectName.replace('StaffSSOTfor', '').replace('App', '');
   };
+
+  // Sort: unallocated first
+  const sortedStaff = [...staff].sort((a, b) => {
+    const aAlloc = allocations[a.unique_id || a.staff_id]?.allocated_projects?.length || 0;
+    const bAlloc = allocations[b.unique_id || b.staff_id]?.allocated_projects?.length || 0;
+    return aAlloc - bAlloc;
+  });
 
   if (loading) {
     return (
@@ -156,14 +177,20 @@ export default function StaffAllocationManager() {
                       {getShortName(c.project_name)}
                     </th>
                   ))}
+                  <th className="text-center px-4 py-3 font-medium">Sync</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border bg-card">
-                {staff.map(s => {
+                {sortedStaff.map(s => {
                   const uid = s.unique_id || s.staff_id;
+                  const allocCount = allocations[uid]?.allocated_projects?.length || 0;
+                  const isUnallocated = allocCount === 0;
                   return (
-                    <tr key={uid || s.id} className="hover:bg-muted/40">
-                      <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{uid}</td>
+                    <tr key={uid || s.id} className={isUnallocated ? "bg-yellow-50/60 hover:bg-yellow-50" : "hover:bg-muted/40"}>
+                      <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
+                        {uid}
+                        {isUnallocated && <span className="ml-2 text-[10px] font-semibold text-yellow-600 bg-yellow-100 px-1.5 py-0.5 rounded">NEW</span>}
+                      </td>
                       <td className="px-4 py-3">{s.full_name}</td>
                       {configs.map(c => {
                         const key = `${uid}:${c.project_name}`;
@@ -182,12 +209,28 @@ export default function StaffAllocationManager() {
                           </td>
                         );
                       })}
+                      <td className="px-4 py-3 text-center">
+                        {syncing[uid] ? (
+                          <Loader2 className="w-4 h-4 animate-spin mx-auto text-muted-foreground" />
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7"
+                            disabled={allocCount === 0}
+                            onClick={() => handleSyncRow(s)}
+                            title="Re-push to all allocated apps"
+                          >
+                            <RotateCw className="w-3.5 h-3.5" />
+                          </Button>
+                        )}
+                      </td>
                     </tr>
                   );
                 })}
                 {staff.length === 0 && (
                   <tr>
-                    <td colSpan={2 + configs.length} className="px-4 py-8 text-center text-muted-foreground">
+                    <td colSpan={3 + configs.length} className="px-4 py-8 text-center text-muted-foreground">
                       No staff records found in source app.
                     </td>
                   </tr>

@@ -68,25 +68,24 @@ export default function DataSourcetoReplicasAndAllocators() {
     queryClient.invalidateQueries({ queryKey: ['SampleReplica1_2'] });
   };
 
-  const EntityTable = ({ records, isLoading, onDelete, deleteMutation }) => (
+  const EntityTable = ({ records, isLoading }) => (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead>Unique ID</TableHead>
           <TableHead>Name</TableHead>
-          <TableHead className="w-[80px]">Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {isLoading ? (
           <TableRow>
-            <TableCell colSpan={3} className="text-center py-8">
+            <TableCell colSpan={2} className="text-center py-8">
               <Loader2 className="w-6 h-6 animate-spin mx-auto" />
             </TableCell>
           </TableRow>
         ) : records?.length === 0 ? (
           <TableRow>
-            <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">
+            <TableCell colSpan={2} className="text-center py-8 text-muted-foreground">
               No records found.
             </TableCell>
           </TableRow>
@@ -95,20 +94,6 @@ export default function DataSourcetoReplicasAndAllocators() {
             <TableRow key={record.id}>
               <TableCell className="font-mono text-sm">{record.unique_id}</TableCell>
               <TableCell>{record.Name}</TableCell>
-              <TableCell>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => onDelete(record.id)}
-                  disabled={deleteMutation.isPending}
-                >
-                  {deleteMutation.isPending ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Trash2 className="w-4 h-4 text-destructive" />
-                  )}
-                </Button>
-              </TableCell>
             </TableRow>
           ))
         )}
@@ -187,8 +172,6 @@ export default function DataSourcetoReplicasAndAllocators() {
           <EntityTable
             records={replica1_1Records}
             isLoading={replica1_1Loading}
-            onDelete={(id) => replica1_1DeleteMutation.mutate(id)}
-            deleteMutation={replica1_1DeleteMutation}
           />
         </div>
 
@@ -197,8 +180,6 @@ export default function DataSourcetoReplicasAndAllocators() {
           <EntityTable
             records={replica1_2Records}
             isLoading={replica1_2Loading}
-            onDelete={(id) => replica1_2DeleteMutation.mutate(id)}
-            deleteMutation={replica1_2DeleteMutation}
           />
         </div>
       </div>

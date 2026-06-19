@@ -56,18 +56,23 @@ export default function AllocateProjectsDialog({ open, record, onClose, onSucces
         ) : (
           <div className="space-y-3 py-2">
             {configs?.map((config) => (
-              <label key={config.id} className="flex items-center gap-3 cursor-pointer">
+              <div key={config.id} className="flex items-center gap-3">
                 <input
                   type="checkbox"
                   checked={selected.includes(config.project_name)}
-                  onChange={() => toggle(config.project_name)}
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+                    setSelected((prev) =>
+                      checked ? [...prev, config.project_name] : prev.filter((p) => p !== config.project_name)
+                    );
+                  }}
                   className="w-4 h-4 accent-primary cursor-pointer"
                 />
                 <div>
                   <p className="text-sm font-medium">{config.project_name}</p>
                   <p className="text-xs text-muted-foreground">{config.replica_entity_name} @ {config.replica_app_id}</p>
                 </div>
-              </label>
+              </div>
             ))}
           </div>
         )}

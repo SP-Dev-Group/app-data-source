@@ -18,18 +18,16 @@ export default function AllocateProjectsDialog({ open, record, onClose, onSucces
   });
 
   useEffect(() => {
-    if (open && record && record.id !== initializedForId.current) {
+    if (open && record && configs && record.id !== initializedForId.current) {
       initializedForId.current = record.id;
-      // Store selected as config IDs internally
-      if (configs) {
-        const matchedIds = configs
-          .filter((c) => (record.allocated_projects || []).includes(c.project_name))
-          .map((c) => c.id);
-        setSelected(matchedIds);
-      }
+      const matchedIds = configs
+        .filter((c) => (record.allocated_projects || []).includes(c.project_name))
+        .map((c) => c.id);
+      setSelected(matchedIds);
     }
     if (!open) {
       initializedForId.current = null;
+      setSelected([]);
     }
   }, [open, record?.id, configs]);
 

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Loader2, Check, X } from "lucide-react";
+import { Plus, Trash2, Loader2, Check, X, ArrowLeft } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -16,6 +17,7 @@ import AddSampleDialog from "@/components/AddSampleDialog";
 import ManageAllocationsDialog from "@/components/ManageAllocationsDialog";
 
 export default function DataSourcetoReplicasAndAllocators() {
+  const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [manageRecord, setManageRecord] = useState(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
@@ -106,9 +108,14 @@ export default function DataSourcetoReplicasAndAllocators() {
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold text-foreground">
-            Data Source to Replicas with Replica Allocator
-          </h1>
+          <div className="flex items-center gap-3">
+            <Button variant="outline" size="icon" onClick={() => navigate("/menu")}>
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+            <h1 className="text-3xl font-bold text-foreground">
+              Data Source to Replicas with Replica Allocator
+            </h1>
+          </div>
           <Button onClick={() => setDialogOpen(true)}>
             <Plus className="w-4 h-4 mr-1" /> Add Sample
           </Button>

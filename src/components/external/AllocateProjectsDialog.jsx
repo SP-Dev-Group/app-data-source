@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 export default function AllocateProjectsDialog({ open, record, onClose, onSuccess }) {
   const [selected, setSelected] = useState([]);
   const [saving, setSaving] = useState(false);
+  const initializedForId = useRef(null);
 
   const { data: configs, isLoading } = useQuery({
     queryKey: ["ReplicaAppConfig10"],
@@ -17,18 +18,14 @@ export default function AllocateProjectsDialog({ open, record, onClose, onSucces
   });
 
   useEffect(() => {
-    if (open && record) {
+    if (open && record && record.id !== initializedForId.current) {
+      initializedForId.current = record.id;
       setSelected(record.allocated_projects || []);
     }
+    if (!open) {
+      initializedForId.current = null;
+    }
   }, [open, record?.id]);
-
-  const toggle = (projectName) => {
-    setSelected((prev) =>
-      prev.includes(projectName)
-        ? prev.filter((p) => p !== projectName)
-        : [...prev, projectName]
-    );
-  };
 
   const handleSave = async () => {
     setSaving(true);

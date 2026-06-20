@@ -46,11 +46,11 @@ export default function Menu() {
       >
         <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
           <div className="flex flex-col gap-3">
-            <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white" onClick={() => navigate("/datasourcetoreplicasandallocators")}>
-              Source to Replica Allocator Internal
-            </Button>
             <Button className="w-full bg-violet-500 hover:bg-violet-600 text-white" onClick={() => navigate("/sourcerecordstoreplicateemplate")}>
               Source Records to Replica Template
+            </Button>
+            <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white" onClick={() => navigate("/datasourcetoreplicasandallocators")}>
+              Source to Replica Allocator Internal
             </Button>
             <Button className="w-full bg-indigo-500 hover:bg-indigo-600 text-white" onClick={() => navigate("/datasourcetoreplicasandallocatorsexternal")}>
               Source to Replica & Source Records to Replica

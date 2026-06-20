@@ -46,6 +46,14 @@ export default function SourceReplicaMakeSetUp() {
   const [editingAutoEntityName, setEditingAutoEntityName] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
 
+  const hasUnmetFields =
+    !formData.projectName ||
+    !formData.description ||
+    !formData.appTitle ||
+    !formData.sourceEntityName ||
+    formData.replicas.some(r => !r.secretValue) ||
+    !!projectError;
+
   const { data: existingTemplates } = useQuery({
     queryKey: ["SourceReplicaTemplateMakeReady"],
     queryFn: () => base44.entities.SourceReplicaTemplateMakeReady.list(),
@@ -267,8 +275,11 @@ export default function SourceReplicaMakeSetUp() {
           </CardContent>
         </Card>
 
-        <div className="flex gap-2 mb-6">
+        <div className="flex items-center gap-3 mb-6">
           <Button onClick={handleSave} disabled={!!projectError}>Save Template</Button>
+          {hasUnmetFields && (
+            <span className="text-sm text-destructive">Some field(s) still required before saving</span>
+          )}
         </div>
 
         <Tabs defaultValue="source" className="space-y-4">

@@ -30,9 +30,9 @@ Deno.serve(async (req) => {
     const results = { deleted: 0, errors: [] };
 
     for (const config of targetConfigs) {
-      const secretKey = Deno.env.get(config.secret_name);
+      const secretKey = config.secret_value;
       if (!secretKey) {
-        results.errors.push(`Missing secret: ${config.secret_name}`);
+        results.errors.push(`Missing secret_value for ${config.project_name}`);
         continue;
       }
 

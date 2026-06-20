@@ -25,6 +25,15 @@ export default function SourceEntityForm({ sourceSchemaOption, sourceFields, sou
       {sourceSchemaOption === 'create' ? (
         <div className="space-y-2">
           <Label>Source Entity Fields</Label>
+          <div className="rounded-md border border-border bg-muted/40 p-3 mb-2">
+            <div className="flex items-center gap-2">
+              <Input value="unique_id" readOnly className="flex-1 bg-background font-mono" />
+              <select disabled value="string" className="border rounded-md px-3 py-2 text-sm bg-background">
+                <option value="string">String</option>
+              </select>
+              <span className="text-xs text-muted-foreground ml-2">System-generated (auto-created on Add Record)</span>
+            </div>
+          </div>
           {sourceFields.map((field, index) => (
             <div key={index} className="flex gap-2">
               <Input value={field.name} onChange={(e) => onFieldChange(index, 'name', e.target.value)} placeholder="Field name" className="flex-1" />

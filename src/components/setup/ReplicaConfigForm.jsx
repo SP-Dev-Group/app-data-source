@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Trash2, Plus, Copy, Check, Pencil } from "lucide-react";
 import { toast } from "sonner";
 
-export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove, autoEntityName, projectName, fieldErrors = {}, onClearError }) {
+export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove, projectName }) {
   const autoSecretName = `REPLICA_APP_${(projectName || '').replace(/\s+/g, '_').toUpperCase()}`;
   const [copied, setCopied] = useState(false);
   const [editingEntityName, setEditingEntityName] = useState({});
@@ -21,10 +21,14 @@ export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove,
   return (
     <div className="space-y-4">
       {replicas.map((replica, index) => {
-        const defaultEntityName = `${autoEntityName}${index + 1}`;
+        const defaultEntityName = `Replica${index + 1}`;
         const defaultSecretName = autoSecretName;
         const isEditingEntity = editingEntityName[index];
         const isEditingSecret = editingSecretName[index];
+
+        const autoEntityFromName = replica.replicaAppName
+          ? `Replica${replica.replicaAppName.replace(/\s+/g, '')}`
+          : defaultEntityName;
 
         return (
           <div key={index} className="p-4 border rounded-lg space-y-3">
@@ -36,14 +40,22 @@ export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove,
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
+                <Label>Replica App Name *</Label>
+                <Input
+                  value={replica.replicaAppName || ""}
+                  onChange={(e) => onUpdate(index, 'replicaAppName', e.target.value)}
+                  placeholder="e.g. NewsBookSite"
+                />
+              </div>
+              <div className="space-y-2">
                 <Label>Replica Entity Name</Label>
                 <div className="flex gap-2">
                   <Input
-                    value={replica.replicaEntityName || defaultEntityName}
+                    value={replica.replicaEntityName || autoEntityFromName}
                     onChange={(e) => onUpdate(index, 'replicaEntityName', e.target.value)}
                     readOnly={!isEditingEntity}
                     className={!isEditingEntity ? "bg-muted text-muted-foreground cursor-not-allowed" : ""}
-                    placeholder={defaultEntityName}
+                    placeholder={autoEntityFromName}
                   />
                   <Button
                     variant="outline"

@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Plus, Copy, Check, Trash2, Pencil } from "lucide-react";
+import { ArrowLeft, Plus, Copy, Check, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,7 +32,7 @@ export default function SourceReplicaMakeSetUp() {
   const [formData, setFormData] = useState({
     projectName: "",
     description: "",
-    appTitle: "",
+
     sourceEntityName: "",
     sourceSchemaOption: "create",
     sourceFields: [{ name: "", type: "string" }],
@@ -43,13 +43,12 @@ export default function SourceReplicaMakeSetUp() {
     replicaPage: { mode: "create", fileName: "" },
   });
   const [projectError, setProjectError] = useState("");
-  const [editingAutoEntityName, setEditingAutoEntityName] = useState(false);
+
   const [fieldErrors, setFieldErrors] = useState({});
 
   const hasUnmetFields =
     !formData.projectName ||
     !formData.description ||
-    !formData.appTitle ||
     !formData.sourceEntityName ||
     formData.replicas.some(r => !r.secretValue) ||
     !!projectError;
@@ -73,12 +72,7 @@ export default function SourceReplicaMakeSetUp() {
     setFieldErrors(p => ({ ...p, projectName: false }));
   };
 
-  const getAutoReplicaEntityName = () => {
-    if (formData.customAutoEntityName !== undefined) return formData.customAutoEntityName;
-    const desc = formData.description.replace(/\s+/g, '');
-    const title = formData.appTitle.replace(/\s+/g, '');
-    return `Replica${desc}${title}`;
-  };
+
 
   const addReplica = () => {
     setFormData({ ...formData, replicas: [...formData.replicas, { secretName: "", secretValue: "", replicaEntityName: "" }] });
@@ -127,7 +121,7 @@ export default function SourceReplicaMakeSetUp() {
     const errors = {};
     if (!formData.projectName) errors.projectName = true;
     if (!formData.description) errors.description = true;
-    if (!formData.appTitle) errors.appTitle = true;
+
     if (!formData.sourceEntityName) errors.sourceEntityName = true;
     formData.replicas.forEach((r, i) => {
       if (!r.secretValue) errors[`replica_secretValue_${i}`] = true;
@@ -148,7 +142,7 @@ export default function SourceReplicaMakeSetUp() {
       await base44.entities.SourceReplicaTemplateMakeReady.create({
         project_name: formData.projectName,
         description: formData.description,
-        app_title: formData.appTitle,
+
         source_entity_name: formData.sourceEntityName,
         source_schema_mode: formData.sourceSchemaOption === 'create' ? 'create_new' : 'existing',
         source_fields: formData.sourceFields.map(f => ({ field_name: f.name, field_type: f.type, is_required: false })),
@@ -157,7 +151,7 @@ export default function SourceReplicaMakeSetUp() {
         version_history_entity_mode: formData.createArchiveEntities ? 'create_new' : 'existing',
         replica_configs: formData.replicas.map((r, i) => ({
           replica_app_id: r.secretValue,
-          replica_entity_name: r.replicaEntityName || (getAutoReplicaEntityName() + (i + 1)),
+          replica_entity_name: r.replicaEntityName || (r.replicaAppName ? `Replica${r.replicaAppName.replace(/\s+/g,'')}` : `Replica${i + 1}`),
           secret_name: r.secretName || `REPLICA_APP_${formData.projectName.replace(/\s+/g, '_').toUpperCase()}`,
           secret_value: r.secretValue,
         })),
@@ -193,29 +187,7 @@ export default function SourceReplicaMakeSetUp() {
                 <p className="text-xs text-muted-foreground">{formData.description.length}/20</p>
               </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="appTitle">Replica App Title *</Label>
-              <Input id="appTitle" value={formData.appTitle} onChange={(e) => { setFormData({ ...formData, appTitle: e.target.value }); }} placeholder="e.g. Manager" className={!formData.appTitle ? "border-red-500" : ""} />
-            </div>
-            <div className="space-y-2">
-              <Label>Auto-generated Replica Entity Name</Label>
-              <div className="flex gap-2">
-                <Input
-                  value={formData.customAutoEntityName ?? getAutoReplicaEntityName()}
-                  readOnly={!editingAutoEntityName}
-                  onChange={(e) => setFormData({ ...formData, customAutoEntityName: e.target.value })}
-                  className={!editingAutoEntityName ? "bg-muted text-muted-foreground cursor-not-allowed" : ""}
-                />
-                <Button
-                  variant="outline"
-                  size="icon"
-                  title="Edit auto entity name"
-                  onClick={() => setEditingAutoEntityName(v => !v)}
-                >
-                  <Pencil className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
+
           </CardContent>
         </Card>
 
@@ -251,10 +223,7 @@ export default function SourceReplicaMakeSetUp() {
               onUpdate={updateReplica}
               onAdd={addReplica}
               onRemove={removeReplica}
-              autoEntityName={getAutoReplicaEntityName()}
               projectName={formData.projectName}
-              fieldErrors={fieldErrors}
-              onClearError={(key) => setFieldErrors(p => ({ ...p, [key]: false }))}
             />
           </CardContent>
         </Card>
@@ -328,7 +297,7 @@ export default function SourceReplicaMakeSetUp() {
               <CardContent className="space-y-4">
                 {formData.replicas.map((replica, index) => (
                   <div key={index} className="space-y-2">
-                    <h3 className="font-semibold">Replica {index + 1}: {replica.replicaEntityName || getAutoReplicaEntityName() + (index + 1) || 'Not configured'}</h3>
+                    <h3 className="font-semibold">Replica {index + 1}: {replica.replicaEntityName || (replica.replicaAppName ? `Replica${replica.replicaAppName.replace(/\s+/g,'')}`  : 'Not configured')}</h3>
                     <div className="flex gap-2 flex-wrap">
                       <Button variant="outline" size="sm" onClick={() => copyToClipboard(generatePushFunction(formData, index), `push-${index}`)}>
                         {copiedSection === `push-${index}` ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} pushToReplica

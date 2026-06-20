@@ -47,7 +47,7 @@ Deno.serve(async (req) => {
     for (const config of targetConfigs) {
       const secretKey = Deno.env.get(config.secret_name);
       if (!secretKey) {
-        results.errors.push(`Missing secret: ${config.secret_name}`);
+        results.errors.push(`Missing secret: ${config.secret_name} (check ReplicaAppConfig10 secret_name matches environment secret)`);
         continue;
       }
 

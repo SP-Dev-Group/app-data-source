@@ -33,21 +33,32 @@ export default function AllocateProjectsDialog({ open, record, onClose, onSucces
 
   const handleSave = async () => {
     setSaving(true);
-    // Convert config IDs back to project names for storage
-    const projectNames = (configs || [])
-      .filter((c) => selected.includes(c.id))
-      .map((c) => c.project_name);
-    await base44.entities.SourceSSOT10.update(record.id, { allocated_projects: projectNames });
+    try {
+      // Convert config IDs back to project names for storage
+      const projectNames = (configs || [])
+        .filter((c) => selected.includes(c.id))
+        .map((c) => c.project_name);
+      await base44.entities.SourceSSOT10.update(record.id, { allocated_projects: projectNames });
 
-    // Push record to each checked replica
-    if (projectNames.length > 0) {
-      await base44.functions.invoke("pushAllocatedRecord10", { recordId: record.id });
+      // Push record to each checked replica
+      if (projectNames.length > 0) {
+        const pushResult = await base44.functions.invoke("pushAllocatedRecord10", { recordId: record.id });
+        const { pushed, errors } = pushResult.data;
+        if (errors && errors.length > 0) {
+          toast.warning(`Pushed to ${pushed} replica(s), ${errors.length} failed: ${errors.join(', ')}`);
+        } else {
+          toast.success(`Allocations saved and pushed to ${pushed} replica(s)`);
+        }
+      } else {
+        toast.success('Allocations cleared');
+      }
+      onSuccess();
+      onClose();
+    } catch (err) {
+      toast.error(`Failed to save allocations: ${err.message}`);
+    } finally {
+      setSaving(false);
     }
-
-    setSaving(false);
-    toast.success(`Allocations saved and pushed to ${projectNames.length} replica(s)`);
-    onSuccess();
-    onClose();
   };
 
   return (

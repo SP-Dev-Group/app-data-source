@@ -27,7 +27,7 @@ export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove,
         const isEditingSecret = editingSecretName[index];
 
         const autoEntityFromName = replica.replicaAppName
-          ? `Replica${replica.replicaAppName.replace(/\s+/g, '')}`
+          ? `Replica${replica.replicaAppName.replace(/\s+/g, '')}${index + 1}`
           : defaultEntityName;
 
         return (

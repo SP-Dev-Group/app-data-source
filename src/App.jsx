@@ -26,6 +26,7 @@ import Base44Menu from './pages/Base44Menu';
 import StaffAllocationManager from './pages/StaffAllocationManager';
 import DataSourcetoReplicasAndAllocators from './pages/DataSourcetoReplicasAndAllocators';
 import DataSourcetoReplicasandAllocatorsExternal from './pages/DataSourcetoReplicasandAllocatorsExternal';
+import SourceRecordsToReplicaTemplate from './pages/SourceRecordsToReplicaTemplate';
 
 
 const AuthenticatedApp = () => {
@@ -74,6 +75,7 @@ const AuthenticatedApp = () => {
       <Route path="/staffallocation" element={<StaffAllocationManager />} />
       <Route path="/datasourcetoreplicasandallocators" element={<DataSourcetoReplicasAndAllocators />} />
       <Route path="/datasourcetoreplicasandallocatorsexternal" element={<DataSourcetoReplicasandAllocatorsExternal />} />
+      <Route path="/sourcerecordstoreplicateemplate" element={<SourceRecordsToReplicaTemplate />} />
 
       <Route path="*" element={<PageNotFound />} />
     </Routes>

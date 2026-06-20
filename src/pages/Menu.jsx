@@ -48,7 +48,10 @@ export default function Menu() {
           Source to Replica Allocator Internal
         </Button>
         <Button className="w-full bg-purple-400 hover:bg-purple-500 text-white" onClick={() => navigate("/datasourcetoreplicasandallocatorsexternal")}>
-          Source to Replica Allocator External
+          Source to Replica & Source Records to Replica
+        </Button>
+        <Button className="w-full bg-purple-300 hover:bg-purple-400 text-white" onClick={() => navigate("/sourcerecordstoreplicateemplate")}>
+          Source Records to Replica Template
         </Button>
         <Button className="w-full bg-red-500 hover:bg-red-600 text-white" onClick={() => navigate("/googlemenu")}>
           Google Menu

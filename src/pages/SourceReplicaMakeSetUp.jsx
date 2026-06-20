@@ -418,49 +418,57 @@ export default function SourceReplicaMakeSetUp() {
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <CardTitle>Backend Functions</CardTitle>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      const all = formData.replicas.map((_, index) =>
-                        [
-                          `// --- pushToReplica ---`,
-                          generatePushFunction(formData, index),
-                          `// --- deleteFromReplicas ---`,
-                          generateDeleteFunction(formData, index),
-                          `// --- pushAllocatedRecord ---`,
-                          generateAllocateFunction(formData, index),
-                          `// --- reinstateFromArchive ---`,
-                          generateReinstateFunction(formData, index),
-                        ].join('\n\n')
-                      ).join('\n\n// ==================\n\n');
-                      copyToClipboard(all, 'all-functions');
-                    }}
-                  >
-                    {copiedSection === 'all-functions' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy All Functions
-                  </Button>
+                  {(() => {
+                    const p = formData.projectName.replace(/\s+/g, '');
+                    return (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const all = formData.replicas.map((_, index) =>
+                            [
+                              `// --- pushToReplica${p} ---`,
+                              generatePushFunction(formData, index),
+                              `// --- deleteFromReplicas${p} ---`,
+                              generateDeleteFunction(formData, index),
+                              `// --- pushAllocatedRecord${p} ---`,
+                              generateAllocateFunction(formData, index),
+                              `// --- reinstateFromArchive${p} ---`,
+                              generateReinstateFunction(formData, index),
+                            ].join('\n\n')
+                          ).join('\n\n// ==================\n\n');
+                          copyToClipboard(all, 'all-functions');
+                        }}
+                      >
+                        {copiedSection === 'all-functions' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy All Functions
+                      </Button>
+                    );
+                  })()}
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                {formData.replicas.map((replica, index) => (
-                  <div key={index} className="space-y-2">
-                    <h3 className="font-semibold">Replica {index + 1}: {replica.replicaEntityName || (replica.replicaAppName ? `Replica${replica.replicaAppName.replace(/\s+/g,'')}`  : 'Not configured')}</h3>
-                    <div className="flex gap-2 flex-wrap">
-                      <Button variant="outline" size="sm" onClick={() => copyToClipboard(generatePushFunction(formData, index), `push-${index}`)}>
-                        {copiedSection === `push-${index}` ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} pushToReplica
-                      </Button>
-                      <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateDeleteFunction(formData, index), `delete-${index}`)}>
-                        {copiedSection === `delete-${index}` ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} deleteFromReplicas
-                      </Button>
-                      <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateAllocateFunction(formData, index), `allocate-${index}`)}>
-                        {copiedSection === `allocate-${index}` ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} pushAllocatedRecord
-                      </Button>
-                      <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateReinstateFunction(formData, index), `reinstate-${index}`)}>
-                        {copiedSection === `reinstate-${index}` ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} reinstateFromArchive
-                      </Button>
+                {formData.replicas.map((replica, index) => {
+                  const p = formData.projectName.replace(/\s+/g, '');
+                  return (
+                    <div key={index} className="space-y-2">
+                      <h3 className="font-semibold">Replica {index + 1}: {replica.replicaEntityName || (replica.replicaAppName ? `Replica${replica.replicaAppName.replace(/\s+/g,'')}` : 'Not configured')}</h3>
+                      <div className="flex gap-2 flex-wrap">
+                        <Button variant="outline" size="sm" onClick={() => copyToClipboard(generatePushFunction(formData, index), `push-${index}`)}>
+                          {copiedSection === `push-${index}` ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} pushToReplica{p}
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateDeleteFunction(formData, index), `delete-${index}`)}>
+                          {copiedSection === `delete-${index}` ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} deleteFromReplicas{p}
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateAllocateFunction(formData, index), `allocate-${index}`)}>
+                          {copiedSection === `allocate-${index}` ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} pushAllocatedRecord{p}
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateReinstateFunction(formData, index), `reinstate-${index}`)}>
+                          {copiedSection === `reinstate-${index}` ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} reinstateFromArchive{p}
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </CardContent>
             </Card>
           </TabsContent>

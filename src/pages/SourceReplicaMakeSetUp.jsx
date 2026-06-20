@@ -415,7 +415,32 @@ export default function SourceReplicaMakeSetUp() {
 
           <TabsContent value="functions">
             <Card>
-              <CardHeader><CardTitle>Backend Functions</CardTitle></CardHeader>
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <CardTitle>Backend Functions</CardTitle>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const all = formData.replicas.map((_, index) =>
+                        [
+                          `// --- pushToReplica ---`,
+                          generatePushFunction(formData, index),
+                          `// --- deleteFromReplicas ---`,
+                          generateDeleteFunction(formData, index),
+                          `// --- pushAllocatedRecord ---`,
+                          generateAllocateFunction(formData, index),
+                          `// --- reinstateFromArchive ---`,
+                          generateReinstateFunction(formData, index),
+                        ].join('\n\n')
+                      ).join('\n\n// ==================\n\n');
+                      copyToClipboard(all, 'all-functions');
+                    }}
+                  >
+                    {copiedSection === 'all-functions' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy All Functions
+                  </Button>
+                </div>
+              </CardHeader>
               <CardContent className="space-y-4">
                 {formData.replicas.map((replica, index) => (
                   <div key={index} className="space-y-2">

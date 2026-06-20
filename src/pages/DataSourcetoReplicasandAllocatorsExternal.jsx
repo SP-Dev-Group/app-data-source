@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus, Loader2, Send, Pencil, Archive, Tag } from "lucide-react";
+import { ArrowLeft, Plus, Loader2, Send, Pencil, Archive, Tag, FileArchive } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -18,6 +18,7 @@ import AddReplicaConfigDialog from "@/components/external/AddReplicaConfigDialog
 import EditSSOTRecordDialog from "@/components/external/EditSSOTRecordDialog";
 import ArchiveSSOTRecordDialog from "@/components/external/ArchiveSSOTRecordDialog";
 import AllocateProjectsDialog from "@/components/external/AllocateProjectsDialog";
+import ArchiveSSOTViewerDialog from "@/components/external/ArchiveSSOTViewerDialog";
 
 export default function DataSourcetoReplicasandAllocatorsExternal() {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
   const [editRecord, setEditRecord] = useState(null);
   const [archiveRecord, setArchiveRecord] = useState(null);
   const [allocateRecord, setAllocateRecord] = useState(null);
+  const [archiveViewerOpen, setArchiveViewerOpen] = useState(false);
 
   const handlePush = async (config) => {
     setPushingId(config.id);
@@ -77,9 +79,14 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
             </h1>
           </div>
           <div className="flex gap-2">
-            <Button onClick={() => setDialogOpen(true)}>
-              <Plus className="w-4 h-4 mr-1" /> Add Record
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => setArchiveViewerOpen(true)}>
+                <FileArchive className="w-4 h-4 mr-1" /> View Archive
+              </Button>
+              <Button onClick={() => setDialogOpen(true)}>
+                <Plus className="w-4 h-4 mr-1" /> Add Record
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -252,6 +259,12 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
         record={allocateRecord}
         onClose={() => setAllocateRecord(null)}
         onSuccess={handleSuccess}
+      />
+
+      <ArchiveSSOTViewerDialog
+        open={archiveViewerOpen}
+        onClose={() => setArchiveViewerOpen(false)}
+        onReinstate={handleSuccess}
       />
     </div>
   );

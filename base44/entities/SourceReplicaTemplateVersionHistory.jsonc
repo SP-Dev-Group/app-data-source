@@ -1,0 +1,37 @@
+{
+  "name": "SourceReplicaTemplateVersionHistory",
+  "type": "object",
+  "properties": {
+    "template_id": {
+      "type": "string",
+      "description": "The ID of the SourceReplicaTemplateMakeReady record"
+    },
+    "project_name": {
+      "type": "string",
+      "description": "Project name at time of this version"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "created",
+        "updated",
+        "archived"
+      ],
+      "description": "What action triggered this version entry"
+    },
+    "version": {
+      "type": "number",
+      "description": "Version number (1 = created, increments on each update)"
+    },
+    "snapshot": {
+      "type": "string",
+      "description": "JSON snapshot of the full template record at this version"
+    }
+  },
+  "required": [
+    "template_id",
+    "project_name",
+    "event_type",
+    "version"
+  ]
+}

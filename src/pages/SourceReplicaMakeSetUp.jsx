@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Plus, Copy, Check, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, Copy, Check, Trash2, BookOpen } from "lucide-react";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,6 +15,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import SourceEntityForm from "@/components/setup/SourceEntityForm";
 import ReplicaConfigForm from "@/components/setup/ReplicaConfigForm";
 import PageModeSelector from "@/components/setup/PageModeSelector";
+import TemplatesPanel from "@/components/setup/TemplatesPanel";
 import {
   generateSourceInstructions,
   generateReplicaInstructions,
@@ -41,12 +42,16 @@ const EMPTY_FORM = {
 
 export default function SourceReplicaMakeSetUp() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [copiedSection, setCopiedSection] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [editingRecord, setEditingRecord] = useState(null); // null = new, object = existing record
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [formData, setFormData] = useState({ ...EMPTY_FORM });
   const [projectError, setProjectError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
+  const [showTemplates, setShowTemplates] = useState(false);
+  const [savedAsUpdate, setSavedAsUpdate] = useState(false);
 
   const hasUnmetFields =
     !formData.projectName ||
@@ -62,9 +67,48 @@ export default function SourceReplicaMakeSetUp() {
 
   const validateProjectName = (name) => {
     if (!name) return false;
-    const exists = existingTemplates?.some(t => t.project_name === name);
+    // When editing, allow same project name on the same record
+    const exists = existingTemplates?.some(t => t.project_name === name && t.id !== editingRecord?.id);
     setProjectError(exists ? "Project name already exists. Please choose a different name." : "");
     return exists;
+  };
+
+  const recordToFormData = (tpl) => ({
+    projectName: tpl.project_name || "",
+    description: tpl.description || "",
+    sourceEntityName: tpl.source_entity_name || "",
+    sourceSchemaOption: tpl.source_schema_mode === "existing" ? "paste" : "create",
+    sourceFields: tpl.source_fields?.map(f => ({ name: f.field_name, type: f.field_type })) || [{ name: "", type: "string" }],
+    sourceSchemaJson: tpl.source_schema_json || "",
+    createArchiveEntities: tpl.archive_entity_mode !== "existing",
+    replicas: tpl.replica_configs?.map(r => ({
+      replicaAppName: r.replica_entity_name || "",
+      replicaEntityName: r.replica_entity_name || "",
+      secretName: r.secret_name || "",
+      secretValue: r.secret_value || "",
+    })) || [{ secretName: "", secretValue: "", replicaEntityName: "" }],
+    sourcePage: { mode: "create", fileName: "" },
+    replicaPage: { mode: "create", fileName: "" },
+  });
+
+  const handleViewRecord = (tpl) => {
+    setFormData(recordToFormData(tpl));
+    setEditingRecord(tpl);
+    setIsEditing(false);
+    setSaveSuccess(false);
+    setProjectError("");
+    setFieldErrors({});
+    setShowTemplates(false);
+  };
+
+  const handleEditRecord = (tpl) => {
+    setFormData(recordToFormData(tpl));
+    setEditingRecord(tpl);
+    setIsEditing(true);
+    setSaveSuccess(false);
+    setProjectError("");
+    setFieldErrors({});
+    setShowTemplates(false);
   };
 
   const handleProjectNameChange = (e) => {
@@ -123,7 +167,6 @@ export default function SourceReplicaMakeSetUp() {
     const errors = {};
     if (!formData.projectName) errors.projectName = true;
     if (!formData.description) errors.description = true;
-
     if (!formData.sourceEntityName) errors.sourceEntityName = true;
     formData.replicas.forEach((r, i) => {
       if (!r.secretValue) errors[`replica_secretValue_${i}`] = true;
@@ -140,28 +183,59 @@ export default function SourceReplicaMakeSetUp() {
       toast.error("Project name already exists. Please choose a different name.");
       return;
     }
+
+    const payload = {
+      project_name: formData.projectName,
+      description: formData.description,
+      app_title: formData.projectName,
+      source_entity_name: formData.sourceEntityName,
+      source_schema_mode: formData.sourceSchemaOption === 'create' ? 'create_new' : 'existing',
+      source_fields: formData.sourceFields.map(f => ({ field_name: f.name, field_type: f.type, is_required: false })),
+      source_schema_json: formData.sourceSchemaJson,
+      archive_entity_mode: formData.createArchiveEntities ? 'create_new' : 'existing',
+      version_history_entity_mode: formData.createArchiveEntities ? 'create_new' : 'existing',
+      replica_configs: formData.replicas.map((r, i) => ({
+        replica_app_id: r.secretValue,
+        replica_entity_name: r.replicaEntityName || (r.replicaAppName ? `Replica${r.replicaAppName.replace(/\s+/g,'')}${i + 1}` : `Replica${i + 1}`),
+        secret_name: r.secretName || `REPLICA_APP_${formData.projectName.replace(/\s+/g, '_').toUpperCase()}`,
+        secret_value: r.secretValue,
+      })),
+    };
+
     try {
-      await base44.entities.SourceReplicaTemplateMakeReady.create({
+      let savedId;
+      let eventType;
+
+      if (editingRecord) {
+        // UPDATE existing record
+        await base44.entities.SourceReplicaTemplateMakeReady.update(editingRecord.id, payload);
+        savedId = editingRecord.id;
+        eventType = "updated";
+      } else {
+        // CREATE new record
+        const created = await base44.entities.SourceReplicaTemplateMakeReady.create(payload);
+        savedId = created.id;
+        eventType = "created";
+      }
+
+      // Write version history
+      const history = await base44.entities.SourceReplicaTemplateVersionHistory.filter({ template_id: savedId });
+      const version = history.length + 1;
+      await base44.entities.SourceReplicaTemplateVersionHistory.create({
+        template_id: savedId,
         project_name: formData.projectName,
-        description: formData.description,
-        app_title: formData.projectName,
-        source_entity_name: formData.sourceEntityName,
-        source_schema_mode: formData.sourceSchemaOption === 'create' ? 'create_new' : 'existing',
-        source_fields: formData.sourceFields.map(f => ({ field_name: f.name, field_type: f.type, is_required: false })),
-        source_schema_json: formData.sourceSchemaJson,
-        archive_entity_mode: formData.createArchiveEntities ? 'create_new' : 'existing',
-        version_history_entity_mode: formData.createArchiveEntities ? 'create_new' : 'existing',
-        replica_configs: formData.replicas.map((r, i) => ({
-          replica_app_id: r.secretValue,
-          replica_entity_name: r.replicaEntityName || (r.replicaAppName ? `Replica${r.replicaAppName.replace(/\s+/g,'')}${i + 1}` : `Replica${i + 1}`),
-          secret_name: r.secretName || `REPLICA_APP_${formData.projectName.replace(/\s+/g, '_').toUpperCase()}`,
-          secret_value: r.secretValue,
-        })),
+        event_type: eventType,
+        version,
+        snapshot: JSON.stringify(payload),
       });
+
+      queryClient.invalidateQueries({ queryKey: ["SourceReplicaTemplateMakeReady"] });
       setFormData({ ...EMPTY_FORM });
       setProjectError("");
       setFieldErrors({});
+      setSavedAsUpdate(!!editingRecord);
       setIsEditing(false);
+      setEditingRecord(null);
       setSaveSuccess(true);
     } catch (err) {
       toast.error(`Failed to save: ${err.message}`);
@@ -171,17 +245,28 @@ export default function SourceReplicaMakeSetUp() {
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between gap-3 mb-6">
+        <div className="flex items-center justify-between gap-3 mb-4">
           <div className="flex items-center gap-3">
             <Button variant="outline" size="icon" onClick={() => navigate("/menu")}>
               <ArrowLeft className="w-4 h-4" />
             </Button>
             <h1 className="text-2xl font-bold text-foreground">Source Replica Setup Generator</h1>
           </div>
-          <Button onClick={() => { setIsEditing(true); setSaveSuccess(false); setFormData({ ...EMPTY_FORM }); setProjectError(""); setFieldErrors({}); }}>
-            <Plus className="w-4 h-4 mr-1" /> New Template
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={() => setShowTemplates(s => !s)}>
+              <BookOpen className="w-4 h-4 mr-1" /> Templates
+            </Button>
+            <Button onClick={() => { setIsEditing(true); setEditingRecord(null); setSaveSuccess(false); setSavedAsUpdate(false); setFormData({ ...EMPTY_FORM }); setProjectError(""); setFieldErrors({}); }}>
+              <Plus className="w-4 h-4 mr-1" /> New Template
+            </Button>
+          </div>
         </div>
+
+        {showTemplates && (
+          <div className="mb-6">
+            <TemplatesPanel onView={handleViewRecord} onEdit={handleEditRecord} />
+          </div>
+        )}
 
         <div className={!isEditing ? "opacity-40 pointer-events-none select-none" : ""}>
 
@@ -260,10 +345,12 @@ export default function SourceReplicaMakeSetUp() {
         </div>{/* end greyed-out wrapper */}
 
         <div className="flex items-center gap-3 mb-6">
-          <Button onClick={handleSave} disabled={!isEditing || hasUnmetFields}>Save Template</Button>
+          <Button onClick={handleSave} disabled={!isEditing || hasUnmetFields}>
+            {editingRecord ? "Update Template" : "Save Template"}
+          </Button>
           {saveSuccess && (
             <span className="flex items-center gap-1.5 text-sm text-green-600 font-medium">
-              <Check className="w-4 h-4" /> Success! New Template Added to Database
+              <Check className="w-4 h-4" /> {savedAsUpdate ? "Template Updated!" : "Success! New Template Added to Database"}
             </span>
           )}
           {!saveSuccess && isEditing && hasUnmetFields && (

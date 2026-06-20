@@ -436,13 +436,43 @@ export default function SourceReplicaMakeSetUp() {
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <CardTitle>REPLICA App Setup Instructions</CardTitle>
-                  <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateReplicaInstructions(formData), 'replica-instructions')}>
-                    {copiedSection === 'replica-instructions' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      size="sm"
+                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                      onClick={() => {
+                        const parts = [];
+
+                        parts.push(`## SECTION 1: REPLICA SETUP INSTRUCTIONS\n\n${generateReplicaInstructions(formData)}`);
+
+                        if (formData.replicaPage?.mode === 'create') {
+                          parts.push(`## SECTION 2: REPLICA PAGE CODE\n// Paste this into: ${formData.replicaPage?.fileName || 'pages/YourReplicaPage.jsx'}\n\n${generateReplicaPageCode(formData)}`);
+                        }
+
+                        copyToClipboard(parts.join('\n\n---\n\n'), 'replica-all');
+                      }}
+                    >
+                      {copiedSection === 'replica-all' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy All
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateReplicaInstructions(formData), 'replica-instructions')}>
+                      {copiedSection === 'replica-instructions' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy Instructions
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
                 <Alert><AlertDescription className="whitespace-pre-wrap font-mono text-xs">{generateReplicaInstructions(formData)}</AlertDescription></Alert>
+                {formData.replicaPage?.mode === 'create' && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-semibold text-sm">Replica Page Code</h3>
+                      <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateReplicaPageCode(formData), 'replica-page-inline')}>
+                        {copiedSection === 'replica-page-inline' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy Page Code
+                      </Button>
+                    </div>
+                    <Alert><AlertDescription className="whitespace-pre-wrap font-mono text-xs">{generateReplicaPageCode(formData)}</AlertDescription></Alert>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>

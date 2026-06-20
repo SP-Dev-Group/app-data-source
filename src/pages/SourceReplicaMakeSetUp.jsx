@@ -123,11 +123,17 @@ export default function SourceReplicaMakeSetUp() {
         description: formData.description,
         app_title: formData.appTitle,
         source_entity_name: formData.sourceEntityName,
-        source_schema_option: formData.sourceSchemaOption,
-        source_fields: formData.sourceFields,
+        source_schema_mode: formData.sourceSchemaOption === 'create' ? 'create_new' : 'existing',
+        source_fields: formData.sourceFields.map(f => ({ field_name: f.name, field_type: f.type, is_required: false })),
         source_schema_json: formData.sourceSchemaJson,
-        create_archive_entities: formData.createArchiveEntities,
-        replicas: formData.replicas,
+        archive_entity_mode: formData.createArchiveEntities ? 'create_new' : 'existing',
+        version_history_entity_mode: formData.createArchiveEntities ? 'create_new' : 'existing',
+        replica_configs: formData.replicas.map((r, i) => ({
+          replica_app_id: r.secretValue,
+          replica_entity_name: r.replicaEntityName || (getAutoReplicaEntityName() + (i + 1)),
+          secret_name: r.secretName || `REPLICA_APP_${formData.projectName.replace(/\s+/g, '_').toUpperCase()}`,
+          secret_value: r.secretValue,
+        })),
       });
       toast.success("Template saved successfully!");
     } catch (err) {

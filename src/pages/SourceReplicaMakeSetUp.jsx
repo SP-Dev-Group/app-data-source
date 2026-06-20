@@ -50,10 +50,11 @@ export default function SourceReplicaMakeSetUp() {
     queryFn: () => base44.entities.SourceReplicaTemplateMakeReady.list(),
   });
 
-  const validateProjectName = async (name) => {
-    if (!name) return;
+  const validateProjectName = (name) => {
+    if (!name) return false;
     const exists = existingTemplates?.some(t => t.project_name === name);
     setProjectError(exists ? "Project name already exists. Please choose a different name." : "");
+    return exists;
   };
 
   const handleProjectNameChange = (e) => {
@@ -113,8 +114,12 @@ export default function SourceReplicaMakeSetUp() {
   };
 
   const handleSave = async () => {
-    if (projectError || !formData.projectName || !formData.description || !formData.appTitle || !formData.sourceEntityName) {
-      toast.error("Please fill in all required fields and fix errors");
+    if (!formData.projectName || !formData.description || !formData.appTitle || !formData.sourceEntityName) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+    if (validateProjectName(formData.projectName)) {
+      toast.error("Project name already exists. Please choose a different name.");
       return;
     }
     try {

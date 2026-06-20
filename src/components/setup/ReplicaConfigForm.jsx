@@ -3,7 +3,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Trash2, Plus } from "lucide-react";
 
-export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove, autoEntityName }) {
+export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove, autoEntityName, projectName }) {
+  const autoSecretName = `REPLICA_APP_${(projectName || '').replace(/\s+/g, '_').toUpperCase()}`;
   return (
     <div className="space-y-4">
       {replicas.map((replica, index) => (
@@ -34,9 +35,9 @@ export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove,
             <div className="space-y-2">
               <Label>Secret Name *</Label>
               <Input
-                value={replica.secretName}
+                value={replica.secretName || autoSecretName}
                 onChange={(e) => onUpdate(index, 'secretName', e.target.value)}
-                placeholder="e.g. DEST_APP_SERVICE_ROLE_KEY"
+                placeholder={autoSecretName}
               />
             </div>
             <div className="space-y-2">

@@ -199,6 +199,7 @@ export default function SourceReplicaMakeSetUp() {
               onAdd={addReplica}
               onRemove={removeReplica}
               autoEntityName={getAutoReplicaEntityName()}
+              projectName={formData.projectName}
             />
           </CardContent>
         </Card>

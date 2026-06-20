@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus, Loader2, Send, Pencil, Archive, Tag, FileArchive } from "lucide-react";
+import { ArrowLeft, Plus, Loader2, Send, Pencil, Archive, Tag, FileArchive, FileText } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -19,6 +19,7 @@ import EditSSOTRecordDialog from "@/components/external/EditSSOTRecordDialog";
 import ArchiveSSOTRecordDialog from "@/components/external/ArchiveSSOTRecordDialog";
 import AllocateProjectsDialog from "@/components/external/AllocateProjectsDialog";
 import ArchiveSSOTViewerDialog from "@/components/external/ArchiveSSOTViewerDialog";
+import PageDocumentationDialog from "@/components/external/PageDocumentationDialog";
 
 export default function DataSourcetoReplicasandAllocatorsExternal() {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
   const [archiveRecord, setArchiveRecord] = useState(null);
   const [allocateRecord, setAllocateRecord] = useState(null);
   const [archiveViewerOpen, setArchiveViewerOpen] = useState(false);
+  const [docsOpen, setDocsOpen] = useState(false);
 
   const handlePush = async (config) => {
     setPushingId(config.id);
@@ -79,14 +81,15 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
             </h1>
           </div>
           <div className="flex gap-2">
-            <div className="flex gap-2">
-              <Button variant="outline" onClick={() => setArchiveViewerOpen(true)}>
-                <FileArchive className="w-4 h-4 mr-1" /> View Archive
-              </Button>
-              <Button onClick={() => setDialogOpen(true)}>
-                <Plus className="w-4 h-4 mr-1" /> Add Record
-              </Button>
-            </div>
+            <Button variant="outline" onClick={() => setDocsOpen(true)}>
+              <FileText className="w-4 h-4 mr-1" /> Documentation
+            </Button>
+            <Button variant="outline" onClick={() => setArchiveViewerOpen(true)}>
+              <FileArchive className="w-4 h-4 mr-1" /> View Archive
+            </Button>
+            <Button onClick={() => setDialogOpen(true)}>
+              <Plus className="w-4 h-4 mr-1" /> Add Record
+            </Button>
           </div>
         </div>
 
@@ -281,6 +284,11 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
         open={archiveViewerOpen}
         onClose={() => setArchiveViewerOpen(false)}
         onReinstate={handleSuccess}
+      />
+
+      <PageDocumentationDialog
+        open={docsOpen}
+        onClose={() => setDocsOpen(false)}
       />
     </div>
   );

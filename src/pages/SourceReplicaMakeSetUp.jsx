@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Plus, Copy, Check, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, Copy, Check, Trash2, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -40,6 +40,7 @@ export default function SourceReplicaMakeSetUp() {
     replicas: [{ secretName: "", secretValue: "", replicaEntityName: "" }],
   });
   const [projectError, setProjectError] = useState("");
+  const [editingAutoEntityName, setEditingAutoEntityName] = useState(false);
 
   const { data: existingTemplates } = useQuery({
     queryKey: ["SourceReplicaTemplateMakeReady"],
@@ -59,6 +60,7 @@ export default function SourceReplicaMakeSetUp() {
   };
 
   const getAutoReplicaEntityName = () => {
+    if (formData.customAutoEntityName !== undefined) return formData.customAutoEntityName;
     const desc = formData.description.replace(/\s+/g, '');
     const title = formData.appTitle.replace(/\s+/g, '');
     return `Replica${desc}${title}`;
@@ -161,7 +163,22 @@ export default function SourceReplicaMakeSetUp() {
             </div>
             <div className="space-y-2">
               <Label>Auto-generated Replica Entity Name</Label>
-              <Input value={getAutoReplicaEntityName()} readOnly className="bg-muted" />
+              <div className="flex gap-2">
+                <Input
+                  value={formData.customAutoEntityName ?? getAutoReplicaEntityName()}
+                  readOnly={!editingAutoEntityName}
+                  onChange={(e) => setFormData({ ...formData, customAutoEntityName: e.target.value })}
+                  className={!editingAutoEntityName ? "bg-muted text-muted-foreground cursor-not-allowed" : ""}
+                />
+                <Button
+                  variant="outline"
+                  size="icon"
+                  title="Edit auto entity name"
+                  onClick={() => setEditingAutoEntityName(v => !v)}
+                >
+                  <Pencil className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>

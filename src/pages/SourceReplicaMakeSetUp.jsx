@@ -127,7 +127,7 @@ export default function SourceReplicaMakeSetUp() {
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
-      toast.error("Please fill in all required fields highlighted in red");
+      toast.error("Some field(s) still required before saving");
       return;
     }
     setFieldErrors({});

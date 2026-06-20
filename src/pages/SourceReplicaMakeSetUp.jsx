@@ -37,7 +37,7 @@ export default function SourceReplicaMakeSetUp() {
     sourceFields: [{ name: "", type: "string" }],
     sourceSchemaJson: "",
     createArchiveEntities: true,
-    replicas: [{ appId: "", secretName: "", secretValue: "", replicaEntityName: "" }],
+    replicas: [{ secretName: "", secretValue: "", replicaEntityName: "" }],
   });
   const [projectError, setProjectError] = useState("");
 
@@ -65,7 +65,7 @@ export default function SourceReplicaMakeSetUp() {
   };
 
   const addReplica = () => {
-    setFormData({ ...formData, replicas: [...formData.replicas, { appId: "", secretName: "", secretValue: "", replicaEntityName: "" }] });
+    setFormData({ ...formData, replicas: [...formData.replicas, { secretName: "", secretValue: "", replicaEntityName: "" }] });
   };
 
   const removeReplica = (index) => {
@@ -254,7 +254,7 @@ export default function SourceReplicaMakeSetUp() {
               <CardContent className="space-y-4">
                 {formData.replicas.map((replica, index) => (
                   <div key={index} className="space-y-2">
-                    <h3 className="font-semibold">Replica {index + 1}: {replica.appId || 'Not configured'}</h3>
+                    <h3 className="font-semibold">Replica {index + 1}: {replica.replicaEntityName || getAutoReplicaEntityName() + (index + 1) || 'Not configured'}</h3>
                     <div className="flex gap-2 flex-wrap">
                       <Button variant="outline" size="sm" onClick={() => copyToClipboard(generatePushFunction(formData, index), `push-${index}`)}>
                         {copiedSection === `push-${index}` ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} pushToReplica

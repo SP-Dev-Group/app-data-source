@@ -27,19 +27,11 @@ export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove,
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
-              <Label>Replica App ID *</Label>
-              <Input
-                value={replica.appId}
-                onChange={(e) => onUpdate(index, 'appId', e.target.value)}
-                placeholder="App ID"
-              />
-            </div>
-            <div className="space-y-2">
               <Label>Replica Entity Name</Label>
               <Input
-                value={replica.replicaEntityName}
+                value={replica.replicaEntityName || `${autoEntityName}${index + 1}`}
                 onChange={(e) => onUpdate(index, 'replicaEntityName', e.target.value)}
-                placeholder={autoEntityName}
+                placeholder={`${autoEntityName}${index + 1}`}
               />
             </div>
             <div className="space-y-2">
@@ -56,12 +48,11 @@ export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove,
               </div>
             </div>
             <div className="space-y-2">
-              <Label>Secret Value *</Label>
+              <Label>Secret Value (Replica App ID) *</Label>
               <Input
                 value={replica.secretValue}
                 onChange={(e) => onUpdate(index, 'secretValue', e.target.value)}
-                placeholder="Service role key"
-                type="password"
+                placeholder="Replica App ID"
               />
             </div>
           </div>

@@ -194,7 +194,7 @@ export default function SourceReplicaMakeSetUp() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="appTitle">App Title *</Label>
+              <Label htmlFor="appTitle">Replica App Title *</Label>
               <Input id="appTitle" value={formData.appTitle} onChange={(e) => { setFormData({ ...formData, appTitle: e.target.value }); }} placeholder="e.g. Manager" className={!formData.appTitle ? "border-red-500" : ""} />
             </div>
             <div className="space-y-2">

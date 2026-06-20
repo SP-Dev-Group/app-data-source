@@ -46,7 +46,7 @@ export default function Menu() {
       >
         <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
           <div className="flex flex-col gap-3">
-            <Button className="w-full bg-violet-500 hover:bg-violet-600 text-white flex flex-col items-center justify-center py-3 h-auto" onClick={() => navigate("/sourcerecordstoreplicateemplate")}>
+            <Button className="w-full bg-violet-500 hover:bg-violet-600 text-white flex flex-col items-center justify-center py-3 h-auto" onClick={() => navigate("/sourcereplicamakesetup")}>
               <span className="text-[10px] uppercase tracking-wider opacity-80 mb-0.5">TEMPLATE</span>
               <span>Source Records to Replica Template</span>
             </Button>

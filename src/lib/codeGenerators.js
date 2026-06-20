@@ -481,12 +481,12 @@ export function generateSourcePageCode(formData) {
   return `// Source App Page for ${projectName}
 // File: pages/${projectName.replace(/\s+/g, '')}.jsx
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus, Loader2, Send, Pencil, Archive, Tag, FileArchive } from "lucide-react";
+import { ArrowLeft, Loader2, Send, Pencil, Archive, Tag } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
 
@@ -494,6 +494,31 @@ export default function ${projectName.replace(/\s+/g, '')}Page() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [pushingId, setPushingId] = useState(null);
+  const [records, setRecords] = useState([]);
+
+  const { data: configs } = useQuery({
+    queryKey: ["ReplicaAppConfig${projectNameClean}"],
+    queryFn: () => base44.entities.ReplicaAppConfig${projectNameClean}.list(),
+  });
+
+  // Initial load
+  useEffect(() => {
+    base44.entities.${sourceEntityName}.list().then(setRecords);
+  }, []);
+
+  // Real-time subscription
+  useEffect(() => {
+    const unsubscribe = base44.entities.${sourceEntityName}.subscribe((event) => {
+      if (event.type === 'create') {
+        setRecords(prev => [...prev, event.data]);
+      } else if (event.type === 'update') {
+        setRecords(prev => prev.map(r => r.id === event.id ? event.data : r));
+      } else if (event.type === 'delete') {
+        setRecords(prev => prev.filter(r => r.id !== event.id));
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   const handlePush = async (config) => {
     setPushingId(config.id);
@@ -506,16 +531,6 @@ export default function ${projectName.replace(/\s+/g, '')}Page() {
       setPushingId(null);
     }
   };
-
-  const { data: records } = useQuery({
-    queryKey: ["${sourceEntityName}"],
-    queryFn: () => base44.entities.${sourceEntityName}.list(),
-  });
-
-  const { data: configs } = useQuery({
-    queryKey: ["ReplicaAppConfig${projectNameClean}"],
-    queryFn: () => base44.entities.ReplicaAppConfig${projectNameClean}.list(),
-  });
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -541,7 +556,7 @@ export default function ${projectName.replace(/\s+/g, '')}Page() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {records?.map((record) => (
+              {records.map((record) => (
                 <TableRow key={record.id}>
                   <TableCell className="font-mono">{record.unique_id}</TableCell>
                   <TableCell>{record.Name}</TableCell>
@@ -611,20 +626,39 @@ export function generateReplicaPageCode(formData) {
   return `// Replica App Page for ${projectName}
 // File: pages/${projectName.replace(/\s+/g, '')}.jsx
 
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export default function ${projectName.replace(/\s+/g, '')}ReplicaPage() {
   const navigate = useNavigate();
+  const [records, setRecords] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const { data: records, isLoading } = useQuery({
-    queryKey: ["${replicaEntityName}"],
-    queryFn: () => base44.entities.${replicaEntityName}.list(),
-  });
+  // Initial load
+  useEffect(() => {
+    base44.entities.${replicaEntityName}.list().then(data => {
+      setRecords(data);
+      setIsLoading(false);
+    });
+  }, []);
+
+  // Real-time subscription
+  useEffect(() => {
+    const unsubscribe = base44.entities.${replicaEntityName}.subscribe((event) => {
+      if (event.type === 'create') {
+        setRecords(prev => [...prev, event.data]);
+      } else if (event.type === 'update') {
+        setRecords(prev => prev.map(r => r.id === event.id ? event.data : r));
+      } else if (event.type === 'delete') {
+        setRecords(prev => prev.filter(r => r.id !== event.id));
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -657,14 +691,14 @@ export default function ${projectName.replace(/\s+/g, '')}ReplicaPage() {
                     <Loader2 className="w-6 h-6 animate-spin mx-auto" />
                   </TableCell>
                 </TableRow>
-              ) : records?.length === 0 ? (
+              ) : records.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={2} className="text-center py-8 text-muted-foreground">
                     No records yet. Waiting for data from SOURCE app.
                   </TableCell>
                 </TableRow>
               ) : (
-                records?.map((record) => (
+                records.map((record) => (
                   <TableRow key={record.id}>
                     <TableCell className="font-mono">{record.unique_id}</TableCell>
                     <TableCell>{record.Name}</TableCell>

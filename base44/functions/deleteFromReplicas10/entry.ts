@@ -23,9 +23,9 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Record not found' }, { status: 404 });
     }
 
-    const allocatedProjects = record.allocated_projects || [];
+    const allocatedConfigIds = record.allocated_projects || [];
     const allConfigs = await base44.asServiceRole.entities.ReplicaAppConfig10.list();
-    const targetConfigs = allConfigs.filter(c => allocatedProjects.includes(c.project_name));
+    const targetConfigs = allConfigs.filter(c => allocatedConfigIds.includes(c.id));
 
     const results = { deleted: 0, errors: [] };
 

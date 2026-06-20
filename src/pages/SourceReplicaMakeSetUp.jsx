@@ -14,6 +14,7 @@ import { Switch } from "@/components/ui/switch";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import SourceEntityForm from "@/components/setup/SourceEntityForm";
 import ReplicaConfigForm from "@/components/setup/ReplicaConfigForm";
+import PageModeSelector from "@/components/setup/PageModeSelector";
 import {
   generateSourceInstructions,
   generateReplicaInstructions,
@@ -38,6 +39,8 @@ export default function SourceReplicaMakeSetUp() {
     sourceSchemaJson: "",
     createArchiveEntities: true,
     replicas: [{ secretName: "", secretValue: "", replicaEntityName: "" }],
+    sourcePage: { mode: "create", fileName: "" },
+    replicaPage: { mode: "create", fileName: "" },
   });
   const [projectError, setProjectError] = useState("");
   const [editingAutoEntityName, setEditingAutoEntityName] = useState(false);
@@ -217,6 +220,22 @@ export default function SourceReplicaMakeSetUp() {
               onRemove={removeReplica}
               autoEntityName={getAutoReplicaEntityName()}
               projectName={formData.projectName}
+            />
+          </CardContent>
+        </Card>
+
+        <Card className="mb-6">
+          <CardHeader><CardTitle>Page Configuration</CardTitle></CardHeader>
+          <CardContent className="grid grid-cols-2 gap-6">
+            <PageModeSelector
+              label="Source App Page"
+              value={formData.sourcePage}
+              onChange={(v) => setFormData({ ...formData, sourcePage: v })}
+            />
+            <PageModeSelector
+              label="Replica App Page"
+              value={formData.replicaPage}
+              onChange={(v) => setFormData({ ...formData, replicaPage: v })}
             />
           </CardContent>
         </Card>

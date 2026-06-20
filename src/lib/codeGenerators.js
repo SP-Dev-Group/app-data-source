@@ -390,10 +390,15 @@ Create the following functions in the functions/ directory:
 
 ## Step 3: Create Page
 
-Create a page with table display for ${sourceEntityName} records including:
-- Record list with Allocate, Edit, Archive buttons
-- Replica configs table with Push All button
-- Archive viewer for reinstatement
+${formData.sourcePage?.mode === 'existing'
+  ? `Use existing page: **${formData.sourcePage?.fileName || '(file name not set)'}**
+- Integrate the ${sourceEntityName} table and Replica Config panel into this existing page.`
+  : `Create a new page: **${formData.sourcePage?.fileName || '(file name not set)'}**
+- Table display for ${sourceEntityName} records including:
+  - Record list with Allocate, Edit, Archive buttons
+  - Replica configs table with Push All button
+  - Archive viewer for reinstatement`
+}
 
 ## Workflows
 
@@ -444,10 +449,14 @@ export function generateReplicaInstructions(formData) {
 
 ## Step 2: Create Page
 
-Create a page to display records from ${replicaEntityName}:
+${formData.replicaPage?.mode === 'existing'
+  ? `Use existing page: **${formData.replicaPage?.fileName || '(file name not set)'}**
+- Integrate the ${replicaEntityName} read-only table into this existing page.`
+  : `Create a new page: **${formData.replicaPage?.fileName || '(file name not set)'}**
 - Table with all fields from the entity
 - Read-only view (data is pushed from SOURCE app)
-- Optional: Add search/filter functionality
+- Optional: Add search/filter functionality`
+}
 
 ## Step 3: Configure Connection
 

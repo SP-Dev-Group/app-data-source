@@ -66,7 +66,7 @@ export default function Menu() {
             <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" onClick={() => navigate("/azuremenu")}>
               Azure Menu
             </Button>
-            <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white" onClick={() => navigate("/base44menu")}>
+            <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white" onClick={() => navigate("/base44menu")}>
               Base44 Menu
             </Button>
           </div>

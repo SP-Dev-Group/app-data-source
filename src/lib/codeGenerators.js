@@ -391,10 +391,10 @@ Create the following functions in the functions/ directory:
 ## Step 3: Create Page
 
 ${formData.sourcePage?.mode === 'existing'
-  ? `Use existing page: **${formData.sourcePage?.fileName || '(file name not set)'}**
-- Integrate the ${sourceEntityName} table and Replica Config panel into this existing page.`
-  : `Create a new page: **${formData.sourcePage?.fileName || '(file name not set)'}**
-- Table display for ${sourceEntityName} records including:
+  ? `Use existing page: **${formData.sourcePage?.fileName ? formData.sourcePage.fileName : '⚠️ FILE NAME NOT SET — enter it in Page Configuration above'}**
+  - Integrate the ${sourceEntityName} table and Replica Config panel into this existing page.`
+  : `Create a new page: **${formData.sourcePage?.fileName ? formData.sourcePage.fileName : '⚠️ FILE NAME NOT SET — enter it in Page Configuration above'}**
+  - Table display for ${sourceEntityName} records including:
   - Record list with Allocate, Edit, Archive buttons
   - Replica configs table with Push All button
   - Archive viewer for reinstatement`
@@ -451,10 +451,10 @@ export function generateReplicaInstructions(formData) {
 ## Step 2: Create Page
 
 ${formData.replicaPage?.mode === 'existing'
-  ? `Use existing page: **${formData.replicaPage?.fileName || '(file name not set)'}**
-- Integrate the ${replicaEntityName} read-only table into this existing page.`
-  : `Create a new page: **${formData.replicaPage?.fileName || '(file name not set)'}**
-- Table with all fields from the entity
+  ? `Use existing page: **${formData.replicaPage?.fileName ? formData.replicaPage.fileName : '⚠️ FILE NAME NOT SET — enter it in Page Configuration above'}**
+  - Integrate the ${replicaEntityName} read-only table into this existing page.`
+  : `Create a new page: **${formData.replicaPage?.fileName ? formData.replicaPage.fileName : '⚠️ FILE NAME NOT SET — enter it in Page Configuration above'}**
+  - Table with all fields from the entity
 - Read-only view (data is pushed from SOURCE app)
 - Optional: Add search/filter functionality`
 }

@@ -27,6 +27,7 @@ import StaffAllocationManager from './pages/StaffAllocationManager';
 import DataSourcetoReplicasAndAllocators from './pages/DataSourcetoReplicasAndAllocators';
 import DataSourcetoReplicasandAllocatorsExternal from './pages/DataSourcetoReplicasandAllocatorsExternal';
 import SourceRecordsToReplicaTemplate from './pages/SourceRecordsToReplicaTemplate';
+import SourceReplicaMakeSetUp from './pages/SourceReplicaMakeSetUp';
 
 
 const AuthenticatedApp = () => {
@@ -76,6 +77,7 @@ const AuthenticatedApp = () => {
       <Route path="/datasourcetoreplicasandallocators" element={<DataSourcetoReplicasAndAllocators />} />
       <Route path="/datasourcetoreplicasandallocatorsexternal" element={<DataSourcetoReplicasandAllocatorsExternal />} />
       <Route path="/sourcerecordstoreplicateemplate" element={<SourceRecordsToReplicaTemplate />} />
+      <Route path="/sourcereplicamakesetup" element={<SourceReplicaMakeSetUp />} />
 
       <Route path="*" element={<PageNotFound />} />
     </Routes>

@@ -73,6 +73,14 @@ export default function Menu() {
             </Button>
           </div>
         </div>
+
+        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+          <div className="flex flex-col gap-3">
+            <Button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl py-4" onClick={() => navigate("/sourcereplicamakesetup")}>
+              SourceReplicaMakeSetUp
+            </Button>
+          </div>
+        </div>
       </motion.div>
     </div>
   );

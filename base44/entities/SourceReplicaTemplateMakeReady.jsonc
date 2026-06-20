@@ -1,0 +1,98 @@
+{
+  "name": "SourceReplicaTemplateMakeReady",
+  "type": "object",
+  "properties": {
+    "project_name": {
+      "type": "string",
+      "description": "Unique project name (must not have repeats)"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 20,
+      "description": "Short description (max 20 characters)"
+    },
+    "app_title": {
+      "type": "string",
+      "description": "Application title"
+    },
+    "source_entity_name": {
+      "type": "string",
+      "description": "Source entity name in the source app"
+    },
+    "source_schema_json": {
+      "type": "string",
+      "description": "JSON schema of source entity (if existing)"
+    },
+    "source_schema_mode": {
+      "type": "string",
+      "enum": [
+        "existing",
+        "create_new"
+      ],
+      "description": "Whether source entity exists or needs to be created"
+    },
+    "source_fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field_name": {
+            "type": "string"
+          },
+          "field_type": {
+            "type": "string"
+          },
+          "is_required": {
+            "type": "boolean"
+          }
+        }
+      },
+      "description": "Fields to create if source_schema_mode is create_new"
+    },
+    "archive_entity_mode": {
+      "type": "string",
+      "enum": [
+        "existing",
+        "create_new"
+      ],
+      "description": "Whether archive entity exists or needs to be created"
+    },
+    "version_history_entity_mode": {
+      "type": "string",
+      "enum": [
+        "existing",
+        "create_new"
+      ],
+      "description": "Whether version history entity exists or needs to be created"
+    },
+    "replica_configs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "replica_app_id": {
+            "type": "string"
+          },
+          "replica_entity_name": {
+            "type": "string"
+          },
+          "secret_name": {
+            "type": "string"
+          },
+          "secret_value": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Array of replica configurations"
+    }
+  },
+  "required": [
+    "project_name",
+    "description",
+    "app_title",
+    "source_entity_name",
+    "source_schema_mode",
+    "replica_configs"
+  ]
+}

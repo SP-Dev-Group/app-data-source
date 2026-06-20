@@ -87,8 +87,8 @@ export default function SourceReplicaMakeSetUp() {
       secretName: r.secret_name || "",
       secretValue: r.secret_value || "",
     })) || [{ secretName: "", secretValue: "", replicaEntityName: "" }],
-    sourcePage: { mode: "create", fileName: "" },
-    replicaPage: { mode: "create", fileName: "" },
+    sourcePage: { mode: tpl.source_page_mode || "create", fileName: tpl.source_page_file_name || "" },
+    replicaPage: { mode: tpl.replica_page_mode || "create", fileName: tpl.replica_page_file_name || "" },
   });
 
   const handleViewRecord = (tpl) => {
@@ -194,6 +194,10 @@ export default function SourceReplicaMakeSetUp() {
       source_schema_json: formData.sourceSchemaJson,
       archive_entity_mode: formData.createArchiveEntities ? 'create_new' : 'existing',
       version_history_entity_mode: formData.createArchiveEntities ? 'create_new' : 'existing',
+      source_page_mode: formData.sourcePage.mode,
+      source_page_file_name: formData.sourcePage.fileName,
+      replica_page_mode: formData.replicaPage.mode,
+      replica_page_file_name: formData.replicaPage.fileName,
       replica_configs: formData.replicas.map((r, i) => ({
         replica_app_id: r.secretValue,
         replica_entity_name: r.replicaEntityName || (r.replicaAppName ? `Replica${r.replicaAppName.replace(/\s+/g,'')}${i + 1}` : `Replica${i + 1}`),

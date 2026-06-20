@@ -65,6 +65,30 @@
       ],
       "description": "Whether version history entity exists or needs to be created"
     },
+    "source_page_mode": {
+      "type": "string",
+      "enum": [
+        "create",
+        "existing"
+      ],
+      "description": "Whether to create a new source page or use an existing one"
+    },
+    "source_page_file_name": {
+      "type": "string",
+      "description": "File name/path for the source app page (e.g. pages/MySourcePage.jsx)"
+    },
+    "replica_page_mode": {
+      "type": "string",
+      "enum": [
+        "create",
+        "existing"
+      ],
+      "description": "Whether to create a new replica page or use an existing one"
+    },
+    "replica_page_file_name": {
+      "type": "string",
+      "description": "File name/path for the replica app page (e.g. pages/MyReplicaPage.jsx)"
+    },
     "replica_configs": {
       "type": "array",
       "items": {

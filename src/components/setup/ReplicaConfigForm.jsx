@@ -35,9 +35,9 @@ export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove,
             <div className="space-y-2">
               <Label>Secret Name *</Label>
               <Input
-                value={replica.secretName || autoSecretName}
-                onChange={(e) => onUpdate(index, 'secretName', e.target.value)}
-                placeholder={autoSecretName}
+                value={autoSecretName}
+                readOnly
+                className="bg-muted text-muted-foreground cursor-not-allowed"
               />
             </div>
             <div className="space-y-2">

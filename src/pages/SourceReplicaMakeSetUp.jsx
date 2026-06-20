@@ -375,9 +375,43 @@ export default function SourceReplicaMakeSetUp() {
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <CardTitle>SOURCE App Setup Instructions</CardTitle>
-                  <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateSourceInstructions(formData), 'source-instructions')}>
-                    {copiedSection === 'source-instructions' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      size="sm"
+                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                      onClick={() => {
+                        const p = formData.projectName.replace(/\s+/g, '');
+                        const parts = [];
+
+                        parts.push(`## SECTION 1: SETUP INSTRUCTIONS\n\n${generateSourceInstructions(formData)}`);
+
+                        if (formData.sourcePage?.mode === 'create') {
+                          parts.push(`## SECTION 2: SOURCE PAGE CODE\n// Paste this into: ${formData.sourcePage?.fileName || 'pages/YourSourcePage.jsx'}\n\n${generateSourcePageCode(formData)}`);
+                        }
+
+                        const fnAll = formData.replicas.map((_, index) =>
+                          [
+                            `// --- pushToReplica${p} ---`,
+                            generatePushFunction(formData, index),
+                            `// --- deleteFromReplicas${p} ---`,
+                            generateDeleteFunction(formData, index),
+                            `// --- pushAllocatedRecord${p} ---`,
+                            generateAllocateFunction(formData, index),
+                            `// --- reinstateFromArchive${p} ---`,
+                            generateReinstateFunction(formData, index),
+                          ].join('\n\n')
+                        ).join('\n\n// ==================\n\n');
+                        parts.push(`## SECTION ${formData.sourcePage?.mode === 'create' ? '3' : '2'}: BACKEND FUNCTIONS\n// Create each as a separate file in functions/\n\n${fnAll}`);
+
+                        copyToClipboard(parts.join('\n\n---\n\n'), 'source-all');
+                      }}
+                    >
+                      {copiedSection === 'source-all' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy All
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateSourceInstructions(formData), 'source-instructions')}>
+                      {copiedSection === 'source-instructions' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy Instructions
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">

@@ -380,8 +380,19 @@ export default function SourceReplicaMakeSetUp() {
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
                 <Alert><AlertDescription className="whitespace-pre-wrap font-mono text-xs">{generateSourceInstructions(formData)}</AlertDescription></Alert>
+                {formData.sourcePage?.mode === 'create' && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-semibold text-sm">Source Page Code</h3>
+                      <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateSourcePageCode(formData), 'source-page-inline')}>
+                        {copiedSection === 'source-page-inline' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy Page Code
+                      </Button>
+                    </div>
+                    <Alert><AlertDescription className="whitespace-pre-wrap font-mono text-xs">{generateSourcePageCode(formData)}</AlertDescription></Alert>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>

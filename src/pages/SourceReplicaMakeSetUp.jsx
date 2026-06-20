@@ -184,18 +184,18 @@ export default function SourceReplicaMakeSetUp() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="projectName">Project Name *</Label>
-                <Input id="projectName" value={formData.projectName} onChange={handleProjectNameChange} placeholder="e.g. NewsBookSite Staff" className={fieldErrors.projectName ? "border-red-500" : ""} />
+                <Input id="projectName" value={formData.projectName} onChange={handleProjectNameChange} placeholder="e.g. NewsBookSite Staff" className={!formData.projectName ? "border-red-500" : ""} />
                 {projectError && <p className="text-sm text-destructive">{projectError}</p>}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="description">Description (max 20 chars) *</Label>
-                <Input id="description" value={formData.description} onChange={(e) => { setFormData({ ...formData, description: e.target.value.slice(0, 20) }); setFieldErrors(p => ({ ...p, description: false })); }} placeholder="e.g. Staff" maxLength={20} className={fieldErrors.description ? "border-red-500" : ""} />
+                <Input id="description" value={formData.description} onChange={(e) => { setFormData({ ...formData, description: e.target.value.slice(0, 20) }); }} placeholder="e.g. Staff" maxLength={20} className={!formData.description ? "border-red-500" : ""} />
                 <p className="text-xs text-muted-foreground">{formData.description.length}/20</p>
               </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="appTitle">App Title *</Label>
-              <Input id="appTitle" value={formData.appTitle} onChange={(e) => { setFormData({ ...formData, appTitle: e.target.value }); setFieldErrors(p => ({ ...p, appTitle: false })); }} placeholder="e.g. Manager" className={fieldErrors.appTitle ? "border-red-500" : ""} />
+              <Input id="appTitle" value={formData.appTitle} onChange={(e) => { setFormData({ ...formData, appTitle: e.target.value }); }} placeholder="e.g. Manager" className={!formData.appTitle ? "border-red-500" : ""} />
             </div>
             <div className="space-y-2">
               <Label>Auto-generated Replica Entity Name</Label>
@@ -225,7 +225,7 @@ export default function SourceReplicaMakeSetUp() {
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="sourceEntityName">Source Entity Name *</Label>
-                <Input id="sourceEntityName" value={formData.sourceEntityName} onChange={(e) => { setFormData({ ...formData, sourceEntityName: e.target.value }); setFieldErrors(p => ({ ...p, sourceEntityName: false })); }} placeholder="e.g. SourceSSOT10" className={fieldErrors.sourceEntityName ? "border-red-500" : ""} />
+                <Input id="sourceEntityName" value={formData.sourceEntityName} onChange={(e) => { setFormData({ ...formData, sourceEntityName: e.target.value }); }} placeholder="e.g. SourceSSOT10" className={!formData.sourceEntityName ? "border-red-500" : ""} />
               </div>
               <SourceEntityForm
                 sourceSchemaOption={formData.sourceSchemaOption}

@@ -81,9 +81,9 @@ export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove,
                 <Label>Secret Value (Replica App ID) *</Label>
                 <Input
                   value={replica.secretValue}
-                  onChange={(e) => { onUpdate(index, 'secretValue', e.target.value); onClearError?.(`replica_secretValue_${index}`); }}
+                  onChange={(e) => onUpdate(index, 'secretValue', e.target.value)}
                   placeholder="Replica App ID"
-                  className={fieldErrors[`replica_secretValue_${index}`] ? "border-red-500" : ""}
+                  className={!replica.secretValue ? "border-red-500" : ""}
                 />
               </div>
             </div>

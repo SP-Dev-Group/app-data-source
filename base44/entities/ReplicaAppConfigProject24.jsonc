@@ -1,0 +1,37 @@
+{
+  "name": "ReplicaAppConfigProject24",
+  "type": "object",
+  "properties": {
+    "project_name": {
+      "type": "string",
+      "description": "Human-readable project name"
+    },
+    "replica_app_id": {
+      "type": "string",
+      "description": "The Base44 App ID of the replica app"
+    },
+    "replica_entity_name": {
+      "type": "string",
+      "description": "Entity name in the replica app"
+    },
+    "secret_name": {
+      "type": "string",
+      "description": "Name of the secret stored in this app's environment"
+    },
+    "secret_value": {
+      "type": "string",
+      "description": "The service role key for the replica app"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional notes"
+    }
+  },
+  "required": [
+    "project_name",
+    "replica_app_id",
+    "replica_entity_name",
+    "secret_name",
+    "secret_value"
+  ]
+}

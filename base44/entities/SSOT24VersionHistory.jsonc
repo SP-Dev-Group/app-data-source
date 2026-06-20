@@ -1,0 +1,37 @@
+{
+  "name": "SSOT24VersionHistory",
+  "type": "object",
+  "properties": {
+    "source_id": {
+      "type": "string",
+      "description": "The ID of the original SSOT24 record"
+    },
+    "unique_id": {
+      "type": "string",
+      "description": "The unique_id from the original record"
+    },
+    "Name": {
+      "type": "string",
+      "description": "Name at this version"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "created",
+        "updated",
+        "archived"
+      ],
+      "description": "What action triggered this version entry"
+    },
+    "version": {
+      "type": "number",
+      "description": "Version number"
+    }
+  },
+  "required": [
+    "source_id",
+    "unique_id",
+    "event_type",
+    "version"
+  ]
+}

@@ -28,6 +28,7 @@ import DataSourcetoReplicasAndAllocators from './pages/DataSourcetoReplicasAndAl
 import DataSourcetoReplicasandAllocatorsExternal from './pages/DataSourcetoReplicasandAllocatorsExternal';
 import SourceRecordsToReplicaTemplate from './pages/SourceRecordsToReplicaTemplate';
 import SourceReplicaMakeSetUp from './pages/SourceReplicaMakeSetUp';
+import Project24 from './pages/Project24';
 
 
 const AuthenticatedApp = () => {
@@ -78,6 +79,7 @@ const AuthenticatedApp = () => {
       <Route path="/datasourcetoreplicasandallocatorsexternal" element={<DataSourcetoReplicasandAllocatorsExternal />} />
       <Route path="/sourcerecordstoreplicateemplate" element={<SourceRecordsToReplicaTemplate />} />
       <Route path="/sourcereplicamakesetup" element={<SourceReplicaMakeSetUp />} />
+      <Route path="/project24" element={<Project24 />} />
 
       <Route path="*" element={<PageNotFound />} />
     </Routes>

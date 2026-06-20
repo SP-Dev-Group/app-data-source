@@ -1,0 +1,25 @@
+{
+  "name": "SSOT24",
+  "type": "object",
+  "properties": {
+    "unique_id": {
+      "type": "string",
+      "description": "Unique identifier (auto-generated)"
+    },
+    "Name": {
+      "type": "string",
+      "description": "Name"
+    },
+    "allocated_projects": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of ReplicaAppConfigProject24 IDs this record is allocated to"
+    }
+  },
+  "required": [
+    "unique_id",
+    "Name"
+  ]
+}

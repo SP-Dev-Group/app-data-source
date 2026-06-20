@@ -44,6 +44,7 @@ export default function SourceReplicaMakeSetUp() {
   });
   const [projectError, setProjectError] = useState("");
   const [editingAutoEntityName, setEditingAutoEntityName] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const { data: existingTemplates } = useQuery({
     queryKey: ["SourceReplicaTemplateMakeReady"],
@@ -61,6 +62,7 @@ export default function SourceReplicaMakeSetUp() {
     const value = e.target.value;
     setFormData({ ...formData, projectName: value });
     validateProjectName(value);
+    setFieldErrors(p => ({ ...p, projectName: false }));
   };
 
   const getAutoReplicaEntityName = () => {
@@ -114,10 +116,22 @@ export default function SourceReplicaMakeSetUp() {
   };
 
   const handleSave = async () => {
-    if (!formData.projectName || !formData.description || !formData.appTitle || !formData.sourceEntityName) {
-      toast.error("Please fill in all required fields");
+    const errors = {};
+    if (!formData.projectName) errors.projectName = true;
+    if (!formData.description) errors.description = true;
+    if (!formData.appTitle) errors.appTitle = true;
+    if (!formData.sourceEntityName) errors.sourceEntityName = true;
+    formData.replicas.forEach((r, i) => {
+      if (!r.secretValue) errors[`replica_secretValue_${i}`] = true;
+    });
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      toast.error("Please fill in all required fields highlighted in red");
       return;
     }
+    setFieldErrors({});
+
     if (validateProjectName(formData.projectName)) {
       toast.error("Project name already exists. Please choose a different name.");
       return;
@@ -162,18 +176,18 @@ export default function SourceReplicaMakeSetUp() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="projectName">Project Name *</Label>
-                <Input id="projectName" value={formData.projectName} onChange={handleProjectNameChange} placeholder="e.g. NewsBookSite Staff" />
+                <Input id="projectName" value={formData.projectName} onChange={handleProjectNameChange} placeholder="e.g. NewsBookSite Staff" className={fieldErrors.projectName ? "border-red-500" : ""} />
                 {projectError && <p className="text-sm text-destructive">{projectError}</p>}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="description">Description (max 20 chars) *</Label>
-                <Input id="description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value.slice(0, 20) })} placeholder="e.g. Staff" maxLength={20} />
+                <Input id="description" value={formData.description} onChange={(e) => { setFormData({ ...formData, description: e.target.value.slice(0, 20) }); setFieldErrors(p => ({ ...p, description: false })); }} placeholder="e.g. Staff" maxLength={20} className={fieldErrors.description ? "border-red-500" : ""} />
                 <p className="text-xs text-muted-foreground">{formData.description.length}/20</p>
               </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="appTitle">App Title *</Label>
-              <Input id="appTitle" value={formData.appTitle} onChange={(e) => setFormData({ ...formData, appTitle: e.target.value })} placeholder="e.g. Manager" />
+              <Input id="appTitle" value={formData.appTitle} onChange={(e) => { setFormData({ ...formData, appTitle: e.target.value }); setFieldErrors(p => ({ ...p, appTitle: false })); }} placeholder="e.g. Manager" className={fieldErrors.appTitle ? "border-red-500" : ""} />
             </div>
             <div className="space-y-2">
               <Label>Auto-generated Replica Entity Name</Label>
@@ -203,7 +217,7 @@ export default function SourceReplicaMakeSetUp() {
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="sourceEntityName">Source Entity Name *</Label>
-                <Input id="sourceEntityName" value={formData.sourceEntityName} onChange={(e) => setFormData({ ...formData, sourceEntityName: e.target.value })} placeholder="e.g. SourceSSOT10" />
+                <Input id="sourceEntityName" value={formData.sourceEntityName} onChange={(e) => { setFormData({ ...formData, sourceEntityName: e.target.value }); setFieldErrors(p => ({ ...p, sourceEntityName: false })); }} placeholder="e.g. SourceSSOT10" className={fieldErrors.sourceEntityName ? "border-red-500" : ""} />
               </div>
               <SourceEntityForm
                 sourceSchemaOption={formData.sourceSchemaOption}
@@ -231,6 +245,8 @@ export default function SourceReplicaMakeSetUp() {
               onRemove={removeReplica}
               autoEntityName={getAutoReplicaEntityName()}
               projectName={formData.projectName}
+              fieldErrors={fieldErrors}
+              onClearError={(key) => setFieldErrors(p => ({ ...p, [key]: false }))}
             />
           </CardContent>
         </Card>

@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Trash2, Plus, Copy, Check, Pencil } from "lucide-react";
 import { toast } from "sonner";
 
-export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove, autoEntityName, projectName }) {
+export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove, autoEntityName, projectName, fieldErrors = {}, onClearError }) {
   const autoSecretName = `REPLICA_APP_${(projectName || '').replace(/\s+/g, '_').toUpperCase()}`;
   const [copied, setCopied] = useState(false);
   const [editingEntityName, setEditingEntityName] = useState({});
@@ -81,8 +81,9 @@ export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove,
                 <Label>Secret Value (Replica App ID) *</Label>
                 <Input
                   value={replica.secretValue}
-                  onChange={(e) => onUpdate(index, 'secretValue', e.target.value)}
+                  onChange={(e) => { onUpdate(index, 'secretValue', e.target.value); onClearError?.(`replica_secretValue_${index}`); }}
                   placeholder="Replica App ID"
+                  className={fieldErrors[`replica_secretValue_${index}`] ? "border-red-500" : ""}
                 />
               </div>
             </div>

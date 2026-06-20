@@ -129,11 +129,14 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
                     <TableCell>
                       {record.allocated_projects?.length > 0
                         ? <div className="flex flex-wrap gap-1">
-                            {record.allocated_projects.map((projectName) => (
-                              <span key={projectName} className="text-xs bg-secondary text-secondary-foreground px-2 py-0.5 rounded-full">
-                                {projectName}
-                              </span>
-                            ))}
+                            {record.allocated_projects.map((configId) => {
+                              const replicaConfig = replicaConfigs?.find((c) => c.id === configId);
+                              return (
+                                <span key={configId} className="text-xs bg-secondary text-secondary-foreground px-2 py-0.5 rounded-full">
+                                  {replicaConfig?.project_name || configId}
+                                </span>
+                              );
+                            })}
                           </div>
                         : <span className="text-xs text-muted-foreground">None</span>
                       }

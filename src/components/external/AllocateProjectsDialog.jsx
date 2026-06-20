@@ -20,10 +20,8 @@ export default function AllocateProjectsDialog({ open, record, onClose, onSucces
   useEffect(() => {
     if (open && record && configs && record.id !== initializedForId.current) {
       initializedForId.current = record.id;
-      const matchedIds = configs
-        .filter((c) => (record.allocated_projects || []).includes(c.project_name))
-        .map((c) => c.id);
-      setSelected(matchedIds);
+      // allocated_projects now stores config IDs directly
+      setSelected(record.allocated_projects || []);
     }
     if (!open) {
       initializedForId.current = null;
@@ -34,14 +32,11 @@ export default function AllocateProjectsDialog({ open, record, onClose, onSucces
   const handleSave = async () => {
     setSaving(true);
     try {
-      // Convert config IDs back to project names for storage
-      const projectNames = (configs || [])
-        .filter((c) => selected.includes(c.id))
-        .map((c) => c.project_name);
-      await base44.entities.SourceSSOT10.update(record.id, { allocated_projects: projectNames });
+      // Save config IDs directly to allocated_projects
+      await base44.entities.SourceSSOT10.update(record.id, { allocated_projects: selected });
 
       // Push record to each checked replica
-      if (projectNames.length > 0) {
+      if (selected.length > 0) {
         const pushResult = await base44.functions.invoke("pushAllocatedRecord10", { recordId: record.id });
         const { pushed, errors } = pushResult.data;
         if (errors && errors.length > 0) {

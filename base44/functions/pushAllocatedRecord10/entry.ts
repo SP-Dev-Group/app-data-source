@@ -23,17 +23,15 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Record not found' }, { status: 404 });
     }
 
-    const allocatedProjects = record.allocated_projects || [];
+    const allocatedConfigIds = record.allocated_projects || [];
 
-    if (allocatedProjects.length === 0) {
-      return Response.json({ pushed: 0, skipped: 0, message: 'No allocated projects for this record' });
+    if (allocatedConfigIds.length === 0) {
+      return Response.json({ pushed: 0, skipped: 0, message: 'No allocated replicas for this record' });
     }
 
-    // Get all replica configs
+    // Get all replica configs and filter by allocated config IDs
     const allConfigs = await base44.asServiceRole.entities.ReplicaAppConfig10.list();
-
-    // Filter to only allocated projects
-    const targetConfigs = allConfigs.filter(c => allocatedProjects.includes(c.project_name));
+    const targetConfigs = allConfigs.filter(c => allocatedConfigIds.includes(c.id));
 
     const { id, created_date, updated_date, created_by_id, allocated_projects, ...fields } = record;
 

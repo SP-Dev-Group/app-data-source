@@ -1,10 +1,20 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Trash2, Plus } from "lucide-react";
+import { Trash2, Plus, Copy, Check } from "lucide-react";
+import { toast } from "sonner";
 
 export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove, autoEntityName, projectName }) {
   const autoSecretName = `REPLICA_APP_${(projectName || '').replace(/\s+/g, '_').toUpperCase()}`;
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(autoSecretName);
+    setCopied(true);
+    toast.success("Secret name copied!");
+    setTimeout(() => setCopied(false), 2000);
+  };
   return (
     <div className="space-y-4">
       {replicas.map((replica, index) => (
@@ -34,11 +44,16 @@ export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove,
             </div>
             <div className="space-y-2">
               <Label>Secret Name *</Label>
-              <Input
-                value={autoSecretName}
-                readOnly
-                className="bg-muted text-muted-foreground cursor-not-allowed"
-              />
+              <div className="flex gap-2">
+                <Input
+                  value={autoSecretName}
+                  readOnly
+                  className="bg-muted text-muted-foreground cursor-not-allowed"
+                />
+                <Button variant="outline" size="icon" onClick={handleCopy} title="Copy secret name">
+                  {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                </Button>
+              </div>
             </div>
             <div className="space-y-2">
               <Label>Secret Value *</Label>

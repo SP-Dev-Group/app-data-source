@@ -142,7 +142,7 @@ export default function SourceReplicaMakeSetUp() {
       await base44.entities.SourceReplicaTemplateMakeReady.create({
         project_name: formData.projectName,
         description: formData.description,
-
+        app_title: formData.projectName,
         source_entity_name: formData.sourceEntityName,
         source_schema_mode: formData.sourceSchemaOption === 'create' ? 'create_new' : 'existing',
         source_fields: formData.sourceFields.map(f => ({ field_name: f.name, field_type: f.type, is_required: false })),
@@ -151,12 +151,26 @@ export default function SourceReplicaMakeSetUp() {
         version_history_entity_mode: formData.createArchiveEntities ? 'create_new' : 'existing',
         replica_configs: formData.replicas.map((r, i) => ({
           replica_app_id: r.secretValue,
-          replica_entity_name: r.replicaEntityName || (r.replicaAppName ? `Replica${r.replicaAppName.replace(/\s+/g,'')}` : `Replica${i + 1}`),
+          replica_entity_name: r.replicaEntityName || (r.replicaAppName ? `Replica${r.replicaAppName.replace(/\s+/g,'')}${i + 1}` : `Replica${i + 1}`),
           secret_name: r.secretName || `REPLICA_APP_${formData.projectName.replace(/\s+/g, '_').toUpperCase()}`,
           secret_value: r.secretValue,
         })),
       });
       toast.success("Template saved successfully!");
+      // Reset form after successful save
+      setFormData({
+        projectName: "",
+        description: "",
+        sourceEntityName: "",
+        sourceSchemaOption: "create",
+        sourceFields: [{ name: "", type: "string" }],
+        sourceSchemaJson: "",
+        createArchiveEntities: true,
+        replicas: [{ secretName: "", secretValue: "", replicaEntityName: "" }],
+        sourcePage: { mode: "create", fileName: "" },
+        replicaPage: { mode: "create", fileName: "" },
+      });
+      setProjectError("");
     } catch (err) {
       toast.error(`Failed to save: ${err.message}`);
     }
@@ -245,7 +259,7 @@ export default function SourceReplicaMakeSetUp() {
         </Card>
 
         <div className="flex items-center gap-3 mb-6">
-          <Button onClick={handleSave} disabled={!!projectError}>Save Template</Button>
+          <Button onClick={handleSave} disabled={hasUnmetFields}>Save Template</Button>
           {hasUnmetFields && (
             <span className="text-sm text-destructive">Some field(s) still required before saving</span>
           )}

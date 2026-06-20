@@ -26,24 +26,26 @@ import {
   generateReplicaPageCode,
 } from "@/lib/codeGenerators";
 
+const EMPTY_FORM = {
+  projectName: "",
+  description: "",
+  sourceEntityName: "",
+  sourceSchemaOption: "create",
+  sourceFields: [{ name: "", type: "string" }],
+  sourceSchemaJson: "",
+  createArchiveEntities: true,
+  replicas: [{ secretName: "", secretValue: "", replicaEntityName: "" }],
+  sourcePage: { mode: "create", fileName: "" },
+  replicaPage: { mode: "create", fileName: "" },
+};
+
 export default function SourceReplicaMakeSetUp() {
   const navigate = useNavigate();
   const [copiedSection, setCopiedSection] = useState(null);
-  const [formData, setFormData] = useState({
-    projectName: "",
-    description: "",
-
-    sourceEntityName: "",
-    sourceSchemaOption: "create",
-    sourceFields: [{ name: "", type: "string" }],
-    sourceSchemaJson: "",
-    createArchiveEntities: true,
-    replicas: [{ secretName: "", secretValue: "", replicaEntityName: "" }],
-    sourcePage: { mode: "create", fileName: "" },
-    replicaPage: { mode: "create", fileName: "" },
-  });
+  const [isEditing, setIsEditing] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [formData, setFormData] = useState({ ...EMPTY_FORM });
   const [projectError, setProjectError] = useState("");
-
   const [fieldErrors, setFieldErrors] = useState({});
 
   const hasUnmetFields =
@@ -156,21 +158,11 @@ export default function SourceReplicaMakeSetUp() {
           secret_value: r.secretValue,
         })),
       });
-      toast.success("Template saved successfully!");
-      // Reset form after successful save
-      setFormData({
-        projectName: "",
-        description: "",
-        sourceEntityName: "",
-        sourceSchemaOption: "create",
-        sourceFields: [{ name: "", type: "string" }],
-        sourceSchemaJson: "",
-        createArchiveEntities: true,
-        replicas: [{ secretName: "", secretValue: "", replicaEntityName: "" }],
-        sourcePage: { mode: "create", fileName: "" },
-        replicaPage: { mode: "create", fileName: "" },
-      });
+      setFormData({ ...EMPTY_FORM });
       setProjectError("");
+      setFieldErrors({});
+      setIsEditing(false);
+      setSaveSuccess(true);
     } catch (err) {
       toast.error(`Failed to save: ${err.message}`);
     }
@@ -179,12 +171,19 @@ export default function SourceReplicaMakeSetUp() {
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-center gap-3 mb-6">
-          <Button variant="outline" size="icon" onClick={() => navigate("/menu")}>
-            <ArrowLeft className="w-4 h-4" />
+        <div className="flex items-center justify-between gap-3 mb-6">
+          <div className="flex items-center gap-3">
+            <Button variant="outline" size="icon" onClick={() => navigate("/menu")}>
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+            <h1 className="text-2xl font-bold text-foreground">Source Replica Setup Generator</h1>
+          </div>
+          <Button onClick={() => { setIsEditing(true); setSaveSuccess(false); setFormData({ ...EMPTY_FORM }); setProjectError(""); setFieldErrors({}); }}>
+            <Plus className="w-4 h-4 mr-1" /> New Template
           </Button>
-          <h1 className="text-2xl font-bold text-foreground">Source Replica Setup Generator</h1>
         </div>
+
+        <div className={!isEditing ? "opacity-40 pointer-events-none select-none" : ""}>
 
         <Card className="mb-6">
           <CardHeader><CardTitle>Project Configuration</CardTitle></CardHeader>
@@ -258,9 +257,16 @@ export default function SourceReplicaMakeSetUp() {
           </CardContent>
         </Card>
 
+        </div>{/* end greyed-out wrapper */}
+
         <div className="flex items-center gap-3 mb-6">
-          <Button onClick={handleSave} disabled={hasUnmetFields}>Save Template</Button>
-          {hasUnmetFields && (
+          <Button onClick={handleSave} disabled={!isEditing || hasUnmetFields}>Save Template</Button>
+          {saveSuccess && (
+            <span className="flex items-center gap-1.5 text-sm text-green-600 font-medium">
+              <Check className="w-4 h-4" /> Success! New Template Added to Database
+            </span>
+          )}
+          {!saveSuccess && isEditing && hasUnmetFields && (
             <span className="text-sm text-destructive">Some field(s) still required before saving</span>
           )}
         </div>

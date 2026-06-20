@@ -101,6 +101,7 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
               <TableRow>
                 <TableHead>Unique ID</TableHead>
                 <TableHead>Name</TableHead>
+                <TableHead>Project</TableHead>
                 <TableHead>Allocated Replicas</TableHead>
                 <TableHead>Allocate</TableHead>
                 <TableHead>Edit</TableHead>
@@ -125,6 +126,18 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
                   <TableRow key={record.id}>
                     <TableCell className="font-mono text-sm">{record.unique_id}</TableCell>
                     <TableCell>{record.Name}</TableCell>
+                    <TableCell>
+                      {record.allocated_projects?.length > 0
+                        ? <div className="flex flex-wrap gap-1">
+                            {record.allocated_projects.map((projectName) => (
+                              <span key={projectName} className="text-xs bg-secondary text-secondary-foreground px-2 py-0.5 rounded-full">
+                                {projectName}
+                              </span>
+                            ))}
+                          </div>
+                        : <span className="text-xs text-muted-foreground">None</span>
+                      }
+                    </TableCell>
                     <TableCell>
                       {record.allocated_projects?.length > 0
                         ? <div className="flex flex-wrap gap-1">

@@ -436,8 +436,9 @@ ${formData.sourcePage?.mode === 'existing'
 }
 
 export function generateReplicaInstructions(formData) {
-  const { projectName, sourceEntityName, description, appTitle } = formData;
-  const replicaEntityName = `Replica${description.replace(/\s+/g, '')}${appTitle.replace(/\s+/g, '')}`;
+  const { projectName, sourceEntityName, replicas } = formData;
+  const firstReplica = replicas?.[0];
+  const replicaEntityName = firstReplica?.replicaEntityName || (firstReplica?.replicaAppName ? `Replica${firstReplica.replicaAppName.replace(/\s+/g, '')}` : 'ReplicaEntity');
   return `### REPLICA App Setup Instructions for ${projectName}
 
 ## Step 1: Create Entity
@@ -604,8 +605,9 @@ export default function ${projectName.replace(/\s+/g, '')}Page() {
 }
 
 export function generateReplicaPageCode(formData) {
-  const { projectName, description, appTitle, sourceEntityName } = formData;
-  const replicaEntityName = `Replica${description.replace(/\s+/g, '')}${appTitle.replace(/\s+/g, '')}`;
+  const { projectName, sourceEntityName, replicas } = formData;
+  const firstReplica = replicas?.[0];
+  const replicaEntityName = firstReplica?.replicaEntityName || (firstReplica?.replicaAppName ? `Replica${firstReplica.replicaAppName.replace(/\s+/g, '')}` : 'ReplicaEntity');
   return `// Replica App Page for ${projectName}
 // File: pages/${projectName.replace(/\s+/g, '')}.jsx
 

@@ -42,26 +42,35 @@ export default function Menu() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="flex flex-col gap-3 w-full max-w-xs"
+        className="flex flex-col gap-4 w-full max-w-xs"
       >
-        <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white" onClick={() => navigate("/datasourcetoreplicasandallocators")}>
-          Source to Replica Allocator Internal
-        </Button>
-        <Button className="w-full bg-indigo-500 hover:bg-indigo-600 text-white" onClick={() => navigate("/datasourcetoreplicasandallocatorsexternal")}>
-          Source to Replica & Source Records to Replica
-        </Button>
-        <Button className="w-full bg-violet-500 hover:bg-violet-600 text-white" onClick={() => navigate("/sourcerecordstoreplicateemplate")}>
-          Source Records to Replica Template
-        </Button>
-        <Button className="w-full bg-red-500 hover:bg-red-600 text-white" onClick={() => navigate("/googlemenu")}>
-          Google Menu
-        </Button>
-        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" onClick={() => navigate("/azuremenu")}>
-          Azure Menu
-        </Button>
-        <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white" onClick={() => navigate("/base44menu")}>
-          Base44 Menu
-        </Button>
+        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+          <div className="flex flex-col gap-3">
+            <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white" onClick={() => navigate("/datasourcetoreplicasandallocators")}>
+              Source to Replica Allocator Internal
+            </Button>
+            <Button className="w-full bg-indigo-500 hover:bg-indigo-600 text-white" onClick={() => navigate("/datasourcetoreplicasandallocatorsexternal")}>
+              Source to Replica & Source Records to Replica
+            </Button>
+            <Button className="w-full bg-violet-500 hover:bg-violet-600 text-white" onClick={() => navigate("/sourcerecordstoreplicateemplate")}>
+              Source Records to Replica Template
+            </Button>
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+          <div className="flex flex-col gap-3">
+            <Button className="w-full bg-red-500 hover:bg-red-600 text-white" onClick={() => navigate("/googlemenu")}>
+              Google Menu
+            </Button>
+            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" onClick={() => navigate("/azuremenu")}>
+              Azure Menu
+            </Button>
+            <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white" onClick={() => navigate("/base44menu")}>
+              Base44 Menu
+            </Button>
+          </div>
+        </div>
       </motion.div>
     </div>
   );

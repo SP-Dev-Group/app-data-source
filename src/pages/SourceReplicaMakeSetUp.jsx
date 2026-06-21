@@ -364,6 +364,14 @@ export default function SourceReplicaMakeSetUp() {
             <Button variant="outline" onClick={() => setShowTemplates(s => !s)}>
               <BookOpen className="w-4 h-4 mr-1" /> Templates
             </Button>
+            <Button variant="outline" onClick={() => {
+              const instructionsSection = document.querySelector('[role="tablist"]');
+              if (instructionsSection) {
+                instructionsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }}>
+              Jump to Instructions
+            </Button>
             <Button onClick={() => { setIsEditing(true); setEditingRecord(null); setSaveSuccess(false); setSavedAsUpdate(false); setFormData({ ...EMPTY_FORM }); setProjectError(""); setFieldErrors({}); setVersionInfo(null); }}>
                   <Plus className="w-4 h-4 mr-1" /> New Template
                 </Button>

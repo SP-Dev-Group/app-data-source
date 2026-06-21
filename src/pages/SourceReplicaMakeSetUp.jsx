@@ -765,7 +765,22 @@ export default function SourceReplicaMakeSetUp() {
               {editingRecord && (
                 <Card>
                   <CardHeader>
-                    <CardTitle className="mb-4">REPLICA App Setup Instructions - Code Update</CardTitle>
+                    <div className="flex items-center justify-between mb-4">
+                      <CardTitle>REPLICA App Setup Instructions - Code Update</CardTitle>
+                      {editingRecord && (
+                        <div className="flex items-center gap-2">
+                          {updateConfirmed ? (
+                            <Badge className="bg-green-600">
+                              <CheckCircle2 className="w-3 h-3 mr-1" /> Files Updated (v{templateStatus?.update_confirmed_version})
+                            </Badge>
+                          ) : (
+                            <Badge variant="outline" className="border-orange-500 text-orange-600">
+                              <AlertCircle className="w-3 h-3 mr-1" /> Pending File Update
+                            </Badge>
+                          )}
+                        </div>
+                      )}
+                    </div>
                     <p className="text-sm text-muted-foreground mb-4">⚠️ Use these instructions to UPDATE your existing setup after editing the template</p>
                     {versionInfo && (
                       <div className="flex items-center gap-2 text-xs text-green-600">
@@ -818,10 +833,15 @@ export default function SourceReplicaMakeSetUp() {
                         </div>
                       </div>
                     </div>
-                    <div className="mt-4 pt-4 border-t border-border">
+                    <div className="mt-4 pt-4 border-t border-border flex items-center justify-between">
                       <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateReplicaUpdateInstructions(formData, versionInfo), 'replica-update-instructions')}>
                         {copiedSection === 'replica-update-instructions' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy Update Instructions Only
                       </Button>
+                      {!updateConfirmed && (
+                        <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={() => setShowConfirmDialog(true)}>
+                          <CheckCircle2 className="w-4 h-4 mr-1" /> Confirm Update Applied
+                        </Button>
+                      )}
                     </div>
                   </CardHeader>
                 </Card>
@@ -843,7 +863,7 @@ export default function SourceReplicaMakeSetUp() {
               <Alert>
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                  This action will mark version {versionInfo?.version} as implemented. Future edits will show this update as completed and track new available updates.
+                  This action will mark version {versionInfo?.version} as implemented for both Source and Replica apps. Future edits will show this update as completed and track new available updates.
                 </AlertDescription>
               </Alert>
             </div>

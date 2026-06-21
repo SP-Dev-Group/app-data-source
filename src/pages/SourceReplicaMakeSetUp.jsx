@@ -364,7 +364,9 @@ export default function SourceReplicaMakeSetUp() {
             <Button variant="outline" size="sm" onClick={() => {
               const instructionsSection = document.getElementById('instructions-section');
               if (instructionsSection) {
-                instructionsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const yOffset = -80;
+                const y = instructionsSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({ top: y, behavior: 'smooth' });
               }
             }}>
               Jump to Instructions

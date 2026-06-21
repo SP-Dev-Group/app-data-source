@@ -410,7 +410,7 @@ export default function SourceReplicaMakeSetUp() {
         </div>
 
         <Tabs defaultValue="source" className="space-y-4">
-          <TabsList className="grid grid-cols-2 lg:grid-cols-4 mb-4">
+          <TabsList className="flex flex-wrap h-auto gap-1 mb-4 p-1">
             <TabsTrigger value="source">SOURCE Instructions</TabsTrigger>
             <TabsTrigger value="replica">REPLICA Instructions</TabsTrigger>
             <TabsTrigger value="functions">Function Code</TabsTrigger>

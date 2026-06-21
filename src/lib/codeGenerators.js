@@ -356,10 +356,11 @@ Deno.serve(async (req) => {
 });`;
 }
 
-export function generateSourceInstructions(formData) {
+export function generateSourceInstructions(formData, versionInfo = null) {
   const { projectName, sourceEntityName, createArchiveEntities } = formData;
   const projectNameClean = projectName.replace(/\s+/g, '');
-  return `### SOURCE App Setup Instructions for ${projectName}
+  const versionHeader = versionInfo ? `\n**Version ${versionInfo.version}** | Last Updated: ${versionInfo.dateTime}\n\n` : '';
+  return `### SOURCE App Setup Instructions for ${projectName}${versionHeader}
 
 ## Step 1: Create Entities
 
@@ -435,11 +436,12 @@ ${formData.sourcePage?.mode === 'existing'
 `;
 }
 
-export function generateReplicaInstructions(formData) {
+export function generateReplicaInstructions(formData, versionInfo = null) {
   const { projectName, sourceEntityName, replicas } = formData;
   const firstReplica = replicas?.[0];
   const replicaEntityName = firstReplica?.replicaEntityName || (firstReplica?.replicaAppName ? `Replica${firstReplica.replicaAppName.replace(/\s+/g, '')}` : 'ReplicaEntity');
-  return `### REPLICA App Setup Instructions for ${projectName}
+  const versionHeader = versionInfo ? `\n**Version ${versionInfo.version}** | Last Updated: ${versionInfo.dateTime}\n\n` : '';
+  return `### REPLICA App Setup Instructions for ${projectName}${versionHeader}
 
 ## Step 1: Create Entity
 
@@ -679,10 +681,11 @@ useEffect(() => {
 
 // --- UPDATE INSTRUCTIONS (for when template has been edited) ---
 
-export function generateSourceUpdateInstructions(formData) {
+export function generateSourceUpdateInstructions(formData, versionInfo = null) {
   const { projectName, sourceEntityName, createArchiveEntities } = formData;
   const projectNameClean = projectName.replace(/\s+/g, '');
-  return `### SOURCE App UPDATE Instructions for ${projectName}
+  const versionHeader = versionInfo ? `\n**Version ${versionInfo.version}** | Last Updated: ${versionInfo.dateTime}\n\n` : '';
+  return `### SOURCE App UPDATE Instructions for ${projectName}${versionHeader}
 
 ⚠️ **IMPORTANT**: This template has been edited. Follow these steps to UPDATE your existing setup:
 
@@ -737,11 +740,12 @@ ${formData.sourcePage?.mode === 'existing'
 `;
 }
 
-export function generateReplicaUpdateInstructions(formData) {
+export function generateReplicaUpdateInstructions(formData, versionInfo = null) {
   const { projectName, sourceEntityName, replicas } = formData;
   const firstReplica = replicas?.[0];
   const replicaEntityName = firstReplica?.replicaEntityName || (firstReplica?.replicaAppName ? `Replica${firstReplica.replicaAppName.replace(/\s+/g, '')}` : 'ReplicaEntity');
-  return `### REPLICA App UPDATE Instructions for ${projectName}
+  const versionHeader = versionInfo ? `\n**Version ${versionInfo.version}** | Last Updated: ${versionInfo.dateTime}\n\n` : '';
+  return `### REPLICA App UPDATE Instructions for ${projectName}${versionHeader}
 
 ⚠️ **IMPORTANT**: The SOURCE app has been updated. Follow these steps:
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -55,6 +56,7 @@ export default function SourceReplicaMakeSetUp() {
   const [fieldErrors, setFieldErrors] = useState({});
   const [showTemplates, setShowTemplates] = useState(false);
   const [savedAsUpdate, setSavedAsUpdate] = useState(false);
+  const [versionInfo, setVersionInfo] = useState(null);
 
   const hasUnmetFields =
     !formData.projectName ||
@@ -92,7 +94,7 @@ export default function SourceReplicaMakeSetUp() {
     replicaPage: { mode: tpl.replica_page_mode || "create", fileName: tpl.replica_page_file_name || "" },
   });
 
-  const handleViewRecord = (tpl) => {
+  const handleViewRecord = async (tpl) => {
     setFormData(recordToFormData(tpl));
     setEditingRecord(tpl);
     setIsEditing(false);
@@ -100,9 +102,19 @@ export default function SourceReplicaMakeSetUp() {
     setProjectError("");
     setFieldErrors({});
     setShowTemplates(false);
+    
+    // Fetch version info
+    const history = await base44.entities.SourceReplicaTemplateVersionHistory.filter({ template_id: tpl.id });
+    if (history.length > 0) {
+      const latestVersion = history.sort((a, b) => b.version - a.version)[0];
+      setVersionInfo({
+        version: latestVersion.version,
+        dateTime: format(new Date(latestVersion.created_date), "EEEE, MMMM d, yyyy h:mm a"),
+      });
+    }
   };
 
-  const handleEditRecord = (tpl) => {
+  const handleEditRecord = async (tpl) => {
     setFormData(recordToFormData(tpl));
     setEditingRecord(tpl);
     setIsEditing(true);
@@ -110,6 +122,16 @@ export default function SourceReplicaMakeSetUp() {
     setProjectError("");
     setFieldErrors({});
     setShowTemplates(false);
+    
+    // Fetch version info
+    const history = await base44.entities.SourceReplicaTemplateVersionHistory.filter({ template_id: tpl.id });
+    if (history.length > 0) {
+      const latestVersion = history.sort((a, b) => b.version - a.version)[0];
+      setVersionInfo({
+        version: latestVersion.version,
+        dateTime: format(new Date(latestVersion.created_date), "EEEE, MMMM d, yyyy h:mm a"),
+      });
+    }
   };
 
   const handleProjectNameChange = (e) => {
@@ -279,9 +301,9 @@ export default function SourceReplicaMakeSetUp() {
             <Button variant="outline" onClick={() => setShowTemplates(s => !s)}>
               <BookOpen className="w-4 h-4 mr-1" /> Templates
             </Button>
-            <Button onClick={() => { setIsEditing(true); setEditingRecord(null); setSaveSuccess(false); setSavedAsUpdate(false); setFormData({ ...EMPTY_FORM }); setProjectError(""); setFieldErrors({}); }}>
-              <Plus className="w-4 h-4 mr-1" /> New Template
-            </Button>
+            <Button onClick={() => { setIsEditing(true); setEditingRecord(null); setSaveSuccess(false); setSavedAsUpdate(false); setFormData({ ...EMPTY_FORM }); setProjectError(""); setFieldErrors({}); setVersionInfo(null); }}>
+                  <Plus className="w-4 h-4 mr-1" /> New Template
+                </Button>
           </div>
         </div>
 
@@ -417,6 +439,13 @@ export default function SourceReplicaMakeSetUp() {
                 <CardHeader>
                   <CardTitle className="mb-4">SOURCE App Setup Instructions - Original Code</CardTitle>
                   <p className="text-sm text-muted-foreground mb-4">Use these instructions for initial setup (first-time creation)</p>
+                  {versionInfo && (
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <span className="font-medium">Version {versionInfo.version}</span>
+                      <span>•</span>
+                      <span>{versionInfo.dateTime}</span>
+                    </div>
+                  )}
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <h4 className="font-semibold text-sm text-muted-foreground">Full Page with existing table / push</h4>
@@ -430,7 +459,7 @@ export default function SourceReplicaMakeSetUp() {
                               const p = formData.projectName.replace(/\s+/g, '');
                               const parts = [];
                               let sectionNum = 1;
-                              parts.push(`## SECTION ${sectionNum++}: SETUP INSTRUCTIONS\n\n${generateSourceInstructions(formData)}`);
+                              parts.push(`## SECTION ${sectionNum++}: SETUP INSTRUCTIONS\n\n${generateSourceInstructions(formData, versionInfo)}`);
                               const fnSpecific = [
                                 `// --- pushToReplica${p} ---`, generatePushFunction(formData, index),
                                 `// --- deleteFromReplicas${p} ---`, generateDeleteFunction(formData, index),
@@ -459,7 +488,7 @@ export default function SourceReplicaMakeSetUp() {
                               const p = formData.projectName.replace(/\s+/g, '');
                               const parts = [];
                               let sectionNum = 1;
-                              parts.push(`## SECTION ${sectionNum++}: SETUP INSTRUCTIONS\n\n${generateSourceInstructions(formData)}`);
+                              parts.push(`## SECTION ${sectionNum++}: SETUP INSTRUCTIONS\n\n${generateSourceInstructions(formData, versionInfo)}`);
                               const fnSpecific = [
                                 `// --- pushToReplica${p} ---`, generatePushFunction(formData, index),
                                 `// --- deleteFromReplicas${p} ---`, generateDeleteFunction(formData, index),
@@ -478,7 +507,7 @@ export default function SourceReplicaMakeSetUp() {
                     </div>
                   </div>
                   <div className="mt-4 pt-4 border-t border-border">
-                    <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateSourceInstructions(formData), 'source-instructions')}>
+                    <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateSourceInstructions(formData, versionInfo), 'source-instructions')}>
                       {copiedSection === 'source-instructions' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy Instructions Only
                     </Button>
                   </div>
@@ -491,6 +520,13 @@ export default function SourceReplicaMakeSetUp() {
                   <CardHeader>
                     <CardTitle className="mb-4">SOURCE App Setup Instructions - Code Update</CardTitle>
                     <p className="text-sm text-muted-foreground mb-4">⚠️ Use these instructions to UPDATE your existing setup after editing the template</p>
+                    {versionInfo && (
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span className="font-medium">Version {versionInfo.version}</span>
+                        <span>•</span>
+                        <span>{versionInfo.dateTime}</span>
+                      </div>
+                    )}
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <h4 className="font-semibold text-sm text-muted-foreground">Full Page with existing table / push</h4>
@@ -504,7 +540,7 @@ export default function SourceReplicaMakeSetUp() {
                                 const p = formData.projectName.replace(/\s+/g, '');
                                 const parts = [];
                                 let sectionNum = 1;
-                                parts.push(`## SECTION ${sectionNum++}: UPDATE INSTRUCTIONS\n\n${generateSourceUpdateInstructions(formData)}`);
+                                parts.push(`## SECTION ${sectionNum++}: UPDATE INSTRUCTIONS\n\n${generateSourceUpdateInstructions(formData, versionInfo)}`);
                                 const fnSpecific = [
                                   `// --- pushToReplica${p} ---`, generatePushFunction(formData, index),
                                   `// --- deleteFromReplicas${p} ---`, generateDeleteFunction(formData, index),
@@ -533,7 +569,7 @@ export default function SourceReplicaMakeSetUp() {
                                 const p = formData.projectName.replace(/\s+/g, '');
                                 const parts = [];
                                 let sectionNum = 1;
-                                parts.push(`## SECTION ${sectionNum++}: UPDATE INSTRUCTIONS\n\n${generateSourceUpdateInstructions(formData)}`);
+                                parts.push(`## SECTION ${sectionNum++}: UPDATE INSTRUCTIONS\n\n${generateSourceUpdateInstructions(formData, versionInfo)}`);
                                 const fnSpecific = [
                                   `// --- pushToReplica${p} ---`, generatePushFunction(formData, index),
                                   `// --- deleteFromReplicas${p} ---`, generateDeleteFunction(formData, index),
@@ -552,7 +588,7 @@ export default function SourceReplicaMakeSetUp() {
                       </div>
                     </div>
                     <div className="mt-4 pt-4 border-t border-border">
-                      <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateSourceUpdateInstructions(formData), 'source-update-instructions')}>
+                      <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateSourceUpdateInstructions(formData, versionInfo), 'source-update-instructions')}>
                         {copiedSection === 'source-update-instructions' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy Update Instructions Only
                       </Button>
                     </div>
@@ -569,6 +605,13 @@ export default function SourceReplicaMakeSetUp() {
                 <CardHeader>
                   <CardTitle className="mb-4">REPLICA App Setup Instructions - Original Code</CardTitle>
                   <p className="text-sm text-muted-foreground mb-4">Use these instructions for initial setup (first-time creation)</p>
+                  {versionInfo && (
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <span className="font-medium">Version {versionInfo.version}</span>
+                      <span>•</span>
+                      <span>{versionInfo.dateTime}</span>
+                    </div>
+                  )}
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <h4 className="font-semibold text-sm text-muted-foreground">Full Page with existing table / push</h4>
@@ -581,7 +624,7 @@ export default function SourceReplicaMakeSetUp() {
                             onClick={() => {
                               const parts = [];
                               let sectionNum = 1;
-                              parts.push(`## SECTION ${sectionNum++}: REPLICA SETUP INSTRUCTIONS\n\n${generateReplicaInstructions(formData)}`);
+                              parts.push(`## SECTION ${sectionNum++}: REPLICA SETUP INSTRUCTIONS\n\n${generateReplicaInstructions(formData, versionInfo)}`);
                               parts.push(`## SECTION ${sectionNum++}: REPLICA PAGE CODE (Option A — Full replacement) [Replica ${index + 1}]\n// File: ${formData.replicaPage?.fileName || 'pages/YourReplicaPage.jsx'}\n\n${generateReplicaPageCode(formData)}`);
                               copyToClipboard(parts.join('\n\n---\n\n'), `replica-all-a-${index}`);
                             }}
@@ -602,7 +645,7 @@ export default function SourceReplicaMakeSetUp() {
                             onClick={() => {
                               const parts = [];
                               let sectionNum = 1;
-                              parts.push(`## SECTION ${sectionNum++}: REPLICA SETUP INSTRUCTIONS\n\n${generateReplicaInstructions(formData)}`);
+                              parts.push(`## SECTION ${sectionNum++}: REPLICA SETUP INSTRUCTIONS\n\n${generateReplicaInstructions(formData, versionInfo)}`);
                               parts.push(`## SECTION ${sectionNum++}: REPLICA PAGE CODE (Option B — Subscription snippet only) [Replica ${index + 1}]\n\n${generateReplicaPageSubscriptionSnippet(formData)}`);
                               copyToClipboard(parts.join('\n\n---\n\n'), `replica-all-b-${index}`);
                             }}
@@ -614,7 +657,7 @@ export default function SourceReplicaMakeSetUp() {
                     </div>
                   </div>
                   <div className="mt-4 pt-4 border-t border-border">
-                    <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateReplicaInstructions(formData), 'replica-instructions')}>
+                    <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateReplicaInstructions(formData, versionInfo), 'replica-instructions')}>
                       {copiedSection === 'replica-instructions' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy Instructions Only
                     </Button>
                   </div>
@@ -627,6 +670,13 @@ export default function SourceReplicaMakeSetUp() {
                   <CardHeader>
                     <CardTitle className="mb-4">REPLICA App Setup Instructions - Code Update</CardTitle>
                     <p className="text-sm text-muted-foreground mb-4">⚠️ Use these instructions to UPDATE your existing setup after editing the template</p>
+                    {versionInfo && (
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span className="font-medium">Version {versionInfo.version}</span>
+                        <span>•</span>
+                        <span>{versionInfo.dateTime}</span>
+                      </div>
+                    )}
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <h4 className="font-semibold text-sm text-muted-foreground">Full Page with existing table / push</h4>
@@ -639,7 +689,7 @@ export default function SourceReplicaMakeSetUp() {
                               onClick={() => {
                                 const parts = [];
                                 let sectionNum = 1;
-                                parts.push(`## SECTION ${sectionNum++}: REPLICA UPDATE INSTRUCTIONS\n\n${generateReplicaUpdateInstructions(formData)}`);
+                                parts.push(`## SECTION ${sectionNum++}: REPLICA UPDATE INSTRUCTIONS\n\n${generateReplicaUpdateInstructions(formData, versionInfo)}`);
                                 parts.push(`## SECTION ${sectionNum++}: REPLICA PAGE CODE (Option A — Full replacement) [Replica ${index + 1}]\n// File: ${formData.replicaPage?.fileName || 'pages/YourReplicaPage.jsx'}\n\n${generateReplicaPageCode(formData)}`);
                                 copyToClipboard(parts.join('\n\n---\n\n'), `replica-update-all-a-${index}`);
                               }}
@@ -660,7 +710,7 @@ export default function SourceReplicaMakeSetUp() {
                               onClick={() => {
                                 const parts = [];
                                 let sectionNum = 1;
-                                parts.push(`## SECTION ${sectionNum++}: REPLICA UPDATE INSTRUCTIONS\n\n${generateReplicaUpdateInstructions(formData)}`);
+                                parts.push(`## SECTION ${sectionNum++}: REPLICA UPDATE INSTRUCTIONS\n\n${generateReplicaUpdateInstructions(formData, versionInfo)}`);
                                 parts.push(`## SECTION ${sectionNum++}: REPLICA PAGE CODE (Option B — Subscription snippet only) [Replica ${index + 1}]\n\n${generateReplicaPageSubscriptionSnippet(formData)}`);
                                 copyToClipboard(parts.join('\n\n---\n\n'), `replica-update-all-b-${index}`);
                               }}
@@ -672,7 +722,7 @@ export default function SourceReplicaMakeSetUp() {
                       </div>
                     </div>
                     <div className="mt-4 pt-4 border-t border-border">
-                      <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateReplicaUpdateInstructions(formData), 'replica-update-instructions')}>
+                      <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateReplicaUpdateInstructions(formData, versionInfo), 'replica-update-instructions')}>
                         {copiedSection === 'replica-update-instructions' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy Update Instructions Only
                       </Button>
                     </div>

@@ -3,6 +3,8 @@ import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Badge } from "@/components/ui/badge";
+import { CheckCircle2, Circle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Plus, Copy, Check, Trash2, BookOpen } from "lucide-react";
@@ -57,6 +59,7 @@ export default function SourceReplicaMakeSetUp() {
   const [showTemplates, setShowTemplates] = useState(false);
   const [savedAsUpdate, setSavedAsUpdate] = useState(false);
   const [versionInfo, setVersionInfo] = useState(null);
+  const [templateStatus, setTemplateStatus] = useState(null);
 
   const hasUnmetFields =
     !formData.projectName ||
@@ -112,6 +115,14 @@ export default function SourceReplicaMakeSetUp() {
         dateTime: format(new Date(latestVersion.created_date), "EEEE, MMMM d, yyyy h:mm a"),
       });
     }
+    
+    // Fetch status
+    const statuses = await base44.entities.SourceReplicaTemplateStatus.filter({ template_id: tpl.id });
+    if (statuses.length > 0) {
+      setTemplateStatus(statuses[0]);
+    } else {
+      setTemplateStatus(null);
+    }
   };
 
   const handleEditRecord = async (tpl) => {
@@ -131,6 +142,14 @@ export default function SourceReplicaMakeSetUp() {
         version: latestVersion.version,
         dateTime: format(new Date(latestVersion.created_date), "EEEE, MMMM d, yyyy h:mm a"),
       });
+    }
+    
+    // Fetch status
+    const statuses = await base44.entities.SourceReplicaTemplateStatus.filter({ template_id: tpl.id });
+    if (statuses.length > 0) {
+      setTemplateStatus(statuses[0]);
+    } else {
+      setTemplateStatus(null);
     }
   };
 
@@ -437,7 +456,18 @@ export default function SourceReplicaMakeSetUp() {
               {/* ORIGINAL CODE SECTION */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="mb-4">SOURCE App Setup Instructions - Original Code</CardTitle>
+                  <div className="flex items-center justify-between mb-4">
+                    <CardTitle>SOURCE App Setup Instructions - Original Code</CardTitle>
+                    {editingRecord && (
+                      <Badge variant={templateStatus?.confirmed_in_use ? "default" : "outline"} className={templateStatus?.confirmed_in_use ? "bg-green-600" : ""}>
+                        {templateStatus?.confirmed_in_use ? (
+                          <><CheckCircle2 className="w-3 h-3 mr-1" /> In Use</>
+                        ) : (
+                          <><Circle className="w-3 h-3 mr-1" /> Not Yet In Use</>
+                        )}
+                      </Badge>
+                    )}
+                  </div>
                   <p className="text-sm text-muted-foreground mb-4">Use these instructions for initial setup (first-time creation)</p>
                   {versionInfo && (
                     <div className="flex items-center gap-2 text-xs text-green-600">

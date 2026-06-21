@@ -362,9 +362,9 @@ export default function SourceReplicaMakeSetUp() {
           </div>
           <div className="flex items-center justify-between">
             <Button variant="outline" size="sm" onClick={() => {
-              const instructionsSection = document.querySelector('[role="tablist"]');
-              if (instructionsSection) {
-                instructionsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              const tabsContainer = document.querySelector('[role="tablist"]')?.closest('.space-y-4');
+              if (tabsContainer) {
+                tabsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }
             }}>
               Jump to Instructions

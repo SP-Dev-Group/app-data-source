@@ -414,48 +414,54 @@ export default function SourceReplicaMakeSetUp() {
                 <div className="flex justify-between items-center">
                   <CardTitle>SOURCE App Setup Instructions</CardTitle>
                   <div className="flex items-center gap-2 flex-wrap justify-end">
-                    <Button
-                      size="sm"
-                      className="bg-blue-600 hover:bg-blue-700 text-white"
-                      onClick={() => {
-                        const p = formData.projectName.replace(/\s+/g, '');
-                        const parts = [];
-                        let sectionNum = 1;
-                        parts.push(`## SECTION ${sectionNum++}: SETUP INSTRUCTIONS\n\n${generateSourceInstructions(formData)}`);
-                        const fnAll = formData.replicas.map((_, index) => [
-                          `// --- pushToReplica${p} ---`, generatePushFunction(formData, index),
-                          `// --- deleteFromReplicas${p} ---`, generateDeleteFunction(formData, index),
-                          `// --- pushAllocatedRecord${p} ---`, generateAllocateFunction(formData, index),
-                          `// --- reinstateFromArchive${p} ---`, generateReinstateFunction(formData, index),
-                        ].join('\n\n')).join('\n\n// ==================\n\n');
-                        parts.push(`## SECTION ${sectionNum++}: BACKEND FUNCTIONS\n// Create each as a separate file in functions/\n\n${fnAll}`);
-                        parts.push(`## SECTION ${sectionNum++}: SOURCE PAGE CODE (Option A — Full replacement)\n// File: ${formData.sourcePage?.fileName || 'pages/YourSourcePage.jsx'}\n\n${generateSourcePageCode(formData)}`);
-                        copyToClipboard(parts.join('\n\n---\n\n'), 'source-all-a');
-                      }}
-                    >
-                      {copiedSection === 'source-all-a' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy All Version: Full Page, Table, Push
-                    </Button>
-                    <Button
-                      size="sm"
-                      className="bg-blue-600 hover:bg-blue-700 text-white"
-                      onClick={() => {
-                        const p = formData.projectName.replace(/\s+/g, '');
-                        const parts = [];
-                        let sectionNum = 1;
-                        parts.push(`## SECTION ${sectionNum++}: SETUP INSTRUCTIONS\n\n${generateSourceInstructions(formData)}`);
-                        const fnAll = formData.replicas.map((_, index) => [
-                          `// --- pushToReplica${p} ---`, generatePushFunction(formData, index),
-                          `// --- deleteFromReplicas${p} ---`, generateDeleteFunction(formData, index),
-                          `// --- pushAllocatedRecord${p} ---`, generateAllocateFunction(formData, index),
-                          `// --- reinstateFromArchive${p} ---`, generateReinstateFunction(formData, index),
-                        ].join('\n\n')).join('\n\n// ==================\n\n');
-                        parts.push(`## SECTION ${sectionNum++}: BACKEND FUNCTIONS\n// Create each as a separate file in functions/\n\n${fnAll}`);
-                        parts.push(`## SECTION ${sectionNum++}: SOURCE PAGE CODE (Option B — Subscription snippet only)\n\n${generateSourcePageSubscriptionSnippet(formData)}`);
-                        copyToClipboard(parts.join('\n\n---\n\n'), 'source-all-b');
-                      }}
-                    >
-                      {copiedSection === 'source-all-b' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy All Version: Subscription Snippet for existing table
-                    </Button>
+                    {formData.replicas.map((_, index) => (
+                      <Button
+                        key={index}
+                        size="sm"
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        onClick={() => {
+                          const p = formData.projectName.replace(/\s+/g, '');
+                          const parts = [];
+                          let sectionNum = 1;
+                          parts.push(`## SECTION ${sectionNum++}: SETUP INSTRUCTIONS\n\n${generateSourceInstructions(formData)}`);
+                          const fnSpecific = [
+                            `// --- pushToReplica${p} ---`, generatePushFunction(formData, index),
+                            `// --- deleteFromReplicas${p} ---`, generateDeleteFunction(formData, index),
+                            `// --- pushAllocatedRecord${p} ---`, generateAllocateFunction(formData, index),
+                            `// --- reinstateFromArchive${p} ---`, generateReinstateFunction(formData, index),
+                          ].join('\n\n');
+                          parts.push(`## SECTION ${sectionNum++}: BACKEND FUNCTIONS (Replica ${index + 1})\n// Create each as a separate file in functions/\n\n${fnSpecific}`);
+                          parts.push(`## SECTION ${sectionNum++}: SOURCE PAGE CODE (Option A — Full replacement)\n// File: ${formData.sourcePage?.fileName || 'pages/YourSourcePage.jsx'}\n\n${generateSourcePageCode(formData)}`);
+                          copyToClipboard(parts.join('\n\n---\n\n'), `source-all-a-${index}`);
+                        }}
+                      >
+                        {copiedSection === `source-all-a-${index}` ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy All (Replica {index + 1}): Full Page, Table, Push
+                      </Button>
+                    ))}
+                    {formData.replicas.map((_, index) => (
+                      <Button
+                        key={index}
+                        size="sm"
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        onClick={() => {
+                          const p = formData.projectName.replace(/\s+/g, '');
+                          const parts = [];
+                          let sectionNum = 1;
+                          parts.push(`## SECTION ${sectionNum++}: SETUP INSTRUCTIONS\n\n${generateSourceInstructions(formData)}`);
+                          const fnSpecific = [
+                            `// --- pushToReplica${p} ---`, generatePushFunction(formData, index),
+                            `// --- deleteFromReplicas${p} ---`, generateDeleteFunction(formData, index),
+                            `// --- pushAllocatedRecord${p} ---`, generateAllocateFunction(formData, index),
+                            `// --- reinstateFromArchive${p} ---`, generateReinstateFunction(formData, index),
+                          ].join('\n\n');
+                          parts.push(`## SECTION ${sectionNum++}: BACKEND FUNCTIONS (Replica ${index + 1})\n// Create each as a separate file in functions/\n\n${fnSpecific}`);
+                          parts.push(`## SECTION ${sectionNum++}: SOURCE PAGE CODE (Option B — Subscription snippet only)\n\n${generateSourcePageSubscriptionSnippet(formData)}`);
+                          copyToClipboard(parts.join('\n\n---\n\n'), `source-all-b-${index}`);
+                        }}
+                      >
+                        {copiedSection === `source-all-b-${index}` ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy All (Replica {index + 1}): Subscription Snippet
+                      </Button>
+                    ))}
                     <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateSourceInstructions(formData), 'source-instructions')}>
                       {copiedSection === 'source-instructions' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy Instructions
                     </Button>
@@ -561,32 +567,38 @@ export default function SourceReplicaMakeSetUp() {
                 <div className="flex justify-between items-center">
                   <CardTitle>REPLICA App Setup Instructions</CardTitle>
                   <div className="flex items-center gap-2 flex-wrap justify-end">
-                    <Button
-                      size="sm"
-                      className="bg-blue-600 hover:bg-blue-700 text-white"
-                      onClick={() => {
-                        const parts = [];
-                        let sectionNum = 1;
-                        parts.push(`## SECTION ${sectionNum++}: REPLICA SETUP INSTRUCTIONS\n\n${generateReplicaInstructions(formData)}`);
-                        parts.push(`## SECTION ${sectionNum++}: REPLICA PAGE CODE (Option A — Full replacement)\n// File: ${formData.replicaPage?.fileName || 'pages/YourReplicaPage.jsx'}\n\n${generateReplicaPageCode(formData)}`);
-                        copyToClipboard(parts.join('\n\n---\n\n'), 'replica-all-a');
-                      }}
-                    >
-                      {copiedSection === 'replica-all-a' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy All Version: Full Page, Table, Push
-                    </Button>
-                    <Button
-                      size="sm"
-                      className="bg-blue-600 hover:bg-blue-700 text-white"
-                      onClick={() => {
-                        const parts = [];
-                        let sectionNum = 1;
-                        parts.push(`## SECTION ${sectionNum++}: REPLICA SETUP INSTRUCTIONS\n\n${generateReplicaInstructions(formData)}`);
-                        parts.push(`## SECTION ${sectionNum++}: REPLICA PAGE CODE (Option B — Subscription snippet only)\n\n${generateReplicaPageSubscriptionSnippet(formData)}`);
-                        copyToClipboard(parts.join('\n\n---\n\n'), 'replica-all-b');
-                      }}
-                    >
-                      {copiedSection === 'replica-all-b' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy All Version: Subscription Snippet for existing table
-                    </Button>
+                    {formData.replicas.map((_, index) => (
+                      <Button
+                        key={index}
+                        size="sm"
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        onClick={() => {
+                          const parts = [];
+                          let sectionNum = 1;
+                          parts.push(`## SECTION ${sectionNum++}: REPLICA SETUP INSTRUCTIONS\n\n${generateReplicaInstructions(formData)}`);
+                          parts.push(`## SECTION ${sectionNum++}: REPLICA PAGE CODE (Option A — Full replacement) [Replica ${index + 1}]\n// File: ${formData.replicaPage?.fileName || 'pages/YourReplicaPage.jsx'}\n\n${generateReplicaPageCode(formData)}`);
+                          copyToClipboard(parts.join('\n\n---\n\n'), `replica-all-a-${index}`);
+                        }}
+                      >
+                        {copiedSection === `replica-all-a-${index}` ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy All (Replica {index + 1}): Full Page, Table, Push
+                      </Button>
+                    ))}
+                    {formData.replicas.map((_, index) => (
+                      <Button
+                        key={index}
+                        size="sm"
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        onClick={() => {
+                          const parts = [];
+                          let sectionNum = 1;
+                          parts.push(`## SECTION ${sectionNum++}: REPLICA SETUP INSTRUCTIONS\n\n${generateReplicaInstructions(formData)}`);
+                          parts.push(`## SECTION ${sectionNum++}: REPLICA PAGE CODE (Option B — Subscription snippet only) [Replica ${index + 1}]\n\n${generateReplicaPageSubscriptionSnippet(formData)}`);
+                          copyToClipboard(parts.join('\n\n---\n\n'), `replica-all-b-${index}`);
+                        }}
+                      >
+                        {copiedSection === `replica-all-b-${index}` ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy All (Replica {index + 1}): Subscription Snippet
+                      </Button>
+                    ))}
                     <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateReplicaInstructions(formData), 'replica-instructions')}>
                       {copiedSection === 'replica-instructions' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy Instructions
                     </Button>

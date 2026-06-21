@@ -360,7 +360,7 @@ export default function SourceReplicaMakeSetUp() {
             </Button>
             <h1 className="text-2xl font-bold text-foreground">Source Replica Setup Generator</h1>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between">
             <Button variant="outline" size="sm" onClick={() => {
               const instructionsSection = document.querySelector('[role="tablist"]');
               if (instructionsSection) {
@@ -369,12 +369,14 @@ export default function SourceReplicaMakeSetUp() {
             }}>
               Jump to Instructions
             </Button>
-            <Button variant="outline" size="sm" onClick={() => setShowTemplates(s => !s)}>
-              <BookOpen className="w-4 h-4 mr-1" /> Templates
-            </Button>
-            <Button size="sm" onClick={() => { setIsEditing(true); setEditingRecord(null); setSaveSuccess(false); setSavedAsUpdate(false); setFormData({ ...EMPTY_FORM }); setProjectError(""); setFieldErrors({}); setVersionInfo(null); }}>
-                  <Plus className="w-4 h-4 mr-1" /> New Template
-                </Button>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" onClick={() => setShowTemplates(s => !s)}>
+                <BookOpen className="w-4 h-4 mr-1" /> Templates
+              </Button>
+              <Button size="sm" onClick={() => { setIsEditing(true); setEditingRecord(null); setSaveSuccess(false); setSavedAsUpdate(false); setFormData({ ...EMPTY_FORM }); setProjectError(""); setFieldErrors({}); setVersionInfo(null); }}>
+                    <Plus className="w-4 h-4 mr-1" /> New Template
+                  </Button>
+            </div>
           </div>
         </div>
 

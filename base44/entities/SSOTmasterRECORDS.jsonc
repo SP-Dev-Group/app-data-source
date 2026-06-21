@@ -1,0 +1,49 @@
+{
+  "name": "SSOTmasterRECORDS",
+  "type": "object",
+  "properties": {
+    "project_name": {
+      "type": "string",
+      "description": "Project name from the template"
+    },
+    "source_entity_name": {
+      "type": "string",
+      "description": "The source SSOT entity name"
+    },
+    "replica_entity_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of replica entity names"
+    },
+    "replica_app_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of replica app IDs"
+    },
+    "template_id": {
+      "type": "string",
+      "description": "Reference to the SourceReplicaTemplateMakeReady record ID"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "withdrawn"
+      ],
+      "default": "active",
+      "description": "Whether this source is active or withdrawn"
+    },
+    "description": {
+      "type": "string",
+      "description": "Short description"
+    }
+  },
+  "required": [
+    "project_name",
+    "source_entity_name"
+  ]
+}

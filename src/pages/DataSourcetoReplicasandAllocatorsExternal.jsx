@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus, Loader2, Send, Pencil, Archive, Tag, FileArchive, FileText } from "lucide-react";
+import { ArrowLeft, Plus, Loader2, Send, Pencil, Archive, Tag, FileArchive, FileText, ChevronDown } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -12,6 +12,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import AddExternalSSOTDialog from "@/components/external/AddExternalSSOTDialog";
 import AddReplicaConfigDialog from "@/components/external/AddReplicaConfigDialog";
@@ -32,6 +34,14 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
   const [allocateRecord, setAllocateRecord] = useState(null);
   const [archiveViewerOpen, setArchiveViewerOpen] = useState(false);
   const [docsOpen, setDocsOpen] = useState(false);
+  const [selectedMasterId, setSelectedMasterId] = useState(null);
+
+  const { data: masterRecords = [] } = useQuery({
+    queryKey: ["SSOTmasterRECORDS"],
+    queryFn: () => base44.entities.SSOTmasterRECORDS.filter({ status: "active" }),
+  });
+
+  const selectedMaster = masterRecords.find(m => m.id === selectedMasterId) || null;
 
   const handlePush = async (config) => {
     setPushingId(config.id);
@@ -93,7 +103,39 @@ export default function DataSourcetoReplicasandAllocatorsExternal() {
           </div>
         </div>
 
-        <h2 className="text-lg font-semibold text-foreground mb-1">SSOT — SourceSSOT10</h2>
+        {/* Source Selector from SSOTmasterRECORDS */}
+        <div className="mb-5 p-4 rounded-lg border bg-card">
+          <div className="flex items-center gap-3 flex-wrap">
+            <span className="text-sm font-medium text-foreground">Select Source:</span>
+            <Select value={selectedMasterId || ""} onValueChange={setSelectedMasterId}>
+              <SelectTrigger className="w-72">
+                <SelectValue placeholder="— select a source entity —" />
+              </SelectTrigger>
+              <SelectContent>
+                {masterRecords.map(m => (
+                  <SelectItem key={m.id} value={m.id}>
+                    {m.project_name} — {m.source_entity_name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {selectedMaster && (
+              <div className="flex items-center gap-2 flex-wrap">
+                <Badge variant="secondary">{selectedMaster.source_entity_name}</Badge>
+                {selectedMaster.replica_entity_names?.map((r, i) => (
+                  <Badge key={i} variant="outline" className="text-xs">{r}</Badge>
+                ))}
+              </div>
+            )}
+          </div>
+          {masterRecords.length === 0 && (
+            <p className="text-xs text-muted-foreground mt-2">No active source entities found. Save a template on the Setup Generator page first.</p>
+          )}
+        </div>
+
+        <h2 className="text-lg font-semibold text-foreground mb-1">
+          SSOT — {selectedMaster ? selectedMaster.source_entity_name : "SourceSSOT10"}
+        </h2>
         <p className="text-xs text-muted-foreground mb-3">
           Records stored locally as the source of truth. Use push functionality to sync to external replica apps.
         </p>

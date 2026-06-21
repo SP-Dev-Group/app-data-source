@@ -233,7 +233,30 @@ export default function SourceReplicaMakeSetUp() {
         snapshot: JSON.stringify(payload),
       });
 
+      // Sync to SSOTmasterRECORDS (only on create of new source entity)
+      if (!editingRecord && formData.sourceSchemaOption === 'create') {
+        const existingMaster = await base44.entities.SSOTmasterRECORDS.filter({ template_id: savedId });
+        if (existingMaster.length === 0) {
+          await base44.entities.SSOTmasterRECORDS.create({
+            project_name: formData.projectName,
+            source_entity_name: formData.sourceEntityName,
+            description: formData.description,
+            template_id: savedId,
+            status: "active",
+            replica_entity_names: formData.replicas.map((r, i) => r.replicaEntityName || (r.replicaAppName ? `Replica${r.replicaAppName.replace(/\s+/g,'')}${i+1}` : `Replica${i+1}`)),
+            replica_app_ids: formData.replicas.map(r => r.secretValue || ''),
+          });
+        } else {
+          // update on edit
+          await base44.entities.SSOTmasterRECORDS.update(existingMaster[0].id, {
+            replica_entity_names: formData.replicas.map((r, i) => r.replicaEntityName || (r.replicaAppName ? `Replica${r.replicaAppName.replace(/\s+/g,'')}${i+1}` : `Replica${i+1}`)),
+            replica_app_ids: formData.replicas.map(r => r.secretValue || ''),
+          });
+        }
+      }
+
       queryClient.invalidateQueries({ queryKey: ["SourceReplicaTemplateMakeReady"] });
+      queryClient.invalidateQueries({ queryKey: ["SSOTmasterRECORDS"] });
       setFormData({ ...EMPTY_FORM });
       setProjectError("");
       setFieldErrors({});
@@ -280,16 +303,33 @@ export default function SourceReplicaMakeSetUp() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="projectName">Project Name *</Label>
-                <Input id="projectName" value={formData.projectName} onChange={handleProjectNameChange} placeholder="e.g. NewsBookSite Staff" className={!formData.projectName ? "border-red-500" : ""} />
-                {projectError && <p className="text-sm text-destructive">{projectError}</p>}
+                {editingRecord ? (
+                  <>
+                    <Input id="projectName" value={formData.projectName} readOnly className="bg-muted text-muted-foreground cursor-not-allowed" />
+                    <p className="text-xs text-amber-600 font-medium">🔒 Can't be changed after Save</p>
+                  </>
+                ) : (
+                  <>
+                    <Input id="projectName" value={formData.projectName} onChange={handleProjectNameChange} placeholder="e.g. NewsBookSite Staff" className={!formData.projectName ? "border-red-500" : ""} />
+                    {projectError && <p className="text-sm text-destructive">{projectError}</p>}
+                  </>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="description">Description (max 20 chars) *</Label>
-                <Input id="description" value={formData.description} onChange={(e) => { setFormData({ ...formData, description: e.target.value.slice(0, 20) }); }} placeholder="e.g. Staff" maxLength={20} className={!formData.description ? "border-red-500" : ""} />
-                <p className="text-xs text-muted-foreground">{formData.description.length}/20</p>
+                {editingRecord ? (
+                  <>
+                    <Input id="description" value={formData.description} readOnly className="bg-muted text-muted-foreground cursor-not-allowed" />
+                    <p className="text-xs text-amber-600 font-medium">🔒 Can't be changed after Save</p>
+                  </>
+                ) : (
+                  <>
+                    <Input id="description" value={formData.description} onChange={(e) => { setFormData({ ...formData, description: e.target.value.slice(0, 20) }); }} placeholder="e.g. Staff" maxLength={20} className={!formData.description ? "border-red-500" : ""} />
+                    <p className="text-xs text-muted-foreground">{formData.description.length}/20</p>
+                  </>
+                )}
               </div>
             </div>
-
           </CardContent>
         </Card>
 
@@ -299,7 +339,14 @@ export default function SourceReplicaMakeSetUp() {
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="sourceEntityName">Source Entity Name *</Label>
-                <Input id="sourceEntityName" value={formData.sourceEntityName} onChange={(e) => { setFormData({ ...formData, sourceEntityName: e.target.value }); }} placeholder="e.g. SourceSSOT10" className={!formData.sourceEntityName ? "border-red-500" : ""} />
+                {editingRecord ? (
+                  <>
+                    <Input id="sourceEntityName" value={formData.sourceEntityName} readOnly className="bg-muted text-muted-foreground cursor-not-allowed" />
+                    <p className="text-xs text-amber-600 font-medium">🔒 Can't be changed after Save</p>
+                  </>
+                ) : (
+                  <Input id="sourceEntityName" value={formData.sourceEntityName} onChange={(e) => { setFormData({ ...formData, sourceEntityName: e.target.value }); }} placeholder="e.g. SourceSSOT10" className={!formData.sourceEntityName ? "border-red-500" : ""} />
+                )}
               </div>
               <SourceEntityForm
                 sourceSchemaOption={formData.sourceSchemaOption}

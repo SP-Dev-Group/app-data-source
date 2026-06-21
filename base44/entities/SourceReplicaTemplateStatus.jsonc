@@ -1,0 +1,44 @@
+{
+  "name": "SourceReplicaTemplateStatus",
+  "type": "object",
+  "properties": {
+    "template_id": {
+      "type": "string",
+      "description": "Reference to the SourceReplicaTemplateMakeReady record ID"
+    },
+    "project_name": {
+      "type": "string",
+      "description": "Project name"
+    },
+    "confirmed_in_use": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the template has been confirmed as actioned and in use"
+    },
+    "confirmed_by": {
+      "type": "string",
+      "description": "Name/email of user who confirmed"
+    },
+    "confirmed_at": {
+      "type": "string",
+      "description": "ISO date when confirmed"
+    },
+    "withdrawn": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this template/project has been withdrawn"
+    },
+    "withdrawn_at": {
+      "type": "string",
+      "description": "ISO date when withdrawn"
+    },
+    "withdrawal_notes": {
+      "type": "string",
+      "description": "Notes about what was done during withdrawal"
+    }
+  },
+  "required": [
+    "template_id",
+    "project_name"
+  ]
+}

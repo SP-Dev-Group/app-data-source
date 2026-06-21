@@ -677,11 +677,116 @@ useEffect(() => {
 // ──────────────────────────────────────────────────────────────────────`;
 }
 
+// --- UPDATE INSTRUCTIONS (for when template has been edited) ---
+
+export function generateSourceUpdateInstructions(formData) {
+  const { projectName, sourceEntityName, createArchiveEntities } = formData;
+  const projectNameClean = projectName.replace(/\s+/g, '');
+  return `### SOURCE App UPDATE Instructions for ${projectName}
+
+⚠️ **IMPORTANT**: This template has been edited. Follow these steps to UPDATE your existing setup:
+
+## Step 1: Update Entity Schemas
+
+### 1.1 Source Entity: ${sourceEntityName}
+- Go to entities/${sourceEntityName}.json
+- Update the schema to match the new structure below
+- ⚠️ DO NOT delete and recreate - UPDATE the existing file
+
+### 1.2 Archive & Version History Entities
+- If you added new fields, update these entities:
+  - ${sourceEntityName}Archive
+  - ${sourceEntityName}VersionHistory
+
+### 1.3 Replica Config Entity: ReplicaAppConfig${projectNameClean}
+- Update the schema if replica configurations changed
+
+## Step 2: Update Backend Functions
+
+Update the following functions in the functions/ directory:
+
+1. pushToReplica${projectNameClean} - Replace with updated code
+2. deleteFromReplicas${projectNameClean} - Replace with updated code
+3. pushAllocatedRecord${projectNameClean} - Replace with updated code
+4. reinstateFromArchive${projectNameClean} - Replace with updated code
+
+## Step 3: Update Page (if needed)
+
+${formData.sourcePage?.mode === 'existing'
+  ? `Update your existing page: **${formData.sourcePage?.fileName || 'Your existing page'}**
+  - Replace the ${sourceEntityName} table component if schema changed
+  - Update field mappings in your table columns`
+  : `Update your page: **${formData.sourcePage?.fileName || 'Your page'}**
+  - Update the ${sourceEntityName} table to reflect any schema changes
+  - Ensure all new fields are displayed`
+}
+
+## Step 4: Test Changes
+
+1. Create a test record in ${sourceEntityName}
+2. Verify it appears correctly in the table
+3. Test the "Push All" function to ensure replicas receive updates
+4. Check that allocated records sync properly
+
+## Important Notes
+
+- ⚠️ DO NOT delete existing records - updates should preserve data
+- ⚠️ Backup your data before making schema changes
+- ⚠️ If removing fields, ensure they're not in use by replicas
+- Version history will track all changes automatically
+`;
+}
+
+export function generateReplicaUpdateInstructions(formData) {
+  const { projectName, sourceEntityName, replicas } = formData;
+  const firstReplica = replicas?.[0];
+  const replicaEntityName = firstReplica?.replicaEntityName || (firstReplica?.replicaAppName ? `Replica${firstReplica.replicaAppName.replace(/\s+/g, '')}` : 'ReplicaEntity');
+  return `### REPLICA App UPDATE Instructions for ${projectName}
+
+⚠️ **IMPORTANT**: The SOURCE app has been updated. Follow these steps:
+
+## Step 1: Update Replica Entity Schema
+
+### Replica Entity: ${replicaEntityName}
+- Go to entities/${replicaEntityName}.json
+- Update the schema to match the SOURCE's ${sourceEntityName}
+- Ensure all fields match exactly (same names, same types)
+- ⚠️ DO NOT delete and recreate - UPDATE the existing file
+
+## Step 2: Update Replica Page (if needed)
+
+${formData.replicaPage?.mode === 'existing'
+  ? `Update your existing page: **${formData.replicaPage?.fileName || 'Your existing page'}**
+  - Update the ${replicaEntityName} table to display new fields
+  - Ensure column mappings match the updated schema`
+  : `Update your page: **${formData.replicaPage?.fileName || 'Your page'}**
+  - Update the ${replicaEntityName} table to reflect schema changes
+  - Add columns for any new fields`
+}
+
+## Step 3: Verify Data Sync
+
+1. Ask SOURCE app admin to "Push All" records
+2. Verify all records appear correctly in your replica table
+3. Check that new fields display properly
+4. Test real-time updates by having SOURCE create/edit a record
+
+## Important Notes
+
+- ⚠️ Replica schema MUST match SOURCE schema exactly
+- ⚠️ unique_id is the key field - DO NOT change it
+- ⚠️ Do not manually edit records in the replica app
+- All data changes come from the SOURCE app
+`;
+}
+
 export function generateReplicaPageCode(formData) {
   const { projectName, sourceEntityName, replicas } = formData;
   const firstReplica = replicas?.[0];
   const replicaEntityName = firstReplica?.replicaEntityName || (firstReplica?.replicaAppName ? `Replica${firstReplica.replicaAppName.replace(/\s+/g, '')}` : 'ReplicaEntity');
   return `// Replica App Page for ${projectName}
+// File: pages/${projectName.replace(/\s+/g, '')}.jsx
+
 // File: pages/${projectName.replace(/\s+/g, '')}.jsx
 
 import { useState, useEffect } from "react";

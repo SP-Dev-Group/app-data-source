@@ -362,9 +362,9 @@ export default function SourceReplicaMakeSetUp() {
           </div>
           <div className="flex items-center justify-between">
             <Button variant="outline" size="sm" onClick={() => {
-              const tabsContainer = document.querySelector('[role="tablist"]')?.closest('.space-y-4');
-              if (tabsContainer) {
-                tabsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              const instructionsSection = document.getElementById('instructions-section');
+              if (instructionsSection) {
+                instructionsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }
             }}>
               Jump to Instructions
@@ -499,6 +499,7 @@ export default function SourceReplicaMakeSetUp() {
           )}
         </div>
 
+        <div id="instructions-section" className="scroll-mt-4">
         <Tabs defaultValue="source" className="space-y-4">
           <TabsList className="flex flex-wrap h-auto gap-1 mb-4 p-1">
             <TabsTrigger value="source">SOURCE Instructions</TabsTrigger>
@@ -873,6 +874,7 @@ export default function SourceReplicaMakeSetUp() {
             </div>
           </TabsContent>
         </Tabs>
+        </div>
 
         {/* Confirmation Dialog */}
         <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>

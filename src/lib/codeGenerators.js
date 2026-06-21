@@ -619,6 +619,64 @@ export default function ${projectName.replace(/\s+/g, '')}Page() {
 }`;
 }
 
+// --- Subscription-only snippets for "existing page" mode ---
+
+export function generateSourcePageSubscriptionSnippet(formData) {
+  const { sourceEntityName } = formData;
+  return `// ── INSERT into your existing page component ──────────────────────────
+// 1. Add this state near the top of your component:
+const [${sourceEntityName.charAt(0).toLowerCase() + sourceEntityName.slice(1)}Records, set${sourceEntityName}Records] = useState([]);
+
+// 2. Initial load – add inside your component:
+useEffect(() => {
+  base44.entities.${sourceEntityName}.list().then(set${sourceEntityName}Records);
+}, []);
+
+// 3. Real-time subscription – add inside your component:
+useEffect(() => {
+  const unsubscribe = base44.entities.${sourceEntityName}.subscribe((event) => {
+    if (event.type === 'create') {
+      set${sourceEntityName}Records(prev => [...prev, event.data]);
+    } else if (event.type === 'update') {
+      set${sourceEntityName}Records(prev => prev.map(r => r.id === event.id ? event.data : r));
+    } else if (event.type === 'delete') {
+      set${sourceEntityName}Records(prev => prev.filter(r => r.id !== event.id));
+    }
+  });
+  return unsubscribe;
+}, []);
+// ──────────────────────────────────────────────────────────────────────`;
+}
+
+export function generateReplicaPageSubscriptionSnippet(formData) {
+  const { replicas } = formData;
+  const firstReplica = replicas?.[0];
+  const replicaEntityName = firstReplica?.replicaEntityName || (firstReplica?.replicaAppName ? `Replica${firstReplica.replicaAppName.replace(/\s+/g, '')}` : 'ReplicaEntity');
+  return `// ── INSERT into your existing page component ──────────────────────────
+// 1. Add this state near the top of your component:
+const [${replicaEntityName.charAt(0).toLowerCase() + replicaEntityName.slice(1)}Records, set${replicaEntityName}Records] = useState([]);
+
+// 2. Initial load – add inside your component:
+useEffect(() => {
+  base44.entities.${replicaEntityName}.list().then(set${replicaEntityName}Records);
+}, []);
+
+// 3. Real-time subscription – add inside your component:
+useEffect(() => {
+  const unsubscribe = base44.entities.${replicaEntityName}.subscribe((event) => {
+    if (event.type === 'create') {
+      set${replicaEntityName}Records(prev => [...prev, event.data]);
+    } else if (event.type === 'update') {
+      set${replicaEntityName}Records(prev => prev.map(r => r.id === event.id ? event.data : r));
+    } else if (event.type === 'delete') {
+      set${replicaEntityName}Records(prev => prev.filter(r => r.id !== event.id));
+    }
+  });
+  return unsubscribe;
+}, []);
+// ──────────────────────────────────────────────────────────────────────`;
+}
+
 export function generateReplicaPageCode(formData) {
   const { projectName, sourceEntityName, replicas } = formData;
   const firstReplica = replicas?.[0];

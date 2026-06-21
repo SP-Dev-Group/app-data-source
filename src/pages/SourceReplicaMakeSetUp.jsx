@@ -25,6 +25,8 @@ import {
   generateReinstateFunction,
   generateSourcePageCode,
   generateReplicaPageCode,
+  generateSourcePageSubscriptionSnippet,
+  generateReplicaPageSubscriptionSnippet,
 } from "@/lib/codeGenerators";
 
 const EMPTY_FORM = {
@@ -587,21 +589,86 @@ export default function SourceReplicaMakeSetUp() {
           <TabsContent value="page">
             <Card>
               <CardHeader><CardTitle>Page Code</CardTitle></CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <h3 className="font-semibold">Source App Page</h3>
-                  <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateSourcePageCode(formData), 'source-page')}>
-                    {copiedSection === 'source-page' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy Source Page Code
-                  </Button>
-                  <Alert><AlertDescription className="whitespace-pre-wrap font-mono text-xs">{generateSourcePageCode(formData)}</AlertDescription></Alert>
+              <CardContent className="space-y-6">
+
+                {/* SOURCE PAGE */}
+                <div className="space-y-3">
+                  <h3 className="font-semibold text-base">Source App Page</h3>
+                  {formData.sourcePage?.mode === 'existing' ? (
+                    <div className="space-y-4">
+                      <div className="p-3 rounded-md bg-amber-50 border border-amber-200 text-sm text-amber-800">
+                        Mode: <strong>Use existing page</strong> — choose the code option that fits your existing page:
+                      </div>
+                      {/* Option A: full code */}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">Option A — Full page replacement (includes table, Push button etc)</span>
+                          <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateSourcePageCode(formData), 'source-page-full')}>
+                            {copiedSection === 'source-page-full' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy
+                          </Button>
+                        </div>
+                        <Alert><AlertDescription className="whitespace-pre-wrap font-mono text-xs">{generateSourcePageCode(formData)}</AlertDescription></Alert>
+                      </div>
+                      {/* Option B: subscription snippet only */}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">Option B — Subscription snippet only (page already has a table — just add real-time sync)</span>
+                          <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateSourcePageSubscriptionSnippet(formData), 'source-page-sub')}>
+                            {copiedSection === 'source-page-sub' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy
+                          </Button>
+                        </div>
+                        <Alert><AlertDescription className="whitespace-pre-wrap font-mono text-xs">{generateSourcePageSubscriptionSnippet(formData)}</AlertDescription></Alert>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateSourcePageCode(formData), 'source-page')}>
+                        {copiedSection === 'source-page' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy Source Page Code
+                      </Button>
+                      <Alert><AlertDescription className="whitespace-pre-wrap font-mono text-xs">{generateSourcePageCode(formData)}</AlertDescription></Alert>
+                    </div>
+                  )}
                 </div>
-                <div className="space-y-2">
-                  <h3 className="font-semibold">Replica App Page</h3>
-                  <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateReplicaPageCode(formData), 'replica-page')}>
-                    {copiedSection === 'replica-page' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy Replica Page Code
-                  </Button>
-                  <Alert><AlertDescription className="whitespace-pre-wrap font-mono text-xs">{generateReplicaPageCode(formData)}</AlertDescription></Alert>
+
+                {/* REPLICA PAGE */}
+                <div className="space-y-3">
+                  <h3 className="font-semibold text-base">Replica App Page</h3>
+                  {formData.replicaPage?.mode === 'existing' ? (
+                    <div className="space-y-4">
+                      <div className="p-3 rounded-md bg-amber-50 border border-amber-200 text-sm text-amber-800">
+                        Mode: <strong>Use existing page</strong> — choose the code option that fits your existing page:
+                      </div>
+                      {/* Option A: full code */}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">Option A — Full page replacement (includes read-only table etc)</span>
+                          <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateReplicaPageCode(formData), 'replica-page-full')}>
+                            {copiedSection === 'replica-page-full' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy
+                          </Button>
+                        </div>
+                        <Alert><AlertDescription className="whitespace-pre-wrap font-mono text-xs">{generateReplicaPageCode(formData)}</AlertDescription></Alert>
+                      </div>
+                      {/* Option B: subscription snippet only */}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">Option B — Subscription snippet only (page already has a table — just add real-time sync)</span>
+                          <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateReplicaPageSubscriptionSnippet(formData), 'replica-page-sub')}>
+                            {copiedSection === 'replica-page-sub' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy
+                          </Button>
+                        </div>
+                        <Alert><AlertDescription className="whitespace-pre-wrap font-mono text-xs">{generateReplicaPageSubscriptionSnippet(formData)}</AlertDescription></Alert>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateReplicaPageCode(formData), 'replica-page')}>
+                        {copiedSection === 'replica-page' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy Replica Page Code
+                      </Button>
+                      <Alert><AlertDescription className="whitespace-pre-wrap font-mono text-xs">{generateReplicaPageCode(formData)}</AlertDescription></Alert>
+                    </div>
+                  )}
                 </div>
+
               </CardContent>
             </Card>
           </TabsContent>

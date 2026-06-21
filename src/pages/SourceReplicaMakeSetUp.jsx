@@ -353,18 +353,15 @@ export default function SourceReplicaMakeSetUp() {
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between gap-3 mb-4">
-          <div className="flex items-center gap-3">
+        <div className="mb-4">
+          <div className="flex items-center gap-3 mb-3">
             <Button variant="outline" size="icon" onClick={() => navigate("/menu")}>
               <ArrowLeft className="w-4 h-4" />
             </Button>
             <h1 className="text-2xl font-bold text-foreground">Source Replica Setup Generator</h1>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => setShowTemplates(s => !s)}>
-              <BookOpen className="w-4 h-4 mr-1" /> Templates
-            </Button>
-            <Button variant="outline" onClick={() => {
+            <Button variant="outline" size="sm" onClick={() => {
               const instructionsSection = document.querySelector('[role="tablist"]');
               if (instructionsSection) {
                 instructionsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -372,7 +369,10 @@ export default function SourceReplicaMakeSetUp() {
             }}>
               Jump to Instructions
             </Button>
-            <Button onClick={() => { setIsEditing(true); setEditingRecord(null); setSaveSuccess(false); setSavedAsUpdate(false); setFormData({ ...EMPTY_FORM }); setProjectError(""); setFieldErrors({}); setVersionInfo(null); }}>
+            <Button variant="outline" size="sm" onClick={() => setShowTemplates(s => !s)}>
+              <BookOpen className="w-4 h-4 mr-1" /> Templates
+            </Button>
+            <Button size="sm" onClick={() => { setIsEditing(true); setEditingRecord(null); setSaveSuccess(false); setSavedAsUpdate(false); setFormData({ ...EMPTY_FORM }); setProjectError(""); setFieldErrors({}); setVersionInfo(null); }}>
                   <Plus className="w-4 h-4 mr-1" /> New Template
                 </Button>
           </div>

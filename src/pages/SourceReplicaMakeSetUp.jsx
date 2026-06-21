@@ -4,10 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Circle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Plus, Copy, Check, Trash2, BookOpen } from "lucide-react";
+import { ArrowLeft, Plus, Copy, Check, Trash2, BookOpen, CheckCircle2, Circle, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import SourceEntityForm from "@/components/setup/SourceEntityForm";
 import ReplicaConfigForm from "@/components/setup/ReplicaConfigForm";
 import PageModeSelector from "@/components/setup/PageModeSelector";
@@ -60,6 +60,8 @@ export default function SourceReplicaMakeSetUp() {
   const [savedAsUpdate, setSavedAsUpdate] = useState(false);
   const [versionInfo, setVersionInfo] = useState(null);
   const [templateStatus, setTemplateStatus] = useState(null);
+  const [updateConfirmed, setUpdateConfirmed] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   const hasUnmetFields =
     !formData.projectName ||
@@ -120,8 +122,10 @@ export default function SourceReplicaMakeSetUp() {
     const statuses = await base44.entities.SourceReplicaTemplateStatus.filter({ template_id: tpl.id });
     if (statuses.length > 0) {
       setTemplateStatus(statuses[0]);
+      setUpdateConfirmed(statuses[0].update_confirmed || false);
     } else {
       setTemplateStatus(null);
+      setUpdateConfirmed(false);
     }
   };
 
@@ -148,8 +152,48 @@ export default function SourceReplicaMakeSetUp() {
     const statuses = await base44.entities.SourceReplicaTemplateStatus.filter({ template_id: tpl.id });
     if (statuses.length > 0) {
       setTemplateStatus(statuses[0]);
+      setUpdateConfirmed(statuses[0].update_confirmed || false);
     } else {
       setTemplateStatus(null);
+      setUpdateConfirmed(false);
+    }
+  };
+
+  const handleConfirmUpdateApplied = async () => {
+    if (!editingRecord) return;
+    
+    try {
+      const now = new Date().toISOString();
+      const me = await base44.auth.me();
+      
+      if (templateStatus) {
+        await base44.entities.SourceReplicaTemplateStatus.update(templateStatus.id, {
+          update_confirmed: true,
+          update_confirmed_at: now,
+          update_confirmed_by: me?.full_name || me?.email || "unknown",
+          update_confirmed_version: versionInfo?.version,
+        });
+      } else {
+        await base44.entities.SourceReplicaTemplateStatus.create({
+          template_id: editingRecord.id,
+          project_name: formData.projectName,
+          update_confirmed: true,
+          update_confirmed_at: now,
+          update_confirmed_by: me?.full_name || me?.email || "unknown",
+          update_confirmed_version: versionInfo?.version,
+        });
+      }
+      
+      const statuses = await base44.entities.SourceReplicaTemplateStatus.filter({ template_id: editingRecord.id });
+      if (statuses.length > 0) {
+        setTemplateStatus(statuses[0]);
+        setUpdateConfirmed(true);
+      }
+      
+      setShowConfirmDialog(false);
+      toast.success("Update confirmed as applied to source and replica files!");
+    } catch (err) {
+      toast.error(`Failed to confirm update: ${err.message}`);
     }
   };
 
@@ -474,6 +518,9 @@ export default function SourceReplicaMakeSetUp() {
                       <span className="font-medium">Version {versionInfo.version}</span>
                       <span>•</span>
                       <span>{versionInfo.dateTime}</span>
+                      {templateStatus?.update_confirmed && templateStatus.update_confirmed_version === versionInfo.version && (
+                        <span className="ml-2 text-green-700">✓ Files Updated</span>
+                      )}
                     </div>
                   )}
                   <div className="grid grid-cols-2 gap-4">
@@ -548,7 +595,22 @@ export default function SourceReplicaMakeSetUp() {
               {editingRecord && (
                 <Card>
                   <CardHeader>
-                    <CardTitle className="mb-4">SOURCE App Setup Instructions - Code Update</CardTitle>
+                    <div className="flex items-center justify-between mb-4">
+                      <CardTitle>SOURCE App Setup Instructions - Code Update</CardTitle>
+                      {editingRecord && (
+                        <div className="flex items-center gap-2">
+                          {updateConfirmed ? (
+                            <Badge className="bg-green-600">
+                              <CheckCircle2 className="w-3 h-3 mr-1" /> Files Updated (v{templateStatus?.update_confirmed_version})
+                            </Badge>
+                          ) : (
+                            <Badge variant="outline" className="border-orange-500 text-orange-600">
+                              <AlertCircle className="w-3 h-3 mr-1" /> Pending File Update
+                            </Badge>
+                          )}
+                        </div>
+                      )}
+                    </div>
                     <p className="text-sm text-muted-foreground mb-4">⚠️ Use these instructions to UPDATE your existing setup after editing the template</p>
                     {versionInfo && (
                       <div className="flex items-center gap-2 text-xs text-green-600">
@@ -617,10 +679,15 @@ export default function SourceReplicaMakeSetUp() {
                         </div>
                       </div>
                     </div>
-                    <div className="mt-4 pt-4 border-t border-border">
+                    <div className="mt-4 pt-4 border-t border-border flex items-center justify-between">
                       <Button variant="outline" size="sm" onClick={() => copyToClipboard(generateSourceUpdateInstructions(formData, versionInfo), 'source-update-instructions')}>
                         {copiedSection === 'source-update-instructions' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} Copy Update Instructions Only
                       </Button>
+                      {!updateConfirmed && (
+                        <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={() => setShowConfirmDialog(true)}>
+                          <CheckCircle2 className="w-4 h-4 mr-1" /> Confirm Update Applied
+                        </Button>
+                      )}
                     </div>
                   </CardHeader>
                 </Card>
@@ -762,6 +829,34 @@ export default function SourceReplicaMakeSetUp() {
             </div>
           </TabsContent>
         </Tabs>
+
+        {/* Confirmation Dialog */}
+        <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Confirm Code Update Applied</DialogTitle>
+              <DialogDescription>
+                Please confirm that you have replaced the code in both Source and Replica application files with the updated instructions above.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="py-4">
+              <Alert>
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>
+                  This action will mark version {versionInfo?.version} as implemented. Future edits will show this update as completed and track new available updates.
+                </AlertDescription>
+              </Alert>
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <Button onClick={handleConfirmUpdateApplied} className="bg-green-600 hover:bg-green-700">
+                <CheckCircle2 className="w-4 h-4 mr-1" /> Confirm Files Updated
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

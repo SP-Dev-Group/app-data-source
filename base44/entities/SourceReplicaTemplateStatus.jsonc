@@ -35,6 +35,23 @@
     "withdrawal_notes": {
       "type": "string",
       "description": "Notes about what was done during withdrawal"
+    },
+    "update_confirmed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the latest code update has been confirmed as applied to files"
+    },
+    "update_confirmed_at": {
+      "type": "string",
+      "description": "ISO date when update was confirmed"
+    },
+    "update_confirmed_by": {
+      "type": "string",
+      "description": "Name/email of user who confirmed the update"
+    },
+    "update_confirmed_version": {
+      "type": "number",
+      "description": "Version number that was confirmed as implemented"
     }
   },
   "required": [

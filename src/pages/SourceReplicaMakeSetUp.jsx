@@ -440,7 +440,7 @@ export default function SourceReplicaMakeSetUp() {
                   <CardTitle className="mb-4">SOURCE App Setup Instructions - Original Code</CardTitle>
                   <p className="text-sm text-muted-foreground mb-4">Use these instructions for initial setup (first-time creation)</p>
                   {versionInfo && (
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-2 text-xs text-green-600">
                       <span className="font-medium">Version {versionInfo.version}</span>
                       <span>•</span>
                       <span>{versionInfo.dateTime}</span>
@@ -521,7 +521,7 @@ export default function SourceReplicaMakeSetUp() {
                     <CardTitle className="mb-4">SOURCE App Setup Instructions - Code Update</CardTitle>
                     <p className="text-sm text-muted-foreground mb-4">⚠️ Use these instructions to UPDATE your existing setup after editing the template</p>
                     {versionInfo && (
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <div className="flex items-center gap-2 text-xs text-green-600">
                         <span className="font-medium">Version {versionInfo.version}</span>
                         <span>•</span>
                         <span>{versionInfo.dateTime}</span>
@@ -606,7 +606,7 @@ export default function SourceReplicaMakeSetUp() {
                   <CardTitle className="mb-4">REPLICA App Setup Instructions - Original Code</CardTitle>
                   <p className="text-sm text-muted-foreground mb-4">Use these instructions for initial setup (first-time creation)</p>
                   {versionInfo && (
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-2 text-xs text-green-600">
                       <span className="font-medium">Version {versionInfo.version}</span>
                       <span>•</span>
                       <span>{versionInfo.dateTime}</span>
@@ -671,7 +671,7 @@ export default function SourceReplicaMakeSetUp() {
                     <CardTitle className="mb-4">REPLICA App Setup Instructions - Code Update</CardTitle>
                     <p className="text-sm text-muted-foreground mb-4">⚠️ Use these instructions to UPDATE your existing setup after editing the template</p>
                     {versionInfo && (
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <div className="flex items-center gap-2 text-xs text-green-600">
                         <span className="font-medium">Version {versionInfo.version}</span>
                         <span>•</span>
                         <span>{versionInfo.dateTime}</span>

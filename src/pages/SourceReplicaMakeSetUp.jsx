@@ -700,13 +700,27 @@ export default function SourceReplicaMakeSetUp() {
               {/* ORIGINAL CODE SECTION */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="mb-4">REPLICA App Setup Instructions - Original Code</CardTitle>
+                  <div className="flex items-center justify-between mb-4">
+                    <CardTitle>REPLICA App Setup Instructions - Original Code</CardTitle>
+                    {editingRecord && (
+                      <Badge variant={templateStatus?.confirmed_in_use ? "default" : "outline"} className={templateStatus?.confirmed_in_use ? "bg-green-600" : ""}>
+                        {templateStatus?.confirmed_in_use ? (
+                          <><CheckCircle2 className="w-3 h-3 mr-1" /> In Use</>
+                        ) : (
+                          <><Circle className="w-3 h-3 mr-1" /> Not Yet In Use</>
+                        )}
+                      </Badge>
+                    )}
+                  </div>
                   <p className="text-sm text-muted-foreground mb-4">Use these instructions for initial setup (first-time creation)</p>
                   {versionInfo && (
                     <div className="flex items-center gap-2 text-xs text-green-600">
                       <span className="font-medium">Version {versionInfo.version}</span>
                       <span>•</span>
                       <span>{versionInfo.dateTime}</span>
+                      {templateStatus?.update_confirmed && templateStatus.update_confirmed_version === versionInfo.version && (
+                        <span className="ml-2 text-green-700">✓ Files Updated</span>
+                      )}
                     </div>
                   )}
                   <div className="grid grid-cols-2 gap-4">

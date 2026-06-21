@@ -1,25 +1,32 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Trash2, Plus } from "lucide-react";
 
-export default function SourceEntityForm({ sourceSchemaOption, sourceFields, sourceSchemaJson, createArchive, onSchemaOptionChange, onFieldChange, onAddField, onRemoveField, onSchemaJsonChange, onArchiveChange }) {
+export default function SourceEntityForm({ sourceSchemaOption, sourceFields, sourceSchemaJson, isEditing, onSchemaOptionChange, onFieldChange, onAddField, onRemoveField, onSchemaJsonChange }) {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
         <Label>Source Schema Option</Label>
-        <div className="flex gap-4">
-          <div className="flex items-center gap-2">
-            <Switch checked={sourceSchemaOption === 'create'} onCheckedChange={(v) => onSchemaOptionChange(v ? 'create' : 'paste')} />
-            <Label>Create Fields</Label>
+        {isEditing ? (
+          <div className="px-3 py-2 rounded-md bg-muted border border-border text-sm">
+            {sourceSchemaOption === 'create' ? 'Create Fields' : 'Paste JSON Schema'}
+            <span className="text-xs text-amber-600 font-medium ml-2">🔒 Locked after first save</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Switch checked={sourceSchemaOption === 'paste'} onCheckedChange={(v) => onSchemaOptionChange(v ? 'paste' : 'create')} />
-            <Label>Paste JSON Schema</Label>
-          </div>
-        </div>
+        ) : (
+          <RadioGroup value={sourceSchemaOption} onValueChange={onSchemaOptionChange} className="flex gap-4">
+            <div className="flex items-center gap-2">
+              <RadioGroupItem value="create" id="create" />
+              <Label htmlFor="create">Create Fields</Label>
+            </div>
+            <div className="flex items-center gap-2">
+              <RadioGroupItem value="paste" id="paste" />
+              <Label htmlFor="paste">Paste JSON Schema</Label>
+            </div>
+          </RadioGroup>
+        )}
       </div>
 
       {sourceSchemaOption === 'create' ? (
@@ -63,11 +70,6 @@ export default function SourceEntityForm({ sourceSchemaOption, sourceFields, sou
           />
         </div>
       )}
-
-      <div className="flex items-center gap-2">
-        <Switch checked={createArchive} onCheckedChange={onArchiveChange} />
-        <Label>Create Archive & Version History Entities</Label>
-      </div>
     </div>
   );
 }

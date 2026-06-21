@@ -36,7 +36,6 @@ const EMPTY_FORM = {
   sourceSchemaOption: "create",
   sourceFields: [{ name: "", type: "string" }],
   sourceSchemaJson: "",
-  createArchiveEntities: true,
   replicas: [{ secretName: "", secretValue: "", replicaEntityName: "" }],
   sourcePage: { mode: "create", fileName: "" },
   replicaPage: { mode: "create", fileName: "" },
@@ -81,7 +80,6 @@ export default function SourceReplicaMakeSetUp() {
     sourceSchemaOption: tpl.source_schema_mode === "existing" ? "paste" : "create",
     sourceFields: tpl.source_fields?.map(f => ({ name: f.field_name, type: f.field_type })) || [{ name: "", type: "string" }],
     sourceSchemaJson: tpl.source_schema_json || "",
-    createArchiveEntities: tpl.archive_entity_mode !== "existing",
     replicas: tpl.replica_configs?.map(r => ({
       replicaAppName: r.replica_entity_name || "",
       replicaEntityName: r.replica_entity_name || "",
@@ -193,8 +191,8 @@ export default function SourceReplicaMakeSetUp() {
       source_schema_mode: formData.sourceSchemaOption === 'create' ? 'create_new' : 'existing',
       source_fields: formData.sourceFields.map(f => ({ field_name: f.name, field_type: f.type, is_required: false })),
       source_schema_json: formData.sourceSchemaJson,
-      archive_entity_mode: formData.createArchiveEntities ? 'create_new' : 'existing',
-      version_history_entity_mode: formData.createArchiveEntities ? 'create_new' : 'existing',
+      archive_entity_mode: 'create_new',
+      version_history_entity_mode: 'create_new',
       source_page_mode: formData.sourcePage.mode,
       source_page_file_name: formData.sourcePage.fileName,
       replica_page_mode: formData.replicaPage.mode,
@@ -348,13 +346,12 @@ export default function SourceReplicaMakeSetUp() {
                 sourceSchemaOption={formData.sourceSchemaOption}
                 sourceFields={formData.sourceFields}
                 sourceSchemaJson={formData.sourceSchemaJson}
-                createArchive={formData.createArchiveEntities}
-                onSchemaOptionChange={(v) => setFormData({ ...formData, sourceSchemaOption: v ? 'create' : 'paste' })}
+                isEditing={!!editingRecord}
+                onSchemaOptionChange={(v) => setFormData({ ...formData, sourceSchemaOption: v })}
                 onFieldChange={updateSourceField}
                 onAddField={addSourceField}
                 onRemoveField={removeSourceField}
                 onSchemaJsonChange={(v) => setFormData({ ...formData, sourceSchemaJson: v })}
-                onArchiveChange={(v) => setFormData({ ...formData, createArchiveEntities: v })}
               />
             </div>
           </CardContent>

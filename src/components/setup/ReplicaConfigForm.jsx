@@ -10,6 +10,7 @@ export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove,
   const [copied, setCopied] = useState(false);
   const [editingEntityName, setEditingEntityName] = useState({});
   const [editingSecretName, setEditingSecretName] = useState({});
+  const [editingSecretValue, setEditingSecretValue] = useState({});
 
   const handleCopy = () => {
     navigator.clipboard.writeText(autoSecretName);
@@ -25,6 +26,7 @@ export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove,
         const defaultSecretName = autoSecretName;
         const isEditingEntity = editingEntityName[index];
         const isEditingSecret = editingSecretName[index];
+        const isEditingSecretValue = editingSecretValue[index];
 
         const autoEntityFromName = replica.replicaAppName
           ? `Replica${replica.replicaAppName.replace(/\s+/g, '')}${index + 1}`
@@ -91,12 +93,23 @@ export default function ReplicaConfigForm({ replicas, onUpdate, onAdd, onRemove,
               </div>
               <div className="space-y-2">
                 <Label>Secret Value (Replica App ID) *</Label>
-                <Input
-                  value={replica.secretValue}
-                  onChange={(e) => onUpdate(index, 'secretValue', e.target.value)}
-                  placeholder="Replica App ID"
-                  className={!replica.secretValue ? "border-red-500" : ""}
-                />
+                <div className="flex gap-2">
+                  <Input
+                    value={replica.secretValue}
+                    onChange={(e) => onUpdate(index, 'secretValue', e.target.value)}
+                    readOnly={!isEditingSecretValue}
+                    className={!isEditingSecretValue ? "bg-muted text-muted-foreground cursor-not-allowed" : ""}
+                    placeholder="Replica App ID"
+                  />
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    title="Edit secret value"
+                    onClick={() => setEditingSecretValue(prev => ({ ...prev, [index]: !prev[index] }))}
+                  >
+                    <Pencil className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

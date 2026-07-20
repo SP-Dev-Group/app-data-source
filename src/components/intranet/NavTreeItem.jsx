@@ -18,7 +18,8 @@ export default function NavTreeItem({ item, level }) {
   const handleClick = () => {
     if (hasChildren) {
       setOpen((o) => !o);
-    } else if (item.to) {
+    }
+    if (item.to) {
       navigate(item.to);
     }
   };

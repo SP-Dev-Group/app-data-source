@@ -171,7 +171,11 @@ export default function PushEntityOnly() {
           </div>
           <div>
             <h2 className="text-sm font-semibold text-foreground mb-2">Method 2: App ID stored as a secret (<code className="px-1 py-0.5 bg-muted rounded">REPLICA_APP_ID</code>)</h2>
-            <p className="text-xs text-muted-foreground mb-2">In the app where this function runs, create a secret named <code className="px-1 py-0.5 bg-muted rounded">REPLICA_APP_ID</code> (Settings → Secrets) with the Replica App ID as its value.</p>
+            <p className="text-xs text-muted-foreground mb-2">
+              In the app where this function runs (Settings → Secrets), create two secrets:
+              <br />- <code className="px-1 py-0.5 bg-muted rounded">REPLICA_APP_ID</code> = the Replica App ID
+              <br />- <code className="px-1 py-0.5 bg-muted rounded">REPLICA_APP_SERVICE_ROLE_KEY</code> = the replica app's <strong>API Key</strong> (found in the replica app's Settings → API Keys) as its value.
+            </p>
             {renderCodeBlock(CODE_BLOCK_SECRET, "Backend Function Code — click to copy", "method2")}
           </div>
         </div>

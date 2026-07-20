@@ -165,14 +165,11 @@ export default function PushEntityOnly() {
           <strong className="text-foreground">Notes:</strong> Use the Replica App ID as the value for <code className="px-1 py-0.5 bg-background rounded text-foreground">REPLICA_APP_ID</code> in the function code below.
         </div>
 
-        <Tabs defaultValue="method1" className="w-full">
+        <Tabs defaultValue="method2" className="w-full">
           <TabsList className="mb-4">
-            <TabsTrigger value="method1">Method 1: Hardcoded App ID</TabsTrigger>
             <TabsTrigger value="method2">Method 2: App ID as Secret</TabsTrigger>
+            <TabsTrigger value="method1">Method 1: Hardcoded App ID</TabsTrigger>
           </TabsList>
-          <TabsContent value="method1">
-            {renderCodeBlock(CODE_BLOCK, "Backend Function Code — click to copy", "method1")}
-          </TabsContent>
           <TabsContent value="method2">
             <p className="text-xs text-muted-foreground mb-3">
               In the app where this function runs (Settings → Secrets), create two secrets:
@@ -180,6 +177,9 @@ export default function PushEntityOnly() {
               <br />- <code className="px-1 py-0.5 bg-muted rounded">REPLICA_APP_SERVICE_ROLE_KEY</code> = the replica app's <strong>API Key</strong> (found in the replica app's Settings → API Keys) as its value.
             </p>
             {renderCodeBlock(CODE_BLOCK_SECRET, "Backend Function Code — click to copy", "method2")}
+          </TabsContent>
+          <TabsContent value="method1">
+            {renderCodeBlock(CODE_BLOCK, "Backend Function Code — click to copy", "method1")}
           </TabsContent>
         </Tabs>
       </div>

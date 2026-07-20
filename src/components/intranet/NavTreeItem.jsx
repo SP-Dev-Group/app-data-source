@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ChevronRight, ChevronDown } from "lucide-react";
+import { ChevronRight, ChevronDown, Check } from "lucide-react";
 
 // Literal padding classes per level (Tailwind purges dynamic class names).
 const PAD = ["pl-3", "pl-6", "pl-9", "pl-12", "pl-14", "pl-16", "pl-20"];
@@ -44,6 +44,9 @@ export default function NavTreeItem({ item, level }) {
           <span className="w-4 shrink-0" />
         )}
         <span className="truncate">{item.label}</span>
+        {item.done && (
+          <Check className="h-4 w-4 shrink-0 text-green-500 ml-auto" />
+        )}
       </button>
 
       {hasChildren && open && level < MAX_LEVEL && (

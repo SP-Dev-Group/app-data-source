@@ -44,7 +44,7 @@ const navItems = [
   { label: "Staff Allocation", to: "/staffallocation" },
   { label: "Source Replica Setup", to: "/sourcereplicamakesetup" },
   { label: "Project 24", to: "/project24" },
-  { label: "Push Entity Only", to: "/pushentityonly" },
+  { label: "Push Entity Only", to: "/pushentityonly", done: true },
 ];
 
 export default function IntranetSidebar() {

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ArrowLeft, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 
@@ -164,21 +165,23 @@ export default function PushEntityOnly() {
           <strong className="text-foreground">Notes:</strong> Use the Replica App ID as the value for <code className="px-1 py-0.5 bg-background rounded text-foreground">REPLICA_APP_ID</code> in the function code below.
         </div>
 
-        <div className="space-y-6">
-          <div>
-            <h2 className="text-sm font-semibold text-foreground mb-2">Method 1: App ID hardcoded in function code</h2>
+        <Tabs defaultValue="method1" className="w-full">
+          <TabsList className="mb-4">
+            <TabsTrigger value="method1">Method 1: Hardcoded App ID</TabsTrigger>
+            <TabsTrigger value="method2">Method 2: App ID as Secret</TabsTrigger>
+          </TabsList>
+          <TabsContent value="method1">
             {renderCodeBlock(CODE_BLOCK, "Backend Function Code — click to copy", "method1")}
-          </div>
-          <div>
-            <h2 className="text-sm font-semibold text-foreground mb-2">Method 2: App ID stored as a secret (<code className="px-1 py-0.5 bg-muted rounded">REPLICA_APP_ID</code>)</h2>
-            <p className="text-xs text-muted-foreground mb-2">
+          </TabsContent>
+          <TabsContent value="method2">
+            <p className="text-xs text-muted-foreground mb-3">
               In the app where this function runs (Settings → Secrets), create two secrets:
               <br />- <code className="px-1 py-0.5 bg-muted rounded">REPLICA_APP_ID</code> = the Replica App ID
               <br />- <code className="px-1 py-0.5 bg-muted rounded">REPLICA_APP_SERVICE_ROLE_KEY</code> = the replica app's <strong>API Key</strong> (found in the replica app's Settings → API Keys) as its value.
             </p>
             {renderCodeBlock(CODE_BLOCK_SECRET, "Backend Function Code — click to copy", "method2")}
-          </div>
-        </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

@@ -30,6 +30,7 @@ import SourceRecordsToReplicaTemplate from './pages/SourceRecordsToReplicaTempla
 import SourceReplicaMakeSetUp from './pages/SourceReplicaMakeSetUp';
 import Project24 from './pages/Project24';
 import PushEntityOnly from './pages/PushEntityOnly';
+import IntranetLayout from "@/components/intranet/IntranetLayout";
 
 
 const AuthenticatedApp = () => {
@@ -59,6 +60,7 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route element={<IntranetLayout />}>
       <Route path="/datasourcedaily" element={<DataSourceDaily />} />
       <Route path="/menu" element={<Menu />} />
       <Route path="/datasourcemanual" element={<DataSourceManual />} />
@@ -82,6 +84,7 @@ const AuthenticatedApp = () => {
       <Route path="/sourcereplicamakesetup" element={<SourceReplicaMakeSetUp />} />
       <Route path="/project24" element={<Project24 />} />
       <Route path="/pushentityonly" element={<PushEntityOnly />} />
+      </Route>
 
       <Route path="*" element={<PageNotFound />} />
     </Routes>

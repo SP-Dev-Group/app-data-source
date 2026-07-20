@@ -126,6 +126,28 @@ export default function DataSourceLive() {
             <Copy className="w-3 h-3" />
           </button>
         </div>
+        <div className="flex items-center gap-2 mt-1">
+          <p className="text-xs font-mono text-muted-foreground">Functions: archiveDataSourceLive, syncToReplicaListener, pushToReplica</p>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText("archiveDataSourceLive, syncToReplicaListener, pushToReplica");
+            }}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Copy className="w-3 h-3" />
+          </button>
+        </div>
+        <div className="flex items-center gap-2 mt-1">
+          <p className="text-xs font-mono text-muted-foreground">Autos: Archive→archiveDataSourceLive, Listener→syncToReplicaListener</p>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText("Archive DataSourceLive on Create/Update/Delete → archiveDataSourceLive; Automation Listener to DataSourceLive entity → syncToReplicaListener");
+            }}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Copy className="w-3 h-3" />
+          </button>
+        </div>
       </div>
       <DataSourceLiveErrorLogs open={logsOpen} onOpenChange={setLogsOpen} />
       <div className="flex flex-1 overflow-hidden">

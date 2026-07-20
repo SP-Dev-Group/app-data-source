@@ -167,8 +167,8 @@ export default function PushEntityOnly() {
 
         <Tabs defaultValue="method2" className="w-full">
           <TabsList className="mb-4">
-            <TabsTrigger value="method2">Method 2: App ID as Secret</TabsTrigger>
-            <TabsTrigger value="method1">Method 1: Hardcoded App ID</TabsTrigger>
+            <TabsTrigger value="method2">Method 1: App ID as Secret</TabsTrigger>
+            <TabsTrigger value="method1">Method 2: Hardcoded App ID</TabsTrigger>
           </TabsList>
           <TabsContent value="method2">
             <p className="text-xs text-muted-foreground mb-3">

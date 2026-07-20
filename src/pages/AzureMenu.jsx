@@ -32,25 +32,6 @@ export default function AzureMenu() {
         Azure Menu
       </motion.h1>
 
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className="flex flex-col gap-3 w-full max-w-xs"
-      >
-        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" onClick={() => navigate("/azuresql")}>
-          Azure SQL Database
-        </Button>
-        <Button className="w-full bg-cyan-600 hover:bg-cyan-700 text-white" onClick={() => navigate("/azurecosmosdb")}>
-          Cosmos DB
-        </Button>
-        <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white" onClick={() => navigate("/azureblobstorage")}>
-          Blob Storage
-        </Button>
-        <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white" onClick={() => navigate("/azurefunctions")}>
-          Azure Functions
-        </Button>
-      </motion.div>
     </div>
   );
 }

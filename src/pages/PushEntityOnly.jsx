@@ -77,7 +77,11 @@ export default function PushEntityOnly() {
           <Button variant="outline" size="icon" onClick={() => navigate("/base44menu")}>
             <ArrowLeft className="w-4 h-4" />
           </Button>
-          <h1 className="text-2xl font-bold text-foreground">Push Entity Only</h1>
+          <h1 className="text-2xl font-bold text-foreground">Push Entity Only — App ID stored in function code</h1>
+        </div>
+
+        <div className="mb-4 p-3 rounded-md bg-muted border border-border text-sm text-muted-foreground">
+          <strong className="text-foreground">Notes:</strong> Use the Replica App ID as the value for <code className="px-1 py-0.5 bg-background rounded text-foreground">REPLICA_APP_ID</code> in the function code below.
         </div>
 
         <div className="bg-card border border-border rounded-lg overflow-hidden">

@@ -9,7 +9,11 @@ const navItems = [
     to: "/googlemenu",
     children: [
       { label: "Google Form Template", to: "/googleformtemplate" },
-      { label: "Google Sheets", to: "/googlesheetsMenu" },
+      { label: "Google Sheets", to: "/googlesheetsMenu", children: [
+        { label: "Manual Entry Sheet ID URL", to: "/googlesheetsmanualsheetid" },
+        { label: "Hard-coded Sheet ID", to: "/googlesheetshardcodeid" },
+        { label: "Security: Protect Sheets", to: "/googlesheetssecurity" },
+      ] },
       { label: "Firebase / Firestore", to: "/googlefirebase" },
       { label: "Google Cloud SQL / BigQuery", to: "/googlesql" },
       { label: "Object Storage", to: "/googleobjectstorage" },

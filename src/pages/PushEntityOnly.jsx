@@ -73,10 +73,16 @@ Deno.serve(async (req) => {
     // 1. Fetch all records from source
     const sourceRecords = await base44.entities.frontpagesample.list();
 
-    // 2. Initialize replica client using App ID stored as a secret
-    //    Create a secret named REPLICA_APP_ID in this app's Settings and set its value to the Replica App ID.
+    // 2. Read the Replica App ID from a secret.
+    //    Create a secret named REPLICA_APP_ID in this app's Settings (Settings → Secrets)
+    //    and set its value to the Replica App ID. Without it, the client falls back to the
+    //    current app and the replica entity won't be found.
+    const REPLICA_APP_ID = Deno.env.get("REPLICA_APP_ID");
+    if (!REPLICA_APP_ID) {
+      return Response.json({ error: "Secret REPLICA_APP_ID is not set. Add it in Settings → Secrets with the Replica App ID as its value." }, { status: 500 });
+    }
     const replicaClient = createClient({ 
-      appId: Deno.env.get("REPLICA_APP_ID"), 
+      appId: REPLICA_APP_ID, 
       serviceRole: true 
     });
 

@@ -59,20 +59,6 @@ export default function Menu() {
 
         <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
           <div className="flex flex-col gap-3">
-            <Button className="w-full bg-red-500 hover:bg-red-600 text-white" onClick={() => navigate("/googlemenu")}>
-              Google Menu
-            </Button>
-            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" onClick={() => navigate("/azuremenu")}>
-              Azure Menu
-            </Button>
-            <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white" onClick={() => navigate("/base44menu")}>
-              Base44 Menu
-            </Button>
-          </div>
-        </div>
-
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-          <div className="flex flex-col gap-3">
             <Button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl py-4" onClick={() => navigate("/sourcereplicamakesetup")}>
               SourceReplicaMakeSetUp
             </Button>

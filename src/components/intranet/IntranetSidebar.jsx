@@ -7,6 +7,7 @@ const navItems = [
   {
     label: "Google Menu",
     to: "/googlemenu",
+    done: true,
     children: [
       { label: "Google Form Template", to: "/googleformtemplate" },
       { label: "Google Sheets", to: "/googlesheetsMenu", children: [
@@ -32,11 +33,12 @@ const navItems = [
   {
     label: "Base44 Menu",
     to: "/base44menu",
+    done: true,
     children: [
-      { label: "Data Source Manual", to: "/datasourcemanual" },
-      { label: "Data Source Daily at 2am", to: "/datasourcedaily" },
-      { label: "Data Source Refresh every 5 mins", to: "/datasourcerefresh5min" },
-      { label: "Data Source Listener", to: "/datasourcelistener" },
+      { label: "Data Source Manual", to: "/datasourcemanual", done: true },
+      { label: "Data Source Daily at 2am", to: "/datasourcedaily", done: true },
+      { label: "Data Source Refresh every 5 mins", to: "/datasourcerefresh5min", done: true },
+      { label: "Data Source Listener", to: "/datasourcelistener", done: true },
       { label: "Entities", to: "/base44entities" },
       { label: "Backend Functions", to: "/base44functions" },
       { label: "Automations", to: "/base44automations" },

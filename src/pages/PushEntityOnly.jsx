@@ -73,24 +73,27 @@ Deno.serve(async (req) => {
     // 1. Fetch all records from source
     const sourceRecords = await base44.entities.frontpagesample.list();
 
-    // 2. Read the Replica App ID from a secret.
-    //    Create a secret named REPLICA_APP_ID in this app's Settings (Settings → Secrets)
-    //    and set its value to the Replica App ID. Without it, the client falls back to the
-    //    current app and the replica entity won't be found.
+    // 2. Read the Replica App ID and the replica app's SERVICE ROLE KEY from secrets.
+    //    Cross-app access requires the replica app's OWN service role key (serviceRole: true
+    //    only uses the current app's key and cannot reach the replica's entities).
+    //    Create two secrets in Settings → Secrets:
+    //      - REPLICA_APP_ID              = the Replica App ID
+    //      - REPLICA_APP_SERVICE_ROLE_KEY = the replica app's service role key
     const REPLICA_APP_ID = Deno.env.get("REPLICA_APP_ID");
-    if (!REPLICA_APP_ID) {
-      return Response.json({ error: "Secret REPLICA_APP_ID is not set. Add it in Settings → Secrets with the Replica App ID as its value." }, { status: 500 });
+    const REPLICA_KEY = Deno.env.get("REPLICA_APP_SERVICE_ROLE_KEY");
+    if (!REPLICA_APP_ID || !REPLICA_KEY) {
+      return Response.json({ error: "Secrets REPLICA_APP_ID and REPLICA_APP_SERVICE_ROLE_KEY must both be set." }, { status: 500 });
     }
-    const replicaClient = createClient({ 
+    const replicaClient = createClientFromRequest(req, { 
       appId: REPLICA_APP_ID, 
-      serviceRole: true 
+      serviceRoleKey: REPLICA_KEY 
     });
 
-    // 3. Upsert into replica entity
+    // 3. Upsert into replica entity (use asServiceRole for service-role-key auth)
     const results = [];
     for (const record of sourceRecords) {
       // Use record.unique_id as the filter key to identify the replica record
-      const existing = await replicaClient.entities.frontpageartworkreplica.filter({ 
+      const existing = await replicaClient.asServiceRole.entities.frontpageartworkreplica.filter({ 
         unique_id: record.unique_id 
       });
 
@@ -104,10 +107,10 @@ Deno.serve(async (req) => {
       };
 
       if (existing && existing.length > 0) {
-        await replicaClient.entities.frontpageartworkreplica.update(existing[0].id, payload);
+        await replicaClient.asServiceRole.entities.frontpageartworkreplica.update(existing[0].id, payload);
         results.push({ id: record.id, status: 'updated' });
       } else {
-        await replicaClient.entities.frontpageartworkreplica.create(payload);
+        await replicaClient.asServiceRole.entities.frontpageartworkreplica.create(payload);
         results.push({ id: record.id, status: 'created' });
       }
     }

@@ -132,34 +132,44 @@ Deno.serve(async (req) => {
         const base44 = createClientFromRequest(req);
         const user = await base44.auth.me();
 
-        if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
-        if (user.role !== 'admin') return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
+        if (!user) {
+            return Response.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        if (user.role !== 'admin') {
+            return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
+        }
 
         const { configId } = await req.json();
-        if (!configId) return Response.json({ error: 'configId required' }, { status: 400 });
+        if (!configId) {
+            return Response.json({ error: 'configId required' }, { status: 400 });
+        }
 
-        const configs = await base44.asServiceRole.entities.ReplicaAppConfig${projectNameClean}.filter({ id: configId });
+        const configs = await base44.entities.ReplicaAppConfig${projectNameClean}.filter({ id: configId });
         const config = configs[0];
-        if (!config) return Response.json({ error: 'Config not found' }, { status: 404 });
 
-        const records = await base44.asServiceRole.entities.${sourceEntityName}.filter({});
+        if (!config) {
+            return Response.json({ error: 'Config not found' }, { status: 404 });
+        }
+
+        const records = await base44.entities.${sourceEntityName}.filter({});
         let pushed = 0;
         const errors = [];
 
         for (const record of records) {
             try {
-                const replicaClient = createClientFromRequest(req, { appId: config.replica_app_id, serviceRoleKey: config.secret_value });
+                const replicaBase44 = createClient(config.replica_app_id, config.secret_value);
                 const normalizedRecord = {
                     unique_id: record.unique_id,
                     ${fieldMappings || '...record'}
                 };
 
-                const existing = await replicaClient.asServiceRole.entities.${sourceEntityName}.filter({ unique_id: record.unique_id });
+                const existing = await replicaBase44.entities.${sourceEntityName}.filter({ unique_id: record.unique_id });
 
                 if (existing && existing.length > 0) {
-                    await replicaClient.asServiceRole.entities.${sourceEntityName}.update(existing[0].id, normalizedRecord);
+                    await replicaBase44.entities.${sourceEntityName}.update(existing[0].id, normalizedRecord);
                 } else {
-                    await replicaClient.asServiceRole.entities.${sourceEntityName}.create(normalizedRecord);
+                    await replicaBase44.entities.${sourceEntityName}.create(normalizedRecord);
                 }
                 pushed++;
             } catch (err) {
@@ -171,7 +181,12 @@ Deno.serve(async (req) => {
     } catch (error) {
         return Response.json({ error: error.message }, { status: 500 });
     }
-});`;
+});
+
+function createClient(appId, serviceRoleKey) {
+    const base44 = createClientFromRequest(req);
+    return base44.asServiceRole;
+}`;
 }
 
 export function generateDeleteFunction(formData, replicaIndex = 0) {

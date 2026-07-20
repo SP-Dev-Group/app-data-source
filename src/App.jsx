@@ -29,6 +29,7 @@ import DataSourcetoReplicasandAllocatorsExternal from './pages/DataSourcetoRepli
 import SourceRecordsToReplicaTemplate from './pages/SourceRecordsToReplicaTemplate';
 import SourceReplicaMakeSetUp from './pages/SourceReplicaMakeSetUp';
 import Project24 from './pages/Project24';
+import PushEntityOnly from './pages/PushEntityOnly';
 
 
 const AuthenticatedApp = () => {
@@ -80,6 +81,7 @@ const AuthenticatedApp = () => {
       <Route path="/sourcerecordstoreplicateemplate" element={<SourceRecordsToReplicaTemplate />} />
       <Route path="/sourcereplicamakesetup" element={<SourceReplicaMakeSetUp />} />
       <Route path="/project24" element={<Project24 />} />
+      <Route path="/pushentityonly" element={<PushEntityOnly />} />
 
       <Route path="*" element={<PageNotFound />} />
     </Routes>

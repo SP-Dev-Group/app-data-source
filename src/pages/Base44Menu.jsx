@@ -68,6 +68,9 @@ export default function Base44Menu() {
         <Button className="w-full bg-purple-500 hover:bg-purple-600 text-white" onClick={() => navigate("/staffallocation")}>
           Staff Allocation Manager
         </Button>
+        <Button className="w-full bg-teal-600 hover:bg-teal-700 text-white" onClick={() => navigate("/pushentityonly")}>
+          Push Entity Only
+        </Button>
       </motion.div>
     </div>
   );

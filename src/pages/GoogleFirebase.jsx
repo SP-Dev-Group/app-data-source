@@ -4,7 +4,7 @@ import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, orderBy, query 
 import { db } from "@/lib/firebase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Plus, RefreshCw, Wand2, Pencil, Trash2, Check, X } from "lucide-react";
+import { Plus, RefreshCw, Wand2, Pencil, Trash2, Check, X } from "lucide-react";
 import GoogleFirebaseInstructions from "@/components/GoogleFirebaseInstructions";
 import GoogleFirebaseSecurity from "@/components/GoogleFirebaseSecurity";
 import IAMSecurity from "@/components/IAMSecurity";
@@ -116,12 +116,7 @@ export default function GoogleFirebase() {
 
       <div className="max-w-3xl mx-auto mr-48">
         <div className="flex items-center mb-8">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" onClick={() => navigate("/googlemenu")}>
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <h1 className="text-2xl font-semibold">Google Firebase — Firestore</h1>
-          </div>
+          <h1 className="text-2xl font-semibold">Google Firebase — Firestore</h1>
         </div>
 
         <div className="bg-card border rounded-lg p-4 mb-6">

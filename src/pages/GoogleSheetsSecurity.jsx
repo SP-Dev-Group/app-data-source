@@ -1,11 +1,8 @@
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Shield } from "lucide-react";
+import { Shield } from "lucide-react";
 import PageMeta from "@/components/PageMeta";
 
 export default function GoogleSheetsSecurity() {
-  const navigate = useNavigate();
-
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <div className="flex flex-1 overflow-hidden">
@@ -14,9 +11,6 @@ export default function GoogleSheetsSecurity() {
 
             {/* Header */}
             <div className="flex items-center gap-3 mb-8">
-              <Button variant="ghost" size="icon" onClick={() => navigate("/googlesheetsMenu")}>
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
               <div className="flex items-center gap-2">
                 <Shield className="h-6 w-6 text-primary" />
                 <h1 className="text-2xl font-semibold">Security: Protect Sheets</h1>

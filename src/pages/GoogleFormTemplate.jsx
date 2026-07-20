@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
-import { ArrowLeft, Plus, Wand2 } from "lucide-react";
+import { Plus, Wand2 } from "lucide-react";
 import PageInfo from "@/components/PageInfo";
 
 const PAGE_INFO = [
@@ -66,14 +65,7 @@ export default function GoogleFormTemplate() {
 
             {/* Header */}
             <div className="flex items-center mb-8">
-              <div className="flex items-center gap-3">
-                <Link to="/googlemenu">
-                  <Button variant="ghost" size="icon">
-                    <ArrowLeft className="h-5 w-5" />
-                  </Button>
-                </Link>
-                <h1 className="text-2xl font-semibold">Google Data Form Template</h1>
-              </div>
+              <h1 className="text-2xl font-semibold">Google Data Form Template</h1>
             </div>
 
         {/* Manual Form */}

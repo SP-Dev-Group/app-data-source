@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Plus, RefreshCw, Wand2, Shield, Pencil, Trash2, Check, X, Archive } from "lucide-react";
+import { Plus, RefreshCw, Wand2, Shield, Pencil, Trash2, Check, X, Archive } from "lucide-react";
 import GoogleSheetsHardcodeIdInstructions from "@/components/GoogleSheetsHardcodeIdInstructions";
 import GoogleSheetsHardcodeArchiveViewer from "@/components/GoogleSheetsHardcodeArchiveViewer";
 import PageMeta from "@/components/PageMeta";
@@ -165,12 +165,7 @@ export default function GoogleSheetsHardcodeId() {
         <div className="flex-1 p-6 overflow-y-auto">
 
           <div className="flex items-center mb-8">
-            <div className="flex items-center gap-3">
-              <Button variant="ghost" size="icon" onClick={() => navigate("/googlesheetsMenu")}>
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <h1 className="text-2xl font-semibold">Google Sheets — Hard-coded ID</h1>
-            </div>
+            <h1 className="text-2xl font-semibold">Google Sheets — Hard-coded ID</h1>
           </div>
 
           <div className="bg-card border rounded-lg p-4 mb-6">

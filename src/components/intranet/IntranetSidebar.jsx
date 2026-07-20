@@ -4,7 +4,17 @@ import NavTreeItem from "./NavTreeItem";
 // Each item supports an optional `children` array (up to 7 nested levels).
 const navItems = [
   { label: "Menu", to: "/menu" },
-  { label: "Google Menu", to: "/googlemenu" },
+  {
+    label: "Google Menu",
+    to: "/googlemenu",
+    children: [
+      { label: "Google Form Template", to: "/googleformtemplate" },
+      { label: "Google Sheets", to: "/googlesheetsMenu" },
+      { label: "Firebase / Firestore", to: "/googlefirebase" },
+      { label: "Google Cloud SQL / BigQuery", to: "/googlesql" },
+      { label: "Object Storage", to: "/googleobjectstorage" },
+    ],
+  },
   { label: "Azure Menu", to: "/azuremenu" },
   { label: "Base44 Menu", to: "/base44menu" },
   { label: "Staff Allocation", to: "/staffallocation" },
